@@ -33,29 +33,82 @@
   font-style: normal;
 }
 
-@font-face {
-  font-family: 'Annabelle JF';
-  src: url('../fonts/Annabelle.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-
 html, body {
   margin: 0;
   font-family: 'Roboto Condensed', sans-serif;
   font-weight: 300;
   font-style: normal;
   overflow-x: hidden;
+  background-color: #011E28;
+  color: white;
 }
 
+/* FONT DIMENSION */
+.bold{
+  font-weight: bold;
+  font-style: normal;
+}
 
+.light{
+  font-weight: 300;
+  font-style: normal;
+}
 
+.medium{
+  font-weight: normal;
+  font-style: normal;
+}
+/* END FONT DIMENSION*/
+
+/* FONT COLOR */
+.text-blu{
+  font-weight: normal;
+  font-style: normal;
+  color:#011E28;
+}
+
+.text-green{
+  font-weight: normal;
+  font-style: normal;
+  color:#05A840;
+}
+
+.text-red{
+  font-weight: normal;
+  font-style: normal;
+  color:#DC0100;
+}
+
+.text-grey{
+  font-weight: normal;
+  font-style: normal;
+  color:#F0F0F0;
+}
+/* END FONT COLOR */
+
+/* BACKGROUND COLOR */
+.bg-blu{
+  background-color:#011E28;
+}
+
+.bg-green{
+  background-color:#05A840;
+}
+
+.bg-red{
+  background-color:#DC0100;
+}
+
+.bg-grey{
+  background-color:#F0F0F0;
+}
+/* END BACKGROUND COLOR */
 
 /* NAVBAR */
 .navbar {
   font-weight: 300;
   font-style: normal;
-  background-color: rgb(42, 52, 55) !important;
+  background-color: #011E28 !important;
 }
 .navbar .navbar-nav .nav-item .nav-link {
   color: white !important;
@@ -78,7 +131,7 @@ html, body {
   bottom: 0;
   width: 80%;
   height: 1px;
-  background-color: #967954;
+  background-color: #05A840;
   border-radius: 1px;
 }
 @media (max-width: 768px) {
@@ -96,7 +149,7 @@ html, body {
   display: block;
   width: 80%;
   height: 1px;
-  background-color: #967954;
+  background-color: #05A840;
   border-radius: 1px;
   position: absolute;
   left: 10%;
@@ -106,80 +159,64 @@ html, body {
   border-color: rgba(255, 255, 255, 0.1);
 }
 .navbar-toggler-icon {
-  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
-}
-.contact-bar {
-  background-color: white;
-  color: black;
-  padding: 10px 60px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.contact-bar .contact-info {
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
-}
-.contact-bar .contact-info i{
-  margin-right: 5px;
-  color: #967954;
-}
-.contact-bar .contact-info span{
-  margin-right: 20px;
-}
-.contact-bar .contact-book a{
-  text-decoration: none;
-  color: inherit;
-
-}
-.contact-bar .contact-book a:hover {
-  text-decoration: underline;
-  cursor: pointer;
-}
-.contact-bar .language-selector {
-  margin-right: 30px;
-  white-space: nowrap;
-}
-.contact-bar .btn {
-  background-color: #967954;
-  color: white;
-  border: none;
-  white-space: nowrap;
-}
-.contact-bar .contact-book {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
 }
 /** END NAV-BAR **/
 
 /** FOOTER **/
 footer{
-  background-color: #f6f5f3;
+  background-color: #05A840;
 }
 footer a {
   display: inline;
-  color: black;
+  color: white;
   text-decoration: none;
 }
 
 footer p {
-  color: black;
+  color: white;
   display: inline;
 }
 
 footer a:hover {
   text-decoration: none;
-  color: #d0af5f;
+  color: #011E28;
 }
 
 footer h5{
-  color: black;
+  color: white;
   font-family: 'Bold', sans-serif;
 }
 
 footer ul.list-unstyled li:hover p {
-  color: #d0af5f;
+  color: #011E28;
 }
-/** END FOOTER **/
+/* END FOOTER */
+
+/* SLIDESHOW */
+.banner {
+  position: relative;
+  margin-top: 8vh;
+  max-height: 60vh;
+  overflow: hidden;
+}
+
+.banner .allImages {
+  height: 100%;
+  transition: opacity 6.5s ease-in-out;
+  display: flex;
+}
+
+.banner .allImages .imageBanner {
+  width: 100%;
+  overflow: hidden;
+}
+
+.banner .allImages .imageBanner img {
+  width: 100%;
+  object-fit: cover;
+  height: auto;
+  object-position: center;
+}
+/* END SLIDESHOW */
+

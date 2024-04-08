@@ -17,7 +17,7 @@
   <nav class="navbar navbar-expand-lg px-5">
     <div class="container-fluid">
       <a class="navbar-brand" href="/">
-        <img src="images/logo.png" alt="JFT Soccer" height="146">
+        <img src="images/logo.png" alt="JFT Soccer" height="60">
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -45,13 +45,21 @@
 </header>
 
 <main>
-  <div class="jumbotron">
-    <h1>This is great</h1>
-    <p>Welcome to templating using EJS</p>
+
+  <div class="banner">
+    <div class="allImages">
+      <div class="imageBanner">
+        <img src="images/heroe1.jpg" alt="Feel the pulse of soccer" loading="lazy">
+      </div>
+      <div class="imageBanner">
+        <img src="images/heroe2.jpg" alt="From past to present" loading="lazy">
+      </div>
+    </div>
   </div>
+
 </main>
 
-<footer class="lwhite px-5 pt-5">
+<footer class="px-5 pt-5">
   <div class="container-fluid">
     <div class="row pb-3">
       <div class="col-md-3 col-6 d-flex">
@@ -70,16 +78,16 @@
           <h5 class="bold">Index</h5>
           <ul class="list-unstyled">
             <li class="nav-item">
-              <a class="nav-link" href="#" id="nav-news"><h6>News</h6></a>
+              <a class="nav-link" href="#" id="nav-news"><p>News</p></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#" id="nav-facts"><h6>Facts</h6></a>
+              <a class="nav-link" href="#" id="nav-facts"><p>Facts</p></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#" id="nav-stat"><h6>Statistics</h6></a>
+              <a class="nav-link" href="#" id="nav-stat"><p>Statistics</p></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#" id="nav-login"><h6>Login</h6></a>
+              <a class="nav-link" href="#" id="nav-login"><p>Login</p></a>
             </li>
           </ul>
         </div>
@@ -124,6 +132,7 @@
 </footer>
 
 <script  type="text/javascript" src="bootstrap/js/bootstrap.bundle.min.js"></script>
+<script  type="text/javascript" src="js/slideshow.js"></script>
 
 </body>
 
