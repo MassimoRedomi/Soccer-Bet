@@ -1,13 +1,13 @@
-package com.iumtweb.secondary_spring;
+package com.iumtweb.spring_server;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SecondarySpringApplication {
+public class SpringServerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SecondarySpringApplication.class, args);
+		SpringApplication.run(SpringServerApplication.class, args);
 	}
 
 }

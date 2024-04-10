@@ -1,10 +1,10 @@
-package com.iumtweb.secondary_spring;
+package com.iumtweb.spring_server;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SecondarySpringApplicationTests {
+class SpringServerApplicationTests {
 
 	@Test
 	void contextLoads() {
