@@ -39,7 +39,6 @@ html, body {
   font-weight: 300;
   font-style: normal;
   overflow-x: hidden;
-  background-color: #011E28;
   color: white;
 }
 
@@ -220,3 +219,11 @@ footer ul.list-unstyled li:hover p {
 }
 /* END SLIDESHOW */
 
+.svg-container {
+  width: 2vw;
+  height: 2vw;
+}
+.svg-container svg {
+  width: 100%;
+  height: 100%;
+}

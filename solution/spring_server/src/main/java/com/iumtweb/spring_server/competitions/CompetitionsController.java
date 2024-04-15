@@ -19,4 +19,9 @@ public class CompetitionsController {
     public List<Competitions> getFirst10Competitions() {
         return competitionsService.getFirst10Competitions();
     }
+
+    @GetMapping("/champions-flags")
+    public List<CompetitionsAndFlags> getCompetitionsAndFlags() {
+        return competitionsService.getAllCompetitionsAndFlags();
+    }
 }
