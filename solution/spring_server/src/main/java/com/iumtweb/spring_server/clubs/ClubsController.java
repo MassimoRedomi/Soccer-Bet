@@ -15,8 +15,8 @@ public class ClubsController {
         this.clubsService = clubsService;
     }
 
-    @GetMapping("/clubs")
-    public List<Clubs> getFirst10Clubs(){
-        return clubsService.getFirst10Clubs();
+    @GetMapping("/clubs-names")
+    public List<ClubsNames> getClubNames() {
+        return clubsService.getClubNames();
     }
 }

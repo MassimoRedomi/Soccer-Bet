@@ -14,7 +14,7 @@ public class ClubsService {
         this.clubsRepository = clubsRepository;
     }
 
-    public List<Clubs> getFirst10Clubs(){
-        return clubsRepository.findTop10ByOrderByClubIdAsc();
+    public List<ClubsNames> getClubNames() {
+        return clubsRepository.findAllClubNames();
     }
 }
