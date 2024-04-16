@@ -8,6 +8,7 @@ function displayClubs(limit) {
     const clubsToShow = allClubs.slice(0, limit);
     clubsToShow.forEach(comp => {
         htmlContent += `<div class="container d-flex flex-row align-items-center my-2">
+                                    <img src="images/football-club.svg" alt="Offers" width="25px" class="mx-2">
                                     <p class="mb-0">${comp.name}</p>
                                 </div>`;
     });

@@ -14,7 +14,7 @@
 
 <body class="bg-blu">
 <header class="fixed-top">
-  <nav class="navbar navbar-expand-lg px-5 border-green">
+  <nav class="navbar navbar-expand-lg px-5 border-bottom-green">
     <div class="container-fluid">
       <a class="navbar-brand" href="/">
         <img src="images/logo.png" alt="JFT Soccer" height="60">
@@ -28,7 +28,10 @@
             <a class="nav-link" href="/" id="nav-news"><h6>NEWS</h6></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/stat" id="nav-stat"><h6>STATISTICS</h6></a>
+            <a class="nav-link" href="/stat" id="nav-stats"><h6>STATISTICS</h6></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/stat" id="nav-chats"><h6>CHATS</h6></a>
           </li>
         </ul>
         <ul class="navbar-nav">
@@ -41,8 +44,7 @@
   </nav>
 </header>
 
-<main>
-
+<main id="news-container">
   <div class="banner">
     <div class="allImages">
       <div class="imageBanner">
@@ -57,28 +59,85 @@
   <div class="container my-5">
     <div class="row">
       <div class="col-md-3">
-        <div class="container bg-grey border rounded-3 mb-4">
-          <h2>Champions</h2>
+        <div class="container bg-grey rounded-3 mb-4 py-4">
+
+          <div class="container-fluid d-flex flex-row align-items-center justify-content-center border-bottom-green mb-4">
+            <img src="images/trophy.svg" alt="Champions" width="25px">
+            <h4 class="mb-0">Champions</h4>
+          </div>
           <div id="champions">Loading...</div>
-          <button id="toggleChampions" onclick="toggleChampions()" style="display: none;">See More</button>
+          <a href="#" id="toggleChampions" onclick="toggleChampions(); return false;"  class="links  border-top-green text-center">See More</a>
+
         </div>
-        <div class="container bg-grey border rounded-3 mb-4">
-          <h2>Nations</h2>
+        <div class="container bg-grey rounded-3 mb-4 py-4">
+
+          <div class="container-fluid d-flex flex-row align-items-center justify-content-center border-bottom-green mb-4">
+            <img src="images/report.svg" alt="Nations" width="25px">
+            <h4 class="mb-0">Nations</h4>
+          </div>
           <div id="nations">Loading...</div>
+
         </div>
-        <div class="container bg-grey border rounded-3 mb-4">
-          <h2>Clubs</h2>
+        <div class="container bg-grey rounded-3 mb-4 py-4">
+
+          <div class="container-fluid d-flex flex-row align-items-center justify-content-center border-bottom-green mb-4">
+            <img src="images/club.svg" alt="Clubs" width="25px">
+            <h4 class="mb-0">Clubs</h4>
+          </div>
           <div id="clubs">Loading...</div>
-          <button id="toggleButton" onclick="toggleClubs()" style="display: none;">See More</button>
+          <a href="#" id="toggleButton" onclick="toggleClubs(); return false;"  class="links  border-top-green text-center">See More</a>
+
+        </div>
+        <div class="container bg-grey rounded-3 mb-4 py-4">
+
+          <div class="container-fluid d-flex flex-row align-items-center justify-content-center border-bottom-green mb-4">
+            <img src="images/app-store.svg" alt="Apps" width="25px">
+            <h4 class="mb-0">Betting Apps</h4>
+          </div>
+          <ul class="list-unstyled">
+            <li class=""><a href="https://play.google.com/store/apps/details?id=com.bet365Wrapper.Bet365_Application&hl=en_GB&gl=GB&pli=1" class="links">Bet365 app</a></li>
+            <li><a href="https://play.google.com/store/apps/details?id=com.williamhill.sports.android&hl=en_GB&gl=GB" class="links">William hill app</a></li>
+            <li><a href="https://play.google.com/store/apps/details?id=com.mobenga.ladbrokes&hl=en_GB&gl=GB" class="links">Ladbrokes App</a></li>
+            <li><a href="https://play.google.com/store/apps/details?id=com.gala.android.vegas&hl=en_GB&gl=GB" class="links">Coral app</a></li>
+            <li><a href="https://play.google.com/store/apps/details?id=com.paddypower.sportsbook.u.inhouse&hl=en_GB&gl=GB" class="links">Paddy power app</a></li>
+            <li><a href="https://play.google.com/store/apps/details?id=com.betfred.mobilecontainer&hl=en_GB&gl=GB" class="links">Betfred app</a></li>
+            <li><a href="https://play.google.com/store/apps/details?id=com.betvictor.bettingapp.uk&hl=en_GB&gl=GB" class="links">BetVictor app</a></li>
+          </ul>
+
+        </div>
+        <div class="container bg-grey rounded-3 mb-4 py-4">
+
+          <div class="container mx-auto d-flex flex-row align-items-center justify-content-center border-bottom-green mb-4">
+            <img src="images/discount.svg" alt="Offers" width="25px" class="">
+            <h4 class="mb-0">Offers</h4>
+          </div>
+          <ul class="list-unstyled">
+            <li><a href="https://promos.betfair.com" class="links">Betfair Sign Up Offer</a></li>
+            <li><a href="https://www.telegraph.co.uk/betting/sports-guides/betvictor-sign-up-offer/" class="links">BetVictor Sign Up Offer</a></li>
+            <li><a href="https://promo.bwin.it/it/promo/offersmatch" class="links">Bwin Sign Up Offer</a></li>
+            <li><a href="https://www.matchbook.com/en/offers" class="links">Matchbook Bonus Code</a></li>
+            <li><a href="https://ro.betano.com/article/en/bonus-terms/221663/" class="links">Betano Bonus Code</a></li>
+          </ul>
+
         </div>
       </div>
       <div class="col-md-9">
           <div id="news"></div>
+          <a href="#" id="toggleNews" onclick="toggleNews(); return false;"  class="links border-top-green text-center text-grey">See More</a>
       </div>
     </div>
   </div>
 
 </main>
+
+<main id="stats-container">
+
+</main>
+
+<main id="chats-container">
+
+</main>
+
 
 <footer class="px-5 pt-5">
   <div class="container-fluid">
@@ -102,7 +161,10 @@
               <a class="nav-link" href="#" id="nav-news"><p>News</p></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#" id="nav-stat"><p>Statistics</p></a>
+              <a class="nav-link" href="#" id="nav-stats"><p>Statistics</p></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" id="nav-chats"><p>Chats</p></a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#" id="nav-login"><p>Login</p></a>
@@ -156,6 +218,7 @@
 <script type="text/javascript" src="js/clubs.js"></script>
 <script type="text/javascript" src="js/champions.js"></script>
 <script type="text/javascript" src="js/news.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
 
 </body>
 
