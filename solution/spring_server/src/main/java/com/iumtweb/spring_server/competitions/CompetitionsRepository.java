@@ -8,10 +8,12 @@ import java.util.List;
 
 @Repository
 public interface CompetitionsRepository extends JpaRepository<Competitions, String> {
+
     List<Competitions> findTop10ByOrderByCompetitionIdAsc();
 
     @Query("SELECT c.name as name, n.sig as sig FROM Competitions c JOIN Nations n ON c.countryName = n.name")
     List<CompetitionsAndFlags> findAllCompetitionsAndFlags();
 
+    List<Competitions> findByCountryName(String countryName);
 
 }

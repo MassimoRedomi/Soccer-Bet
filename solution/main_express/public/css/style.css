@@ -62,6 +62,9 @@ html, body {
   color: #05A840;
 }
 
+.top{
+  margin-top: 10vh;
+}
 
 #stats-container, #chats-container {
   display: none;
@@ -231,7 +234,6 @@ footer ul.list-unstyled li:hover p {
 /* SLIDESHOW */
 .banner {
   position: relative;
-  margin-top: 8vh;
   max-height: 60vh;
   overflow: hidden;
 }
@@ -395,3 +397,34 @@ footer ul.list-unstyled li:hover p {
   color: #05A840;
 }
 /* END NEWS */
+
+/* SEARCH-BAR */
+.search-container .search-area {
+  background-color: #95a5a6;
+  border: none;
+  margin-right: 5px;
+  color: black;
+  height: 38px;
+}
+
+.search-container .search-button {
+  background-color: #05A840;
+  color: white;
+  border: none;
+  height: 38px;
+  padding: 0 15px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.search-container .bi-search {
+  width: 1rem;
+  height: 1rem;
+}
+
+.search-container {
+  gap: 5px;
+}
+/* END SEARCH-BAR */

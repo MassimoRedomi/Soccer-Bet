@@ -1,19 +1,35 @@
-axios.get('/api/soccer-nations')
-    .then(function (response) {
-        const competitions = response.data;
-        const container = document.getElementById('nations');
-        let htmlContent = '';
+function handleNationsClick(data) {
+    const url = "/api/send-country";
+    const elementId = "champions_nation_list";
+    const processData = createChampionsLink;
 
-        competitions.forEach(comp => {
-            htmlContent += `<div class="container d-flex flex-row align-items-center my-2">
-                                <div class="svg-container mx-2">${comp.sig}</div>
-                                <p class="mb-0">${comp.name}</p>
-                            </div>`;
-        });
+    sendAxiosQuery(url, data, elementId, processData);
+}
 
-        container.innerHTML = htmlContent;
-    })
-    .catch(function (error) {
-        console.log('Error fetching data:', error);
-        document.getElementById('nations').innerHTML = '<p>Error loading data.</p>';
+
+function createNationsLink(nat) {
+    return `<div class="container my-2">
+              <a href="#" class="nation-link links d-flex align-items-center" data-nation="${nat.name}">
+                  <div class="svg-container mx-2">${nat.sig}</div>
+                  ${nat.name}
+              </a>
+            </div>`;
+}
+
+
+function createChampionsLink(champ) {
+    return `<div class="container my-2">
+              <a href="#" class="champion-link links d-flex align-items-center" data-champion="${champ.competitionId}">
+                  ${champ.name}
+              </a>
+            </div>`;
+}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    getAxiosQuery('/api/soccer-nations', 'nations', createNationsLink, function() {
+        attachClickHandlers('.nation-link', handleNationsClick, 'data-nation');
     });
+});
+
+

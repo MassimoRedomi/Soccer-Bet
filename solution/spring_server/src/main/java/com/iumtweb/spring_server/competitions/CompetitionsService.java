@@ -23,4 +23,8 @@ public class CompetitionsService {
         return competitionsRepository.findAllCompetitionsAndFlags();
     }
 
+    public List<Competitions> getCompetitionsByCountryName(String countryName) {
+        return competitionsRepository.findByCountryName(countryName);
+    }
+
 }

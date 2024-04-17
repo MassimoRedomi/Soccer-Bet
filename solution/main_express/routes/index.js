@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const fetch = require('node-fetch');
-const axios = require('axios');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -51,5 +50,27 @@ router.get('/api/news', async (req, res) => {
     res.status(500).json({ message: "Failed to fetch data" });
   }
 });
+
+router.post('/api/send-country', async (req, res) => {
+  try {
+    let nationName = req.body.nation;
+
+    const response = await fetch('http://localhost:8082/champions-x-country', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ countryName: nationName })
+    });
+
+    const data = await response.json();
+
+    res.status(200).json(data);
+  } catch (error) {
+    console.error('Error posting country:', error);
+    res.status(500).json({ message: 'Error sending country information' });
+  }
+});
+
 
 module.exports = router;

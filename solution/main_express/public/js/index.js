@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
         deactivateAllLinks();
         sections[sectionKey].style.display = 'block';
         links[sectionKey].classList.add('active');
+        localStorage.setItem('activeSection', sectionKey);
     }
 
     function setupEventListeners() {
@@ -38,7 +39,12 @@ document.addEventListener('DOMContentLoaded', function () {
     // Initialization function to set up the page
     function init() {
         setupEventListeners();
-        activateSection('news');
+        const lastActiveSection = localStorage.getItem('activeSection');
+        if (lastActiveSection && sections[lastActiveSection]) {
+            activateSection(lastActiveSection);
+        } else {
+            activateSection('news');
+        }
     }
 
     init();
