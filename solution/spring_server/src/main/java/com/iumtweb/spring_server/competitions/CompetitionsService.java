@@ -15,15 +15,11 @@ public class CompetitionsService {
         this.competitionsRepository = competitionsRepository;
     }
 
-    public List<Competitions> getFirst10Competitions() {
-        return competitionsRepository.findTop10ByOrderByCompetitionIdAsc();
-    }
-
     public List<CompetitionsAndFlags> getAllCompetitionsAndFlags() {
         return competitionsRepository.findAllCompetitionsAndFlags();
     }
 
-    public List<Competitions> getCompetitionsByCountryName(String countryName) {
+    public List<CompetitionsAndFlags> getCompetitionsByCountryName(String countryName) {
         return competitionsRepository.findByCountryName(countryName);
     }
 

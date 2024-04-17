@@ -1,7 +1,7 @@
-function sendAxiosQuery(url, data, elementId, fun, callback) {
+function sendAxiosQuery(url, data, elementId, fun, limit, callback) {
     axios.post(url , data)
         .then(response => {
-            processData(response.data, elementId, fun);
+            processData(response.data, elementId, fun, limit);
             if (callback) callback();
         })
         .catch( function (response) {
@@ -9,17 +9,18 @@ function sendAxiosQuery(url, data, elementId, fun, callback) {
         })
 }
 
-function getAxiosQuery(url, elementId, fun, callback) {
+function getAxiosQuery(url, elementId, fun, limit, callback) {
     axios.get(url)
         .then(response => {
-            processData(response.data, elementId, fun);
+            processData(response.data, elementId, fun, limit);
             if (callback) callback();
         })
         .catch( function (response) {
             alert (response.toJSON());
         })
 }
-function processData(data, elementId, fun) {
+
+function processData(data, elementId, fun, limit) {
     const container = document.getElementById(elementId);
     let htmlContent = '';
 
@@ -46,7 +47,6 @@ function attachClickHandlers(selector, action) {
                     data[key] = value;
                 });
             }
-
             action(data);
         });
     });

@@ -1,12 +1,8 @@
 package com.iumtweb.spring_server.competitions;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 @RestController
@@ -19,26 +15,18 @@ public class CompetitionsController {
         this.competitionsService = competitionsService;
     }
 
-    @GetMapping("/competitions")
-    public List<Competitions> getFirst10Competitions() {
-        return competitionsService.getFirst10Competitions();
-    }
-
     @GetMapping("/champions-flags")
     public List<CompetitionsAndFlags> getCompetitionsAndFlags() {
         return competitionsService.getAllCompetitionsAndFlags();
     }
 
     @PostMapping("/champions-x-country")
-    public ResponseEntity<List<Competitions>> getCompetitionsByCountry(@RequestBody CountryRequest request) {
-        try {
-            String countryName = request.getCountryName();
-            List<Competitions> competitionsList = competitionsService.getCompetitionsByCountryName(countryName);
-            return new ResponseEntity<>(competitionsList, HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<List<CompetitionsAndFlags>> getCompetitionsByCountry(@RequestBody CountryRequest request) {
+        List<CompetitionsAndFlags> competitions = competitionsService.getCompetitionsByCountryName(request.getCountryName());
+        if (competitions.isEmpty()) {
+            return ResponseEntity.noContent().build();
         }
+        return ResponseEntity.ok(competitions);
     }
 
 }

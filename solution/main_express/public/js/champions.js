@@ -40,3 +40,4 @@ axios.get('/api/champions')
         console.log('Error fetching data:', error);
         document.getElementById('champions').innerHTML = '<p>Error loading data.</p>';
     });
+
