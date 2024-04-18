@@ -1,26 +1,36 @@
-function sendAxiosQuery(url, data, elementId, fun, limit, callback) {
+function sendAxiosQuery(url, data, elementId, fun, callbacks) {
     axios.post(url , data)
         .then(response => {
-            processData(response.data, elementId, fun, limit);
-            if (callback) callback();
+            processData(response.data, elementId, fun);
+            if (callbacks && callbacks.clickHandler){
+                callbacks.clickHandler();
+            }
+            if (callbacks && callbacks.buttonHandler){
+                callbacks.buttonHandler();
+            }
         })
         .catch( function (response) {
             alert (response.toJSON());
         })
 }
 
-function getAxiosQuery(url, elementId, fun, limit, callback) {
+function getAxiosQuery(url, elementId, fun, callbacks) {
     axios.get(url)
         .then(response => {
-            processData(response.data, elementId, fun, limit);
-            if (callback) callback();
+            processData(response.data, elementId, fun);
+            if (callbacks && callbacks.clickHandler){
+                callbacks.clickHandler();
+            }
+            if (callbacks && callbacks.buttonHandler){
+                callbacks.buttonHandler(response.data);
+            }
         })
         .catch( function (response) {
             alert (response.toJSON());
         })
 }
 
-function processData(data, elementId, fun, limit) {
+function processData(data, elementId, fun) {
     const container = document.getElementById(elementId);
     let htmlContent = '';
 
@@ -53,4 +63,52 @@ function attachClickHandlers(selector, action) {
 }
 
 
+function attachButtonHandler(elementId, buttonId, limit) {
+    const button = document.getElementById(buttonId);
+    let isLimited = true;
 
+    initializeItemsVisibility(elementId, buttonId, limit);
+
+    button.addEventListener('click', function() {
+        event.preventDefault();
+        const container = document.getElementById(elementId);
+        let items = container.querySelectorAll('.item');
+
+        if (isLimited) {
+            items.forEach((item, index) => {
+                if (index >= limit) {
+                    item.style.display = 'block';
+                }
+            });
+            button.textContent = 'Show Less';
+            isLimited = false;
+        } else {
+            items.forEach((item, index) => {
+                if (index >= limit) {
+                    item.style.display = 'none';
+                }
+            });
+            button.textContent = 'Show More';
+            isLimited = true;
+        }
+    });
+}
+
+function initializeItemsVisibility(elementId, buttonId, limit) {
+    const container = document.getElementById(elementId);
+    const items = container.querySelectorAll('.item');
+
+    items.forEach((item, index) => {
+        if (index >= limit) {
+            item.style.display = 'none';
+        } else {
+            item.style.display = '';
+        }
+    });
+
+    // Initialize the button text
+    const button = document.getElementById(buttonId);
+    if (button) {
+        button.textContent = 'Show More';
+    }
+}
