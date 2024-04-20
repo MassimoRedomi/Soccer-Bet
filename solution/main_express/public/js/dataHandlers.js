@@ -1,59 +1,94 @@
-function handleNationsClick(data) {
-    const url = "/api/send-country";
-    const elementId = "champions_nation_list";
-    const limit =null;
-    const processData = createChampionsLink;
+const actions = {
+    loadMoreLessChampions: () => toggleItemVisibility('champions', 'toggleChampions', 14),
+    loadMoreLessClubs: ()     => toggleItemVisibility('clubs', 'toggleClubs', 14)
+};
 
-    sendAxiosQuery(url, data, elementId, processData, limit);
+const content = {
+    createClubsContent:             data => `<div class="item my-2">
+                                                <a href="#" class="champion-link links d-flex align-items-center" data-club="${data.clubId}">
+                                                    <img src="images/football-club.svg" alt="Offers" class="svg-container me-2">
+                                                    <p class="mb-0">${data.name}</p>
+                                                </a>
+                                             </div>`,
+    createNationsDropdownContent:   data => `<option value="${data.name}">${data.name}</option>`,
+    createNationsListContent:       data => `<div class="item my-2">
+                                                <a href="#" class="nation-link links d-flex align-items-center" data-nation="${data.name}">
+                                                    <div class="svg-container me-2">${data.sig}</div>
+                                                    ${data.name}
+                                                </a>
+                                            </div>`,
+    createChampionsContent:         data => `<div class="item my-2">
+                                                <a href="#" class="champion-link links d-flex align-items-center" data-champion="${data.competitionId}">
+                                                    <div class="svg-container me-2">${data.sig}</div>
+                                                    <p class="mb-0">${data.name}</p>
+                                                </a>
+                                            </div>`
+};
+
+function initializeClubsHandlers() {
+    initializeItemsVisibility('clubs', 'toggleClubs', 14);
 }
 
-
-function createNationsLink(nat) {
-    return `<div class="item">
-                <div class="container my-2">
-                    <a href="#" class="nation-link links d-flex align-items-center" data-nation="${nat.name}">
-                        <div class="svg-container mx-2">${nat.sig}</div>
-                        ${nat.name}
-                    </a>
-                </div>
-            </div>`;
+function initializeChampionsHandlers() {
+    initializeItemsVisibility('champions', 'toggleChampions', 14);
 }
 
-function createClubsLink(club){
-    return `<div class="item">
-                <div class="container d-flex flex-row align-items-center my-2 item">
-                    <img src="images/football-club.svg" alt="Offers" width="25px" class="mx-2">
-                    <p class="mb-0">${club.name}</p>
-                </div>
-            </div>`;
+function initializeNationsListHandlers() {
+    // Add event handlers specific to nations list content
 }
 
-function createChampionsLink(champ) {
-    return `<div class="item">
-                <div class="container d-flex flex-row align-items-center my-2">
-                    <a href="#" class="champion-link links d-flex align-items-center" data-champion="${champ.competitionId}">
-                        <div class="svg-container mx-2">${champ.sig}</div>
-                        <p class="mb-0">${champ.name}</p>
-                    </a>
-                </div>
-            </div>`;
+function initializeNationsDropdownHandlers() {
+    // Add event handlers specific to nations dropdown content
 }
 
+document.addEventListener('DOMContentLoaded', function () {
+    function loadData() {
+        getAxiosQuery('/api/clubs-names')
+            .then(data => {
+                const htmlContent = renderDataAsHtml(data, content.createClubsContent);
+                updateElementHtml('clubs', htmlContent, 'replace');
+                initializeClubsHandlers();
+            })
+            .catch(error => {
+                console.error('Failed to load club data:', error);
+                updateElementHtml('clubs', '<p>Error loading club data.</p>', 'replace');
+            });
 
-document.addEventListener('DOMContentLoaded', () => {
-    async function loadData() {
-        await getAxiosQuery('/api/clubs-names', 'clubs', createClubsLink, {
-            buttonHandler: () => attachButtonHandler('clubs', 'toggleClubs', 14)
-        });
-        await getAxiosQuery('/api/champions', 'champions', createChampionsLink,{
-            buttonHandler: () => attachButtonHandler('champions', 'toggleChampions', 14)
-        });
-        await getAxiosQuery('/api/soccer-nations', 'nations', createNationsLink, {
-            clickHandler: () => attachClickHandlers('.nation-link', handleNationsClick, 'data-nation')
-        });
+        getAxiosQuery('/api/champions')
+            .then(data => {
+                const htmlContent = renderDataAsHtml(data, content.createChampionsContent);
+                updateElementHtml('champions', htmlContent, 'replace');
+                initializeChampionsHandlers();
+            })
+            .catch(error => {
+                console.error('Failed to load champion data:', error);
+                updateElementHtml('champions', '<p>Error loading champion data.</p>', 'replace');
+            });
+
+        getAxiosQuery('/api/soccer-nations')
+            .then(data =>{
+                const htmlContent=renderDataAsHtml(data, content.createNationsListContent);
+                updateElementHtml('nations', htmlContent, 'replace');
+                initializeNationsListHandlers();
+            })
+            .catch(error =>{
+                console.error('Failed to load nations data:', error);
+                updateElementHtml('nations', '<p>Error loading nations data</p>', 'replace');
+            });
+
+        getAxiosQuery('/api/soccer-nations')
+            .then(data =>{
+                const htmlContent=renderDataAsHtml(data, content.createNationsDropdownContent);
+                updateElementHtml('nation_dropdown', htmlContent, 'replace');
+                initializeNationsDropdownHandlers()
+            })
+            .catch(error =>{
+                console.error('Failed to load nations data:', error);
+                updateElementHtml('nation_dropdown', '<p>Error loading nations data</p>', 'replace');
+            });
     }
 
-    loadData().catch(error => console.error('Error loading data', error));
+    loadData();
 });
 
 

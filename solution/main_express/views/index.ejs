@@ -59,40 +59,40 @@
   <div class="container my-5">
     <div class="row">
       <div class="col-md-3">
-        <div class="container bg-grey rounded-3 mb-4 py-4">
+        <div class="container-fluid mb-4 py-4 bg-black rounded-3">
 
           <div class="container-fluid d-flex flex-row align-items-center justify-content-center border-bottom-green mb-4">
-            <img src="images/trophy.svg" alt="Champions" width="25px">
-            <h4 class="mb-0">Champions</h4>
+            <img src="images/trophy.svg" alt="Champions" width="25px" class="me-2">
+            <h4 class="mb-0 text-white">CHAMPIONS</h4>
           </div>
-          <div id="champions">Loading...</div>
-          <a href="#" id="toggleChampions" onclick="toggleChampions(); return false;"  class="links  border-top-green text-center">See More</a>
+          <div id="champions"><h4 class="text-white">Loading...</h4></div>
+          <a href="#" id="toggleChampions" data-action="loadMoreLessChampions"  class="interactable links  border-top-green text-center">See More</a>
 
         </div>
-        <div class="container bg-grey rounded-3 mb-4 py-4">
+        <div class="container-fluid mb-4 py-4 bg-black rounded-3">
 
           <div class="container-fluid d-flex flex-row align-items-center justify-content-center border-bottom-green mb-4">
-            <img src="images/report.svg" alt="Nations" width="25px">
-            <h4 class="mb-0">Nations</h4>
+            <img src="images/report.svg" alt="Nations" width="25px" class="me-2">
+            <h4 class="mb-0 text-white">NATIONS</h4>
           </div>
-          <div id="nations">Loading...</div>
+          <div id="nations"><h4 class="text-white">Loading...</h4></div>
 
         </div>
-        <div class="container bg-grey rounded-3 mb-4 py-4">
+        <div class="container-fluid mb-4 py-4 bg-black rounded-3">
 
           <div class="container-fluid d-flex flex-row align-items-center justify-content-center border-bottom-green mb-4">
-            <img src="images/club.svg" alt="Clubs" width="25px">
-            <h4 class="mb-0">Clubs</h4>
+            <img src="images/club.svg" alt="Clubs" width="25px" class="me-2">
+            <h4 class="mb-0 text-white">CLUBS</h4>
           </div>
-          <div id="clubs">Loading...</div>
-          <a href="#" id="toggleClubs" onclick="toggleClubs(); return false;"  class="links  border-top-green text-center">See More</a>
+          <div id="clubs"><h4 class="text-white">Loading...</h4></div>
+          <a href="#" id="toggleClubs" data-action="loadMoreLessClubs"  class="interactable links  border-top-green text-center">See More</a>
 
         </div>
-        <div class="container bg-grey rounded-3 mb-4 py-4">
+        <div class="container-fluid mb-4 py-4 bg-black rounded-3">
 
           <div class="container-fluid d-flex flex-row align-items-center justify-content-center border-bottom-green mb-4">
-            <img src="images/app-store.svg" alt="Apps" width="25px">
-            <h4 class="mb-0">Betting Apps</h4>
+            <img src="images/app-store.svg" class="me-2" alt="Apps" width="25px">
+            <h4 class="mb-0 text-white">Betting Apps</h4>
           </div>
           <ul class="list-unstyled">
             <li class=""><a href="https://play.google.com/store/apps/details?id=com.bet365Wrapper.Bet365_Application&hl=en_GB&gl=GB&pli=1" class="links">Bet365 app</a></li>
@@ -105,11 +105,11 @@
           </ul>
 
         </div>
-        <div class="container bg-grey rounded-3 mb-4 py-4">
+        <div class="container-fluid mb-4 py-4 bg-black rounded-3">
 
           <div class="container mx-auto d-flex flex-row align-items-center justify-content-center border-bottom-green mb-4">
-            <img src="images/discount.svg" alt="Offers" width="25px" class="">
-            <h4 class="mb-0">Offers</h4>
+            <img src="images/discount.svg" alt="Offers" width="25px" class="me-2">
+            <h4 class="mb-0 text-white">Offers</h4>
           </div>
           <ul class="list-unstyled">
             <li><a href="https://promos.betfair.com" class="links">Betfair Sign Up Offer</a></li>
@@ -153,19 +153,20 @@
     </div>
     <div class="row">
 
-      <div class="col-md-3">
-          <div class="container-fluid">
+      <div class="col-md-3 border-right-green">
+          <div class="container-fluid d-flex flex-column align-items-center my-4">
+            <select id="nation_dropdown"  name="nation" class="nation-drop"></select>
             <div id="champions_nation_list">Loading...</div>
           </div>
       </div>
       <div class="col-md-6">
 
       </div>
-      <div class="col-md-3">
+      <div class="col-md-3 border-left-green">
 
       </div>
     </div>
-    <div class="row">
+    <div class="row border-top-green">
       <div class="col-md-12">
 
       </div>
@@ -256,7 +257,7 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script type="text/javascript" src="js/dataHandlers.js"></script>
 <script type="text/javascript" src="js/index.js"></script>
-<script type="text/javascript" src="js/webDataUtils.js"></script>
+<script type="text/javascript" src="js/webDataUtils2.js"></script>
 <script type="text/javascript" src="js/news.js"></script>
 
 </body>

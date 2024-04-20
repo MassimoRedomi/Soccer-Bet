@@ -17,8 +17,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateArticles(articles) {
         const container = document.getElementById('news');
-        let htmlContent = '<div class="content-wrapper bg-grey rounded-3">';
-        const limit = showAll ? articles.length : 24;
+        let htmlContent = '<div class="content-wrapper rounded-3 bg-black">';
+        const limit = showAll ? articles.length : 34;
 
         articles.slice(0, limit).forEach(article => {
             if (article.title === "[Removed]") {

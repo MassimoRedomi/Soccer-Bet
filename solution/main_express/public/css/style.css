@@ -52,7 +52,7 @@ html, body {
 
 .links {
   display: block;
-  color: black;
+  color: #ffffff;
   text-decoration: none;
   transition: color 0.3s;
   padding: 10px;
@@ -111,6 +111,12 @@ html, body {
   font-style: normal;
   color:#F0F0F0;
 }
+
+.text-white{
+  font-weight: normal;
+  font-style: normal;
+  color: #ffffff;
+}
 /* END FONT COLOR */
 
 /* BACKGROUND COLOR */
@@ -130,6 +136,15 @@ html, body {
   background-color:#F0F0F0;
 }
 
+.bg-black {
+  background-color: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* END BACKGROUND COLOR */
+
+/* BORDER COLORS */
 .border-bottom-green{
   border-bottom: 1px solid #05A840!important
 }
@@ -137,7 +152,20 @@ html, body {
 .border-top-green{
   border-top: 1px solid #05A840!important
 }
-/* END BACKGROUND COLOR */
+
+.border-left-green{
+  border-left:1px solid #05A840!important
+}
+
+.border-right-green{
+  border-right:1px solid #05A840!important
+}
+
+.border-green{
+  border:1px solid #05A840!important;
+}
+/* END BORDER COLORS */
+
 
 /* NAVBAR */
 .navbar {
