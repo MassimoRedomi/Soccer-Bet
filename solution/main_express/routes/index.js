@@ -7,7 +7,7 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Home Page' });
 });
 
-/* GET JSON data for soccer nations. */
+
 router.get('/api/soccer-nations', async (req, res, next) => {
   try {
     const response = await fetch('http://localhost:8082/soccer-nations');
@@ -54,7 +54,6 @@ router.get('/api/news', async (req, res) => {
 router.post('/api/send-country', async (req, res) => {
   try {
     let nationName = req.body.nation;
-
     const response = await fetch('http://localhost:8082/champions-x-country', {
       method: 'POST',
       headers: {

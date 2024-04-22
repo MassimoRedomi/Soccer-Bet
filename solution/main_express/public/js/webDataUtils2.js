@@ -320,4 +320,3 @@ function initializeItemsVisibility(elementId, buttonId, limit) {
         console.error('Failed to find the button with ID:', buttonId);
     }
 }
-
