@@ -456,3 +456,20 @@ footer ul.list-unstyled li:hover p {
   gap: 5px;
 }
 /* END SEARCH-BAR */
+
+/* DROPDOWN */
+#nation_dropdown {
+  width: 100%;
+  font-size: 1.5rem;
+  background-color: transparent;
+  color: #ffffff;
+  border-bottom: 1px solid #05A840;
+  padding: 8px;
+}
+
+
+#nation_dropdown option {
+  background-color: #fff;
+  color: #333;
+}
+/* END DROPDOWN */

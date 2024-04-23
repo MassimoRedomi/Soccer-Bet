@@ -155,8 +155,10 @@
 
       <div class="col-md-3 border-right-green">
           <div class="container-fluid d-flex flex-column align-items-center my-4">
-            <select id="nation_dropdown"  name="nation" class="nation-drop"></select>
-            <div id="champions_nation_list">Loading...</div>
+            <select id="nation_dropdown"  name="nation" class="interactable" data-action="loadConnectedDataNation"></select>
+            <div id="champions_nation_list">
+              <p class="text-white">Loading... </p>
+            </div>
           </div>
       </div>
       <div class="col-md-6">

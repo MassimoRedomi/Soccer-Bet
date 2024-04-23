@@ -1,6 +1,6 @@
 const content = {
     createClubsContent:             data => `<div class="item my-2">
-                                                <a href="#" class="champion-link links d-flex align-items-center" data-club="${data.clubId}">
+                                                <a href="#" class="interactable links d-flex align-items-center" data-club="${data.clubId}">
                                                     <img src="images/football-club.svg" alt="Offers" class="svg-container me-2">
                                                     <p class="mb-0">${data.name}</p>
                                                 </a>
@@ -13,7 +13,7 @@ const content = {
                                                 </a>
                                             </div>`,
     createChampionsContent:         data => `<div class="item my-2">
-                                                <a href="#" class="champion-link links d-flex align-items-center" data-champion="${data.competitionId}">
+                                                <a href="#" class="interactable links d-flex align-items-center" data-champion="${data.competitionId}">
                                                     <div class="svg-container me-2">${data.sig}</div>
                                                     <p class="mb-0">${data.name}</p>
                                                 </a>
