@@ -149,7 +149,6 @@ function handleEvent(event) {
         event.preventDefault();
 
         const data = extractDataFromElement(element);
-        console.log(data);
 
         const actionName = element.getAttribute('data-action');
         const action = actions[actionName];

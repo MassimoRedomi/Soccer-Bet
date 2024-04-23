@@ -1,6 +1,8 @@
 const express = require('express');
+const bcrypt = require('bcrypt');
 const router = express.Router();
 const fetch = require('node-fetch');
+const saltRounds = 10;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -71,5 +73,56 @@ router.post('/api/send-country', async (req, res) => {
   }
 });
 
+router.post('/api/signup', async (req, res) => {
+  try{
+    let user = req.body.email;
+    let pwd = req.body.password1;
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hashPwd = await bcrypt.hash(pwd, salt);
+    const response = await fetch('http://localhost:8082/save-user', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email: user, password: hashPwd })
+    });
+    const data = await response.json();
+
+    res.status(200).json(data);
+  } catch(error){
+    console.error('Error posting user and password:', error);
+    res.status(500).json({ message: 'Error sending signup information' });
+  }
+});
+
+router.post('/api/login', async (req, res) => {
+  try {
+    const email = req.body.email;
+    const password = req.body.password;
+    const response = await fetch('http://localhost:8082/get-user', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ userMail: email })
+    });
+
+    const user = await response.json();
+
+    if (response.status !== 200) {
+      throw new Error('User not found');
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (isMatch) {
+      res.status(200).json({ message: 'OK' });
+    } else {
+      res.status(401).json({ message: "Can't continue with auth because passwords aren't equal" });
+    }
+  } catch (error) {
+    console.error('Error posting user', error);
+    res.status(500).json({ message: 'Error sending login information' });
+  }
+});
 
 module.exports = router;

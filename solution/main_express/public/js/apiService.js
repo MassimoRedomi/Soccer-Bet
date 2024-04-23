@@ -5,7 +5,6 @@ function postInitialData() {
     ];
 
     const dataFetchPromises = endpoints.map(endpoint =>{
-        console.log(endpoint.data);
         return postAxiosQuery(endpoint.url, endpoint.data)
             .then(data =>{
                 const htmlContent = renderDataAsHtml(data, endpoint.contentFn);

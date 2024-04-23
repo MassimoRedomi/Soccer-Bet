@@ -27,30 +27,61 @@ const actions = {
                                                         updateElementHtml('nation_dropdown', '<p class="text-white">Error loading champions data</p>', 'replace');
                                                     });
 
+                                             },
+    openLoginModal: ()              => {
+                                                const modaLogin = document.getElementById('loginModal');
+                                                const modalSign = document.getElementById('signinModal');
+                                                modaLogin.style.display = 'block';
+                                                modalSign.style.display = 'none';
+                                             },
+    closeModal: ()                  => {
+                                                const modaLogin = document.getElementById('loginModal');
+                                                const modaSign = document.getElementById('signinModal');
+                                                modaLogin.style.display = 'none';
+                                                modaSign.style.display = 'none';
+                                             },
+    openSignModal: ()               => {
+                                                const modaLogin = document.getElementById('loginModal');
+                                                const modalSign = document.getElementById('signinModal');
+                                                modaLogin.style.display = 'none';
+                                                modalSign.style.display = 'block';
+                                             },
+    sendLoginRequest: ()              => {
+                                                const form = document.getElementById('loginForm');
+                                                const data = extractDataFromElement(form);
+
+                                                if (validateLoginData(data, 'loginErrors')) {
+                                                    postAxiosQuery('/api/login', data)
+                                                        .then(response => {
+                                                            if (response.message === 'OK') {
+                                                                fullContentAfterLogin(response);
+                                                            } else {
+                                                                updateElementHtml('loginErrors', `<p class="text-red">${response.message}</p>`, 'replace');
+                                                            }
+                                                        })
+                                                        .catch(error => {
+                                                            console.error(`Failed to load data from /api/login:`, error);
+                                                            const errorMessage = (error.response && error.response.data && error.response.data.message)
+                                                                                            ? error.response.data.message
+                                                                                            : 'Login failed due to wrong password. Please try again.';
+                                                            updateElementHtml('loginErrors', `<p class="text-red">${errorMessage}</p>`, 'replace');
+                                                        });
+                                                }
+                                             },
+    sendSignRequest: ()             => {
+                                                const form = document.getElementById('signForm');
+                                                data = extractDataFromElement(form);
+                                                if(validateSigninData(data, 'passwordErrors')){
+                                                    postAxiosQuery('/api/signup', data)
+                                                        .then(data => moveToLogin(data))
+                                                        .catch(error =>{
+                                                            console.error(`Failed to load data from /api/signup:`, error);
+                                                            updateElementHtml('congrats', `<h3 class="text-white">We are sorry! Your account wasn't created</h3>`, 'replace');
+                                                            updateElementHtml('congrats2', `<p class="text-white">Please try again later! We are working at the problem</p>`, 'replace');
+                                                            return null;
+                                                        });
+                                                }
+
                                              }
+
 };
-
-
-/**
- * Updates the select dropdown options marking the specified default value as selected.
- *
- * @param {string} selectId - The ID of the select element to update.
- * @param {string} defaultValue - The value that should be marked as selected in the dropdown.
- */
-function updateSelectOptions(selectId, defaultValue) {
-    const selectElement = document.getElementById(selectId);
-    if (!selectElement) {
-        console.error('Select element not found:', selectId);
-        return;
-    }
-
-    const options = Array.from(selectElement.options).map(option => ({name: option.value}));
-
-    const optionsHtml = options.map(option => {
-        const isSelected = option.name === defaultValue.nation ? ' selected' : '';
-        return `<option value="${option.name}"${isSelected}>${option.name}</option>`;
-    }).join('');
-
-    selectElement.innerHTML = optionsHtml;
-}
-

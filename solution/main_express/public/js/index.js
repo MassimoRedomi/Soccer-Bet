@@ -37,6 +37,7 @@ function setupEventListeners() {
 
 function init() {
     setupEventListeners();
+    initChat();
     const lastActiveSection = localStorage.getItem('activeSection');
     if (lastActiveSection && sections[lastActiveSection]) {
         activateSection(lastActiveSection);
