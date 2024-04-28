@@ -70,6 +70,11 @@ html, body {
   display: none;
 }
 
+.disabled {
+  pointer-events: none;
+  color: grey;
+}
+
 /* FONT DIMENSION */
 .bold{
   font-weight: bold;

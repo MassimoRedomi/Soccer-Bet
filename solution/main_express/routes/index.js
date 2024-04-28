@@ -96,33 +96,51 @@ router.post('/api/signup', async (req, res) => {
 });
 
 router.post('/api/login', async (req, res) => {
+  const { email, password } = req.body;
   try {
-    const email = req.body.email;
-    const password = req.body.password;
     const response = await fetch('http://localhost:8082/get-user', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userMail: email })
     });
 
-    const user = await response.json();
-
-    if (response.status !== 200) {
-      throw new Error('User not found');
+    if (!response.ok) {
+      throw new Error('Network response was not ok.');
     }
+
+    const user = await response.json();
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (isMatch) {
-      res.status(200).json({ message: 'OK' });
+      req.session.isLoggedIn = true;
+      res.json({ status: 'success', message: 'OK' });
     } else {
-      res.status(401).json({ message: "Can't continue with auth because passwords aren't equal" });
+      res.status(401).json({ status: 'error', message: 'Invalid credentials' });
     }
   } catch (error) {
-    console.error('Error posting user', error);
-    res.status(500).json({ message: 'Error sending login information' });
+    console.error('Error during login:', error);
+    res.status(500).json({ status: 'error', message: 'Error sending login information', details: error.message });
   }
+});
+
+router.get('/api/check-login', (req, res) => {
+  try {
+    const isLoggedIn = !!req.session.isLoggedIn;
+    res.json({ isLoggedIn });
+  } catch (error) {
+    console.error('Failed to check login status:', error);
+    res.status(500).json({ message: 'Internal Server Error', details: error.message });
+  }
+});
+
+router.get('/api/logout', (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      console.log('Session destruction error:', err);
+      return res.status(500).send('Failed to log out.');
+    }
+    res.send('OK');
+  });
 });
 
 module.exports = router;

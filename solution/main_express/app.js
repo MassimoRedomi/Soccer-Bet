@@ -3,10 +3,21 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const session = require("express-session");
+const app = express();
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
-const app = express();
 
+app.use(session({
+  secret: 'your_secret_key',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: 'auto',
+    httpOnly: true,
+    maxAge: 3600000
+  }
+}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -35,6 +46,10 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+});
+
+app.use((req, res, next) => {
+  res.status(404).send('Not Found');
 });
 
 module.exports = app;
