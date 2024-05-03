@@ -65,7 +65,7 @@
           <input type="password" id="password" name="password" required>
         </div>
         <div id="loginErrors"></div>
-        <button type="submit" class="interactable" data-action="sendLoginRequest">Login</button>
+        <button type="submit" class="interactable button-prime" data-action="sendLoginRequest">Login</button>
       </form>
     </div>
   </div>
@@ -96,13 +96,13 @@
           <input type="password" id="password2" name="password2" required>
         </div>
         <div id="passwordErrors"></div>
-        <button type="submit" class="interactable" data-action="sendSignRequest">Create account</button>
+        <button type="submit" class="interactable button-prime" data-action="sendSignRequest">Create account</button>
       </form>
     </div>
   </div>
 </div>
 
-<main id="news-container" class="top">
+<main id="news-chats-container" class="top">
   <div class="banner">
     <div class="allImages">
       <div class="imageBanner">
@@ -180,8 +180,119 @@
         </div>
       </div>
       <div class="col-md-9">
-          <div id="news"></div>
-          <a href="#" id="toggleNews" onclick="toggleNews(); return false;"  class="links border-top-green text-center text-grey">See More</a>
+          <div id="news-container">
+            <div id="news"></div>
+            <a href="#" id="toggleNews" onclick="toggleNews(); return false;"  class="links border-top-green text-center text-grey">See More</a>
+          </div>
+          <div id="chats-container">
+            <div id="initial_form" style="display: block">
+
+              <div class="container-fluid mb-4 py-4 bg-black text-white rounded-3">
+                <h4 id="userName"></h4>
+                <p>
+                  Join fellow soccer fans from around the world in our chat rooms. Please select your country from
+                  the list below to tailor the chat experience to your preferred language. This helps ensure that you and your
+                  fellow fans can communicate effectively and enjoy discussing the beautiful game together.
+                </p>
+              </div>
+
+              <div class="container-fluid mb-4 py-4 bg-black text-white rounded-3">
+                <h4 id="languageName">Please, choose your language...</h4>
+                <div class="container d-flex flex-row justify-content-center" id="language"><h4 class="text-white">Loading...</h4></div>
+              </div>
+
+              <div class="container-fluid mb-4 py-4 bg-black text-white rounded-3" style="display: none;" id="languageChampionContainer">
+                <h4 id="championLanguageName">Please, choose your champion chat and start chatting with other fans...</h4>
+                <p id="championLanguageInfo" style="display: none;"></p>
+                <div class="container-fluid justify-content-center">
+                  <div class="row" id="championChat">
+                    <h4 class="text-white">Loading...</h4>
+                  </div>
+                </div>
+              </div>
+              <button type="submit" class="interactable button-prime"
+                      style="display: none;" data-action="startChat"
+                      id="startChatButton" data-language=""
+                      data-champion="" data-userName="">
+                Start Conversation
+              </button>
+
+            </div>
+            <div id="chat_interface" style="display: none">
+              <div class="container-fluid mb-4 py-4 bg-black text-white rounded-3">
+                <div class="row">
+                  <div class="col-md-4">
+
+                  </div>
+                  <div class="col-md-4">
+                    <h3>CHAT ROOM</h3>
+                  </div>
+                  <div class="col-md-4">
+                    <h3><div id="in_room" style="display: inline"></div></h3>
+                  </div>
+                </div>
+              </div>
+
+              <div class="container-fluid mb-4 py-4 bg-black text-white rounded-3">
+                <h4>Welcome to our Fan Chat!</h4>
+                <h4 id="who_you_are"></h4>
+                <p>
+                  We're excited to have you here and hope you enjoy discussing and sharing with fellow fans.
+                  To ensure a welcoming and respectful environment for everyone, we kindly ask you to adhere
+                  to the following guidelines
+                </p>
+              </div>
+
+              <div class="container-fluid mb-4 py-4 bg-black text-white rounded-3">
+                <ul>
+                  <li><strong>Be Respectful:</strong>
+                    <ul>
+                      <li>Always treat others with respect. Differences in opinions about games, teams, or players are natural, but must be expressed politely and constructively.</li>
+                    </ul>
+                  </li>
+                  <li><strong>No Harassment or Bullying:</strong>
+                    <ul>
+                      <li>Personal attacks, threats, or bullying of any kind will not be tolerated. Respect each person’s dignity and rights.</li>
+                    </ul>
+                  </li>
+                  <li><strong>Keep Language Clean:</strong>
+                    <ul>
+                      <li>Avoid using profane, vulgar, or offensive language. Our chat is for fans of all ages and backgrounds.</li>
+                    </ul>
+                  </li>
+                  <li><strong>Stay On Topic:</strong>
+                    <ul>
+                      <li>Keep discussions relevant to the sport and related topics. This helps maintain focus and ensures everyone can enjoy the conversation.</li>
+                    </ul>
+                  </li>
+                  <li><strong>No Spamming:</strong>
+                    <ul>
+                      <li>Please do not flood the chat with repetitive messages, advertisements, or irrelevant content.</li>
+                    </ul>
+                  </li>
+                  <li><strong>Listen and Respond Thoughtfully:</strong>
+                    <ul>
+                      <li>Give others a chance to speak and listen to what they have to say. Respond thoughtfully and avoid dominating the conversation.</li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="container-fluid mb-4 py-4 bg-black text-white rounded-3">
+                <div id="chat_history" class="boxed"></div>
+                  <form onsubmit="return false;" style="width: 100%">
+                    <div class="row">
+                      <div class="col-md-8">
+                        <input type="text" id="chat_input" name="chat_input" style="width: 100%">
+                      </div>
+                      <div class="col-md-4">
+                        <button id="chat_send" class="button-prime" onclick="sendChatText()">Send</button>
+                      </div>
+                    </div>
+                  </form>
+              </div>
+            </div>
+          </div>
       </div>
     </div>
   </div>
@@ -229,56 +340,6 @@
     <div class="row border-top-green">
       <div class="col-md-12">
 
-      </div>
-    </div>
-  </div>
-</main>
-
-<main id="chats-container" class="top">
-  <div id="initial_form" style="display: block">
-    <p>Please insert the id of the Room you want to Join, if you do not have a room id, click Generate Room</p>
-    <form onsubmit="return false;">
-      <p><label for="name"> Your name </label>
-        <input type="text" id="name" name="name">
-      </p>
-      <p>
-        <label for="roomNo"> Your room </label>
-        <input type="text" id="roomNo" name="roomNo">
-        <button id="roomNoGenerator" onclick="generateRoom()">Generate Room</button>
-      </p>
-      <button id="connect" onclick="connectToRoom()">Connect</button>
-    </form>
-  </div>
-  <div id="chat_interface" style="display: none">
-    <div id="chat_container" class="split left">
-      <h1>Chat</h1>
-      <div>
-        <div id="who_you_are" style="display: inline"></div>
-        , you are chatting in room:
-        <div id="in_room" style="display: inline"></div>
-      </div>
-      <div id="chat_history" class="boxed"></div>
-      <div id="chat_box" class="bottom boxed">
-        <form onsubmit="return false;" style="width: 100%">
-          <p>
-            <label for="name"> chat: </label>
-            <input type="text" id="chat_input" name="chat_input" style="width: 80%">
-            <button id="chat_send" onclick="sendChatText()">Send</button>
-          </p>
-        </form>
-      </div>
-    </div>
-    <div id="news_container" class="split right">
-      <h1>News</h1>
-      <div id="news_history" class="boxed"></div>
-      <div id="news_box" class="bottom boxed">
-        <form onsubmit="return false;" style="width: 100%">
-          <p>
-            <label for="name"> news: </label>
-            <input type="text" id="news_input" name="news_input" style="width: 80%">
-            <button id="news_send" onclick="sendNewsText()">Send</button>
-          </p>
-        </form>
       </div>
     </div>
   </div>

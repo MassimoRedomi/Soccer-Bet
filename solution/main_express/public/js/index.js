@@ -1,7 +1,14 @@
+document.addEventListener('DOMContentLoaded', function () {
+    setupEventListeners();
+    checkLoginStatus();
+    loadLastActiveSection();
+});
+
 const sections = {
-    news: document.getElementById('news-container'),
+    newsChats: document.getElementById('news-chats-container'),
     stats: document.getElementById('stats-container'),
-    chats: document.getElementById('chats-container')
+    chats: document.getElementById('chats-container'),
+    news: document.getElementById('news-container')
 };
 
 const links = {
@@ -10,8 +17,10 @@ const links = {
     chats: document.getElementById('nav-chats')
 };
 
-function hideAllSections() {
-    Object.values(sections).forEach(section => section.style.display = 'none');
+function hideAllSections(exclude) {
+    Object.entries(sections).forEach(([key, section]) => {
+        section.style.display = (key === exclude) ? 'block' : 'none';
+    });
 }
 
 function deactivateAllLinks() {
@@ -20,22 +29,34 @@ function deactivateAllLinks() {
 
 function activateSection(sectionKey) {
     const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-    if ((sectionKey === 'stats' || sectionKey === 'chats') && !isLoggedIn) {
-        updateElementHtml('congrats', '<h3>Please, Log in to continue</h3>', 'replace');
+    if (!isLoggedIn && (sectionKey === 'stats' || sectionKey === 'chats')) {
+        updateElementHtml('congrats', '<h3>Please log in to continue</h3>', 'replace');
         actions.openLoginModal();
         return;
     }
 
-    hideAllSections();
+    hideAllSections(sectionKey);
     deactivateAllLinks();
-    sections[sectionKey].style.display = 'block';
+
+    if (sectionKey === 'chats') {
+        sections.newsChats.style.display = 'block';
+        sections.news.style.display = 'none';
+        sections.chats.style.display = 'block';
+    } else if (sectionKey === 'news') {
+        sections.newsChats.style.display = 'block';
+        sections.news.style.display = 'block';
+        sections.chats.style.display = 'none';
+    } else if (sectionKey === 'stats') {
+        sections.stats.style.display = 'block';
+    }
+
     links[sectionKey].classList.add('active');
     localStorage.setItem('activeSection', sectionKey);
 }
 
 function setupEventListeners() {
     Object.keys(links).forEach(key => {
-        links[key].addEventListener('click', function (event) {
+        links[key].addEventListener('click', function(event) {
             event.preventDefault();
             activateSection(key);
         });
@@ -49,17 +70,11 @@ async function checkLoginStatus() {
         console.log(data.isLoggedIn);
         localStorage.setItem('isLoggedIn', data.isLoggedIn);
         if (data.isLoggedIn) {
-            const loginLink = document.getElementById('nav-login');
-            loginLink.innerHTML = '<h6>LOGOUT</h6>';
-            loginLink.setAttribute('data-action', 'userLogout');
-            const lastActiveSection = localStorage.getItem('activeSection') || 'news';
-            activateSection(lastActiveSection);
+            actions.updateLoginUI('LOGOUT', 'userLogout');
+            actions.setUserName();
             initChat();
-            actions.closeModal();
         } else {
-            const loginLink = document.getElementById('nav-login');
-            loginLink.innerHTML = '<h6>LOGIN</h6>';
-            loginLink.setAttribute('data-action', 'openLoginModal');
+            actions.updateLoginUI('LOGIN', 'openLoginModal');
             links.stats.classList.add('disabled');
             links.chats.classList.add('disabled');
             activateSection('news');
@@ -70,7 +85,12 @@ async function checkLoginStatus() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    setupEventListeners();
-    checkLoginStatus();
-});
+function loadLastActiveSection() {
+    const lastActiveSection = localStorage.getItem('activeSection');
+    if (lastActiveSection && sections[lastActiveSection]) {
+        activateSection(lastActiveSection);
+    } else {
+        activateSection('news');
+    }
+}
+

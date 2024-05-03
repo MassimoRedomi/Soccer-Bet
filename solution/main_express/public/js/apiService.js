@@ -29,7 +29,9 @@ function getInitialData() {
         { url: '/api/clubs-names', elementId: 'clubs', contentFn: content.createClubsContent },
         { url: '/api/champions', elementId: 'champions', contentFn: content.createChampionsContent },
         { url: '/api/soccer-nations', elementId: 'nations', contentFn: content.createNationsListContent },
-        { url: '/api/soccer-nations', elementId: 'nation_dropdown', contentFn: content.createNationsDropdownContent }
+        { url: '/api/soccer-nations', elementId: 'nation_dropdown', contentFn: content.createNationsDropdownContent },
+        { url: 'api/soccer-nations', elementId: 'language', contentFn: content.createLanguageContent},
+        { url: 'api/champions', elementId: 'championChat', contentFn: content.createChampionChatContent}
     ];
 
     const dataFetchPromises = endpoints.map(endpoint => {

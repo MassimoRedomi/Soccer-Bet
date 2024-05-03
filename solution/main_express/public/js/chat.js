@@ -1,7 +1,6 @@
 let name = null;
 let roomNo = null;
 let chat= io.connect('/chat');
-let news= io.connect('/news');
 
 
 /**
@@ -15,19 +14,8 @@ function initChat() {
     document.getElementById('chat_interface').style.display = 'none';
 
     initChatSocket();
-    initNewsSocket();
 }
 
-
-/**
- * called to generate a random room number
- * This is a simplification. A real world implementation would ask the server to generate a unique room number
- * so to make sure that the room number is not accidentally repeated across uses
- */
-function generateRoom() {
-    roomNo = Math.round(Math.random() * 10000);
-    document.getElementById('roomNo').value = 'R' + roomNo;
-}
 
 /**
  * it initialises the socket for /chat
@@ -53,23 +41,6 @@ function initChatSocket() {
 
 }
 
-/**
- * it initialises the socket for /news
- */
-function initNewsSocket(){
-    news.on('joined', function (room, userId) {
-            if (userId !== name) {
-                // notifies that someone has joined the room
-                writeOnNewsHistory('<b>'+userId+'</b>' + ' joined news room ' + room);
-            }
-        });
-
-    // called when some news is received (note: only news received by others are received)
-    news.on('news', function (room, userId, newsText) {
-        writeOnNewsHistory('<b>' + userId + ':</b> ' + newsText);
-    });
-}
-
 
 /**
  * called when the Send button is pressed. It gets the text to send from the interface
@@ -79,27 +50,16 @@ function sendChatText() {
     let chatText = document.getElementById('chat_input').value;
     chat.emit('chat', roomNo, name, chatText);
 }
-/**
- * called when the Send button is pressed for news. It gets the text to send from the interface
- * and sends the message via  socket
- */
-function sendNewsText() {
-    let newsText = document.getElementById('news_input').value;
-    news.emit('news', roomNo, name, newsText);
-    document.getElementById('news_input').value='';
-}
 
 /**
  * used to connect to a room. It gets the user name and room number from the
  * interface
  * It connects both chat and news at the same time
  */
-function connectToRoom() {
-    roomNo = document.getElementById('roomNo').value;
-    name = document.getElementById('name').value;
-    if (!name) name = 'Unknown-' + Math.random();
+function connectToRoom(room, userName) {
+    name = userName;
+    roomNo = room
     chat.emit('create or join', roomNo, name);
-    news.emit('create or join', roomNo, name);
 }
 
 /**
@@ -112,18 +72,8 @@ function writeOnChatHistory(text) {
     paragraph.innerHTML = text;
     history.appendChild(paragraph);
     document.getElementById('chat_input').value = '';
-}
 
-/**
- * it appends the given html text to the history div
- * @param text: teh text to append
- */
-function writeOnNewsHistory(text) {
-    let history = document.getElementById('news_history');
-    let paragraph = document.createElement('p');
-    paragraph.innerHTML = text;
-    history.appendChild(paragraph);
-    document.getElementById('news_input').value = '';
+    scrollToBottom();
 }
 
 /**
@@ -135,6 +85,11 @@ function hideLoginInterface(room, userId) {
     document.getElementById('initial_form').style.display = 'none';
     document.getElementById('chat_interface').style.display = 'block';
     document.getElementById('who_you_are').innerHTML= userId;
-    document.getElementById('in_room').innerHTML= ' '+room;
+    document.getElementById('in_room').innerHTML= ' '+actions.formatNames(room);
+}
+
+function scrollToBottom() {
+    const chatHistory = document.getElementById('chat_history');
+    chatHistory.scrollTop = chatHistory.scrollHeight;
 }
 

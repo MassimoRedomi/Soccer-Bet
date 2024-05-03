@@ -113,6 +113,7 @@ router.post('/api/login', async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (isMatch) {
       req.session.isLoggedIn = true;
+      req.session.userEmail = email;
       res.json({ status: 'success', message: 'OK' });
     } else {
       res.status(401).json({ status: 'error', message: 'Invalid credentials' });
@@ -143,4 +144,13 @@ router.get('/api/logout', (req, res) => {
   });
 });
 
+
+router.get('/api/userinfo', (req, res) => {
+  if (req.session.isLoggedIn) {
+    const userEmail = req.session.userEmail;
+    res.json(userEmail);
+  } else {
+    res.status(401).json({ message: "Unauthorized access. Please log in." });
+  }
+});
 module.exports = router;

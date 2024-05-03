@@ -28,6 +28,20 @@ const actions = {
                                                     });
 
                                              },
+    loadChampionsChats: data               =>{
+                                                    const languageNameElement = document.getElementById('languageName');
+                                                    const languageContainer= document.getElementById('languageChampionContainer');
+                                                    const startChatButton = document.getElementById('startChatButton');
+
+                                                    if (!languageNameElement) {
+                                                        console.error("The languageName element does not exist in the DOM.");
+                                                        return;
+                                                    }
+
+                                                    languageNameElement.innerHTML = `Nation selected: ${data.language}`;
+                                                    languageContainer.style.display = 'block';
+                                                    startChatButton.setAttribute('data-language', data.language);
+                                             },
     openLoginModal: ()              => {
                                                 const modaLogin = document.getElementById('loginModal');
                                                 const modalSign = document.getElementById('signinModal');
@@ -53,6 +67,7 @@ const actions = {
                                                     postAxiosQuery('/api/login', data)
                                                         .then(response => {
                                                             if (response.message === 'OK') {
+                                                                actions.closeModal();
                                                                 checkLoginStatus();
                                                             } else {
                                                                 updateElementHtml('loginErrors', `<p class="text-red">${response.message}</p>`, 'replace');
@@ -72,7 +87,7 @@ const actions = {
                                                 data = extractDataFromElement(form);
                                                 if(actions.validateSigninData(data, 'passwordErrors')){
                                                     postAxiosQuery('/api/signup', data)
-                                                        .then(data => moveToLogin(data))
+                                                        .then(data => actions.moveToLogin(data))
                                                         .catch(error =>{
                                                             console.error(`Failed to load data from /api/signup:`, error);
                                                             updateElementHtml('congrats', `<h3 class="text-white">We are sorry! Your account wasn't created</h3>`, 'replace');
@@ -132,6 +147,7 @@ const actions = {
 
                                                 },
     moveToLogin: data                        => {
+        console.log('we are here');
                                                     const modaLogin = document.getElementById('loginModal');
                                                     const modalSign = document.getElementById('signinModal');
                                                     updateElementHtml('congrats', '<h3>Congratulations! Your account is created</h3>', 'replace');
@@ -155,7 +171,7 @@ const actions = {
 
                                                     selectElement.innerHTML = optionsHtml;
                                                 },
-    userLogout: ()                         => {
+    userLogout: ()                     => {
                                                         fetch('/api/logout')
                                                             .then(response => {
                                                                 if (response.ok) {
@@ -166,6 +182,70 @@ const actions = {
                                                             .catch(error => {
                                                                 console.error('Logout failed:', error);
                                                             });
+                                                },
+    updateLoginUI: (text, action)      => {
+                                                    const loginLink = document.getElementById('nav-login');
+                                                    loginLink.innerHTML = `<h6>${text}</h6>`;
+                                                    loginLink.setAttribute('data-action', action);
+                                                },
+    setUserName: async ()                    => {
+                                                    const userNameElement = document.getElementById('userName');
+                                                    const startChatButton = document.getElementById('startChatButton');
+
+                                                    if (!userNameElement) {
+                                                        console.error("The userName element does not exist in the DOM.");
+                                                        return;
+                                                    }
+
+                                                    try {
+                                                        const response = await fetch('/api/userinfo');
+                                                        if (!response.ok) {
+                                                            throw new Error('Failed to fetch user information from the server');
+                                                        }
+
+                                                        const data = await response.json();
+                                                        if (data) {
+                                                            userNameElement.innerHTML = `Welcome, ${data}!`;
+                                                            startChatButton.setAttribute('data-userName', data);
+                                                            localStorage.setItem('userEmail', data);
+                                                        } else {
+                                                            userNameElement.innerHTML = `<h4>Guest</h4>`;
+                                                            console.log("No email address available for the user.");
+                                                        }
+                                                    } catch (error) {
+                                                        console.error('Error retrieving user information:', error);
+                                                        userNameElement.innerHTML = `<h4>Error loading user data</h4>`;
+                                                        activateSection('news');
+                                                    }
+                                                },
+    formatNames:    inputString              => {
+                                                    const names = inputString.split('-');
+                                                    const capitalizedNames = names.map(name => {
+                                                        if (name) {
+                                                            return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+                                                        }
+                                                        return '';
+                                                    });
+                                                    return capitalizedNames.join(' ');
+                                                },
+    loadChampionChat: data                           => {
+                                                    const championLanguageElement = document.getElementById('championLanguageName');
+                                                    const championLanguageInfo= document.getElementById('championLanguageInfo');
+                                                    const startChatButton = document.getElementById('startChatButton');
+
+                                                    if (!championLanguageElement) {
+                                                        console.error("The languageName element does not exist in the DOM.");
+                                                        return;
+                                                    }
+
+                                                    championLanguageElement.innerHTML = `Champion chat selected: ${actions.formatNames(data.champion)}`;
+                                                    championLanguageInfo.innerHTML= `Start your conversation by pressing the button above`;
+                                                    championLanguageInfo.style.display = 'block';
+                                                    startChatButton.style.display = 'block';
+                                                    startChatButton.setAttribute('data-champion', data.champion);
+                                                },
+    startChat: data                          => {
+                                                    connectToRoom(data.champion, data.username);
                                                 }
 
 };

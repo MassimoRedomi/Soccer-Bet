@@ -44,6 +44,7 @@ html, body {
 
 .svg-container {
   width: 25px;
+  pointer-events: none;
 }
 .svg-container svg {
   width: 100%;
@@ -73,6 +74,53 @@ html, body {
 .disabled {
   pointer-events: none;
   color: grey;
+}
+
+
+.button-prime {
+  width: 100%;
+  background-color: #05A840;
+  color: #F0F0F0;
+  font-size: 1.2rem;
+  border: none;
+  padding: 10px 20px;
+  transition: background-color 0.3s, color 0.3s;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.button-prime:hover {
+  background-color: #037730;
+  color: #ffffff;
+}
+
+.boxed {
+  width: 100%; /* Adjust the width as needed */
+  height: 300px; /* Fixed height */
+  overflow-y: auto; /* Allows vertical scrolling */
+  padding: 10px; /* Padding inside the box */
+}
+
+/* Additional styles for scrollbar appearance */
+.boxed::-webkit-scrollbar {
+  width: 10px; /* Width of the scrollbar */
+}
+
+.boxed::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Color of the track */
+}
+
+.boxed::-webkit-scrollbar-thumb {
+  background: #888; /* Color of the scrollbar thumb */
+}
+
+.boxed::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Color of the thumb on hover */
+}
+
+.interactable p {
+  margin-bottom: 0;
+  pointer-events: none;
 }
 
 /* FONT DIMENSION */
@@ -180,11 +228,14 @@ html, body {
 }
 .navbar .navbar-nav .nav-item .nav-link {
   color: white !important;
+  display: block;
+  width: 100%;
 }
 
 .navbar-nav .nav-link h6 {
   color: white;
   display: inline-block;
+  pointer-events: none;
 }
 .navbar-nav .nav-link.active h6 {
   color: #05A840;
