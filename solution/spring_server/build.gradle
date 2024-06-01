@@ -25,3 +25,28 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+tasks.withType(JavaCompile).configureEach {
+	options.encoding = 'UTF-8'
+}
+
+tasks.register('generateJavadocs', Javadoc) {
+	source = sourceSets.main.allJava
+	classpath = configurations.runtimeClasspath
+	destinationDir = layout.buildDirectory.dir("docs/javadoc").get().asFile
+}
+
+tasks.register('copyJavadocs', Copy) {
+	dependsOn generateJavadocs
+	from layout.buildDirectory.dir("docs/javadoc")
+	into "$projectDir/src/main/resources/static/javadoc"
+}
+
+// Ensure processResources depends on copyJavadocs
+tasks.named('processResources') {
+	dependsOn copyJavadocs
+}
+
+tasks.named('build') {
+	dependsOn copyJavadocs
+}
