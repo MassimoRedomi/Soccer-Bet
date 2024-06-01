@@ -1,5 +1,7 @@
 const createError = require('http-errors');
 const express = require('express');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpecs = require('./swaggerConfig');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
@@ -33,6 +35,8 @@ app.use('/api', gameEventsRouter);
 app.use('/api', careerRoutes);
 app.use('/api', rankingsRoutes);
 
+// Swagger API documentation setup
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
 app.use(function(req, res, next) {
   next(createError(404));
