@@ -37,7 +37,6 @@ public class UsersController {
             result.put("password", password);
             return ResponseEntity.ok(result);
         } else {
-            return ResponseEntity.notFound().build();
-        }
+            return ResponseEntity.notFound().build();        }
     }
 }
