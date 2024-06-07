@@ -22,8 +22,6 @@ const gameSchema = new mongoose.Schema({
     away_club_name: String,
     aggregate: String,
     competition_type: String,
-    home_club_formation: String,
-    away_club_formation: String,
     competition_name: String
 });
 
