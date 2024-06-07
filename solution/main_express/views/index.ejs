@@ -324,9 +324,18 @@
 
       <div class="col-md-3 border-right-green">
           <div class="container-fluid d-flex flex-column align-items-center my-4">
-            <select id="nation_dropdown"  name="nation" class="interactable" data-action="loadConnectedDataNation"></select>
+            <select id="nation_dropdown"  name="nation" class="interactable" data-action="controllerSoccerData"></select>
             <div id="champions_nation_list">
               <p class="text-white">Loading... </p>
+            </div>
+          </div>
+          <div class="container-fluid d-flex flex-row align-items-center justify-content-center border-top-green mb-4">
+            <img src="images/calendar.png" class="me-2" alt="Apps" width="25px">
+            <h4 class="mb-0 text-white">Years</h4>
+          </div>
+          <div class="container-fluid align-items-center my-4">
+            <div class="row" id="champions_years">
+                <p class="text-white">Loading... </p>
             </div>
           </div>
       </div>
@@ -334,12 +343,35 @@
 
       </div>
       <div class="col-md-3 border-left-green">
-
+        <div class="scroll-container">
+        <div class="container-fluid d-flex flex-column align-items-center my-4">
+            <div id="breadcrumbs">
+              <p class="text-white">Loading... </p>
+            </div>
+            <div id="gamesxchampion">
+              <p class="text-white">Loading... </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="row border-top-green">
-      <div class="col-md-12">
-
+    <div class="container-fluid border-top-green">
+      <div class="row">
+        <div class="col-4 d-flex justify-content-center align-items-center"><p class="text-white bold mb-0">PLAYER</p></div>
+        <div class="col-1 d-flex justify-content-center align-items-center"><p class="text-white bold mb-0">AGE</p></div>
+        <div class="col-1 d-flex justify-content-center align-items-center"><p class="text-white bold mb-0">P.G</p></div>
+        <div class="col-2 d-flex justify-content-center align-items-center"><p class="text-white bold mb-0">MIN</p></div>
+        <div class="col-1 d-flex justify-content-center align-items-center"><p class="text-white bold mb-0">G</p></div>
+        <div class="col-1 d-flex justify-content-center align-items-center"><p class="text-white bold mb-0">A</p></div>
+        <div class="col-1 d-flex justify-content-center align-items-center"><div class="red_card"></div></div>
+        <div class="col-1 d-flex justify-content-center align-items-center"><div class="yellow_card"></div></div>
+      </div>
+    </div>
+    <div class="scroll-container2">
+      <div class="container-fluid">
+        <div id="clubPlayers">
+          <p class="text-white">Loading... </p>
+        </div>
       </div>
     </div>
   </div>
@@ -422,8 +454,7 @@
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <script  type="text/javascript" src="js/slideshow.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script type="text/javascript" src="js/components.js"></script>
-<script type="text/javascript" src="js/handlers.js"></script>
+<script type="text/javascript" src="js/actions.js"></script>
 <script type="text/javascript" src="js/apiService.js"></script>
 <script type="text/javascript" src="js/content.js"></script>
 <script type="text/javascript" src="js/index.js"></script>

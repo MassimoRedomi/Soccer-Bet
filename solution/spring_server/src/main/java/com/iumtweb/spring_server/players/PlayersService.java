@@ -1,5 +1,6 @@
 package com.iumtweb.spring_server.players;
 
+import com.iumtweb.spring_server.clubs.Clubs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,5 +17,9 @@ public class PlayersService {
 
     public List<Players> getFirst10Players(){
         return playersRepository.findTop10ByOrderByPlayerIdAsc();
+    }
+
+    public List<Players> getPlayersByClubId(Clubs currentClubId) {
+        return playersRepository.findByCurrentClubId(currentClubId);
     }
 }

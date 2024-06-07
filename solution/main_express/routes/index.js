@@ -343,4 +343,357 @@ router.get('/api/userinfo', (req, res) => {
   }
 });
 
+
+/**
+ * @swagger
+ * /api/games_by_champion:
+ *   post:
+ *     summary: Fetch games by competition ID
+ *     description: Forwards a request to another server to fetch games by competition ID.
+ *     tags:
+ *       - Games
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               competition_id:
+ *                 type: string
+ *                 example: "RU1"
+ *     responses:
+ *       200:
+ *         description: A list of games
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   game_id:
+ *                     type: integer
+ *                     example: 2222597
+ *                   competition_id:
+ *                     type: string
+ *                     example: "RU1"
+ *                   season:
+ *                     type: integer
+ *                     example: 2012
+ *                   round:
+ *                     type: string
+ *                     example: "6. Matchday"
+ *                   date:
+ *                     type: string
+ *                     format: date-time
+ *                     example: "2012-08-25T00:00:00.000Z"
+ *                   home_club_id:
+ *                     type: integer
+ *                     example: 3725
+ *                   away_club_id:
+ *                     type: integer
+ *                     example: 232
+ *                   home_club_goals:
+ *                     type: integer
+ *                     example: 2
+ *                   away_club_goals:
+ *                     type: integer
+ *                     example: 1
+ *                   home_club_position:
+ *                     type: integer
+ *                     example: 2
+ *                   away_club_position:
+ *                     type: integer
+ *                     example: 5
+ *                   home_club_manager_name:
+ *                     type: string
+ *                     example: "Stanislav Cherchesov"
+ *                   away_club_manager_name:
+ *                     type: string
+ *                     example: "Unai Emery"
+ *                   stadium:
+ *                     type: string
+ *                     example: "Akhmat-Arena"
+ *                   attendance:
+ *                     type: integer
+ *                     example: 21700
+ *                   referee:
+ *                     type: string
+ *                     example: "Vladislav Bezborodov"
+ *                   url:
+ *                     type: string
+ *                     example: "https://www.transfermarkt.co.uk/terek-grozny_spartak-moscow/index/spielbericht/2222597"
+ *                   home_club_name:
+ *                     type: string
+ *                     example: "RFK Akhmat Grozny"
+ *                   away_club_name:
+ *                     type: string
+ *                     example: "FK Spartak Moskva"
+ *                   aggregate:
+ *                     type: string
+ *                     example: "2:1"
+ *                   competition_type:
+ *                     type: string
+ *                     example: "domestic_league"
+ *       500:
+ *         description: Internal Server Error
+ */
+router.post('/api/games_by_champion', async (req, res) => {
+  const { competition_id } = req.body;
+
+  try {
+    const response = await fetch('http://localhost:3002/games/games_by_competition', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ competition_id: competition_id })
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch games from the competition service');
+    }
+
+    const data = await response.json();
+    res.status(200).json(data);
+  } catch (error) {
+    console.error('Error forwarding request:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+
+/**
+ * @swagger
+ * /api/games_by_championNseason:
+ *   post:
+ *     summary: Fetch games by competition ID and season
+ *     description: Forwards a request to another server to fetch games by competition ID and season.
+ *     tags:
+ *       - Games
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               competition_id:
+ *                 type: string
+ *                 example: "RU1"
+ *               season:
+ *                 type: integer
+ *                 example: 2012
+ *     responses:
+ *       200:
+ *         description: A list of games
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   game_id:
+ *                     type: integer
+ *                     example: 2222597
+ *                   competition_id:
+ *                     type: string
+ *                     example: "RU1"
+ *                   season:
+ *                     type: integer
+ *                     example: 2012
+ *                   round:
+ *                     type: string
+ *                     example: "6. Matchday"
+ *                   date:
+ *                     type: string
+ *                     format: date-time
+ *                     example: "2012-08-25T00:00:00.000Z"
+ *                   home_club_id:
+ *                     type: integer
+ *                     example: 3725
+ *                   away_club_id:
+ *                     type: integer
+ *                     example: 232
+ *                   home_club_goals:
+ *                     type: integer
+ *                     example: 2
+ *                   away_club_goals:
+ *                     type: integer
+ *                     example: 1
+ *                   home_club_position:
+ *                     type: integer
+ *                     example: 2
+ *                   away_club_position:
+ *                     type: integer
+ *                     example: 5
+ *                   home_club_manager_name:
+ *                     type: string
+ *                     example: "Stanislav Cherchesov"
+ *                   away_club_manager_name:
+ *                     type: string
+ *                     example: "Unai Emery"
+ *                   stadium:
+ *                     type: string
+ *                     example: "Akhmat-Arena"
+ *                   attendance:
+ *                     type: integer
+ *                     example: 21700
+ *                   referee:
+ *                     type: string
+ *                     example: "Vladislav Bezborodov"
+ *                   url:
+ *                     type: string
+ *                     example: "https://www.transfermarkt.co.uk/terek-grozny_spartak-moscow/index/spielbericht/2222597"
+ *                   home_club_name:
+ *                     type: string
+ *                     example: "RFK Akhmat Grozny"
+ *                   away_club_name:
+ *                     type: string
+ *                     example: "FK Spartak Moskva"
+ *                   aggregate:
+ *                     type: string
+ *                     example: "2:1"
+ *                   competition_type:
+ *                     type: string
+ *                     example: "domestic_league"
+ *       500:
+ *         description: Internal Server Error
+ */
+router.post('/api/games_by_championNseason', async (req, res) => {
+  const { competition_id, season } = req.body;
+  try {
+    const response = await fetch('http://localhost:3002/games/games_by_competitionNseason', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ competition_id: competition_id, season: season })
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch games from the competition service');
+    }
+
+    const data = await response.json();
+    res.status(200).json(data);
+  } catch (error) {
+    console.error('Error forwarding request:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+/**
+ * @swagger
+ * /api/seasons_by_champion:
+ *   post:
+ *     summary: Fetch unique seasons by competition ID
+ *     description: Forwards a request to another server to fetch unique seasons by competition ID.
+ *     tags:
+ *       - Games
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               competition_id:
+ *                 type: string
+ *                 example: "RU1"
+ *     responses:
+ *       200:
+ *         description: A list of unique seasons
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: integer
+ *                 example: 2012
+ *       500:
+ *         description: Internal Server Error
+ */
+router.post('/api/seasons_by_champion', async (req, res) => {
+  const { competitionId } = req.body;
+  console.log(req.body);
+  try {
+    const response = await fetch('http://localhost:3002/games/seasons_by_competition', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ competition_id: competitionId })
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch seasons from the competition service');
+    }
+
+    const data = await response.json();
+    res.status(200).json(data);
+  } catch (error) {
+    console.error('Error forwarding request:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+/**
+ * @swagger
+ * /api/clubplayers:
+ *   post:
+ *     summary: Fetch players by club ID
+ *     description: Forwards a request to another server to fetch players by club ID.
+ *     tags:
+ *       - Players
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               current_club_id:
+ *                 type: string
+ *                 example: "1234"
+ *     responses:
+ *       200:
+ *         description: A list of players
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   player_id:
+ *                     type: integer
+ *                     example: 1
+ *                   player_name:
+ *                     type: string
+ *                     example: "John Doe"
+ *                   position:
+ *                     type: string
+ *                     example: "Forward"
+ *       500:
+ *         description: Internal Server Error
+ */
+router.post('/api/clubplayers', async (req, res) => {
+  const { clubId } = req.body;
+  try {
+    const response = await fetch('http://localhost:8082/playersoncurrentclub', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ clubId: clubId })
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch seasons from the competition service');
+    }
+
+    const data = await response.json();
+    res.status(200).json(data);
+  } catch (error) {
+    console.error('Error forwarding request:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
 module.exports = router;
+

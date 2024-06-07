@@ -596,3 +596,27 @@ footer ul.list-unstyled li:hover p {
   cursor: pointer;
 }
 /* END MODAL */
+
+.scroll-container {
+  height: 600px; /* Set the desired height */
+  overflow-y: auto; /* Add vertical scroll bar if content exceeds height */
+}
+
+.scroll-container2 {
+  height: 300px; /* Set the desired height */
+  overflow-y: auto; /* Add vertical scroll bar if content exceeds height */
+}
+
+.red_card {
+  width: 20px;
+  height: 25px;
+  border-radius: 20%;
+  background-color: #DC0100;
+}
+
+.yellow_card {
+  width: 20px;
+  height: 25px;
+  border-radius: 20%;
+  background-color: #F3A000;
+}
