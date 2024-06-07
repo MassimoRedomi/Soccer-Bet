@@ -30,26 +30,32 @@ exports.getGamesByCompetitionAndSeason = async (req, res) => {
     }
 };
 
-// Get unique seasons by competition_id
 exports.getSeasonsByCompetitionId = async (req, res) => {
     const { competition_id } = req.body;
+    console.log("Fetching seasons for competition_id:", competition_id);
 
     try {
-        // Find unique seasons for the given competition_id
+        // Aggregate to find unique seasons
         const seasons = await Game.aggregate([
             { $match: { competition_id: competition_id } },
-            { $group: { _id: "$season" } },
-            { $sort: { _id: -1 } } // Sort seasons in descending order
+            { $group: { _id: "$season", competition_name: { $first: "$competition_name" } } },
+            { $sort: { _id: -1 } }
         ]);
+
+        console.log("Seasons aggregation result:", seasons);
 
         // Format the result to include both season and competition_id
         const result = seasons.map(season => ({
             competition_id: competition_id,
-            season: season._id
+            season: season._id,
+            competition_name: season.competition_name
         }));
+
+        console.log("Formatted result:", result);
 
         res.json(result);
     } catch (err) {
+        console.error("Error during aggregation:", err);
         res.status(500).json({ message: err.message });
     }
 };

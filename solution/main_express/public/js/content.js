@@ -13,7 +13,7 @@ const content = {
                                                 </a>
                                             </div>`,
     createChampionsContent:         data => `<div class="item my-2">
-                                                <a href="#" class="interactable links d-flex align-items-center" data-action="controllerSoccerData"  data-country="${data.countryName}" data-name="${data.name}" data-champion="${data.competitionId}">
+                                                <a href="#" class="interactable links d-flex align-items-center" data-action="controllerSoccerData"  data-champion="${data.competitionId}" data-nation="${data.countryName}">
                                                     <div class="svg-container me-2">${data.sig}</div>
                                                     <p class="mb-0">${actions.formatNames(data.name)}</p>
                                                 </a>
@@ -33,7 +33,7 @@ const content = {
                                             </div>`,
     createSeasonsContent:           data => `<div class="col-4">
                                                 <div class="item my-2">
-                                                    <a href="#" class="interactable links d-flex align-items-center" data-action="controllerSoccerData" data-season="${data.season}" data-competition="${data.competition_id}">
+                                                    <a href="#" class="interactable links d-flex align-items-center" data-action="controllerSoccerData" data-season="${data.season}" data-competition="${data.competition_id}" data-name="${data.competition_name}">
                                                         <p class="mb-0">${data.season}</p>
                                                     </a>
                                                 </div>
@@ -55,7 +55,7 @@ const content = {
                                                         </div>
                                                     </div>
                                             </div>`,
-    createBreadCrumbsContent:       data => `<h4 class="mb-0 text-white">${data.name} > ${data.season}</h4>`,
+    createBreadCrumbsContent:       data => `<h4 class="mb-0 text-white">${actions.formatNames(data.name)} > ${data.season}</h4>`,
     createClubPlayersContent:       data => `<div class="item my-2">
                                                  <a href="#" class="interactable links" data-action="controllerSoccerData" data-playerId="${data.playerId}">
                                                     <div class="row">

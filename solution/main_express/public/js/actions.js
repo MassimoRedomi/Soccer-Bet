@@ -2,41 +2,22 @@ const actions = {
     async controllerSoccerData(data) {
         try {
             activateSection('stats');
-
+            if (data.club) {
+                await actions.chargePlayers({clubId: data.club});
+            } else if (data.season) {
+                const gamesData = await actions.chargeGames({competition_id: data.competition, season: data.season});
+                actions.chargeBreadCrumbs([{name: data.name, season: data.season}]);
+                await actions.controllerSoccerData({club: gamesData[0].home_club_id});
+            } else if (data.champion) {
+                const seasonsData = await actions.chargeSeasons({competitionId: data.champion});
+                await actions.controllerSoccerData({competition: seasonsData[0].competition_id, season: seasonsData[0].season, name: seasonsData[0].competition_name});
+            }
             if (data.nation) {
                 actions.updateSelectOptions('nation_dropdown', data);
                 const championsData = await actions.chargeChampions(data);
-                let formattedData = championsData.map(item => ({ competitionId: item.competitionId }));
-                let competitionId = formattedData[0];
-                const seasonsData= await actions.chargeSeasons(competitionId);
-                let championAndSeason = {competition_id: seasonsData[0].competition_id, season: seasonsData[0].season};
-                let nameAndSeason = [{ name : actions.formatNames(championsData[0].name), season: seasonsData[0].season}];
-                actions.chargeBreadCrumbs(nameAndSeason);
-                const gamesData= await actions.chargeGames(championAndSeason);
-                let clubId= {clubId: gamesData[0].home_club_id};
-                const clubPlayersData = await actions.chargePlayers(clubId);
+                await actions.controllerSoccerData(data.champion?{champion: data.champion}:{champion: championsData[0].competitionId});
             }
-            if (data.club) {
-                const clubPlayersData = await actions.chargePlayers({clubId: data.club});
-            }
-            if (data.champion) {
-                actions.updateSelectOptions('nation_dropdown', {nation: data.country});
-                const championsData = await actions.chargeChampions({nation: data.country});
-                const seasonsData= await actions.chargeSeasons({competitionId: data.champion});
-                let championAndSeason = {competition_id: data.champion, season: seasonsData[0].season};
-                let nameAndSeason = [{ name : actions.formatNames(data.name), season: seasonsData[0].season}];
-                actions.chargeBreadCrumbs(nameAndSeason);
-                const gamesData= await actions.chargeGames(championAndSeason);
-                let clubId= {clubId: gamesData[0].home_club_id};
-                const clubPlayersData = await actions.chargePlayers(clubId);
-            }
-
-            if (data.season) {
-                const gamesData= await actions.chargeGames({competition_id: data.competition, season: data.season});
-                let clubId= {clubId: gamesData[0].home_club_id};
-                const clubPlayersData = await actions.chargePlayers(clubId);
-            }
-        } catch (error) {
+        }catch (error) {
             console.error('Error processing data:', error);
             updateElementHtml('nation_dropdown', '<p class="text-white">Error loading data</p>', 'replace');
         }
