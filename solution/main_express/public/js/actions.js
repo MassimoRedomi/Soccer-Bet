@@ -1,20 +1,28 @@
+
 const actions = {
     async controllerSoccerData(data) {
+        const endpoints = [
+            { url: '/api/send-country', elementId:'champions_nation_list', contentFn: content.createChampionsContent },
+            { url: '/api/seasons_by_champion', elementId: 'champions_years', contentFn: content.createSeasonsContent },
+            { url: '/api/games_by_championNseason', elementId: 'gamesxchampion', contentFn:content.createGamesContent },
+            { url: '/api/clubplayers', elementId: 'clubPlayers', contentFn: content.createClubPlayersContent }
+        ];
+
         try {
             activateSection('stats');
             if (data.club) {
-                await actions.chargePlayers({clubId: data.club});
+                await actions.charge({clubId: data.club}, endpoints[3].url, endpoints[3].elementId, endpoints[3].contentFn);
             } else if (data.season) {
-                const gamesData = await actions.chargeGames({competition_id: data.competition, season: data.season});
+                const gamesData = await actions.charge({competition_id: data.competition, season: data.season}, endpoints[2].url, endpoints[2].elementId, endpoints[2].contentFn);
                 actions.chargeBreadCrumbs([{name: data.name, season: data.season}]);
                 await actions.controllerSoccerData({club: gamesData[0].home_club_id});
             } else if (data.champion) {
-                const seasonsData = await actions.chargeSeasons({competitionId: data.champion});
+                const seasonsData = await actions.charge({competitionId: data.champion}, endpoints[1].url, endpoints[1].elementId, endpoints[1].contentFn);
                 await actions.controllerSoccerData({competition: seasonsData[0].competition_id, season: seasonsData[0].season, name: seasonsData[0].competition_name});
             }
             if (data.nation) {
                 actions.updateSelectOptions('nation_dropdown', data);
-                const championsData = await actions.chargeChampions(data);
+                const championsData = await actions.charge(data, endpoints[0].url, endpoints[0].elementId, endpoints[0].contentFn);
                 await actions.controllerSoccerData(data.champion?{champion: data.champion}:{champion: championsData[0].competitionId});
             }
         }catch (error) {
@@ -22,30 +30,48 @@ const actions = {
             updateElementHtml('nation_dropdown', '<p class="text-white">Error loading data</p>', 'replace');
         }
     },
-    chargeChampions: async (data) => {
-        const championsData = await postAxiosQuery('/api/send-country', data);
-        const ChampionsHtmlContent = renderDataAsHtml(championsData, content.createChampionsContent);
-        updateElementHtml('champions_nation_list', ChampionsHtmlContent, 'replace');
-        return championsData;
+    getInitialData: () => {
+        const endpoints = [
+            { url: '/api/clubs-names', elementId: 'clubs', contentFn: content.createClubsContent },
+            { url: '/api/champions', elementId: 'champions', contentFn: content.createChampionsContent },
+            { url: '/api/soccer-nations', elementId: 'nations', contentFn: content.createNationsListContent },
+            { url: '/api/soccer-nations', elementId: 'nation_dropdown', contentFn: content.createNationsDropdownContent },
+            { url: '/api/soccer-nations', elementId: 'language', contentFn: content.createLanguageContent},
+            { url: '/api/champions', elementId: 'championChat', contentFn: content.createChampionChatContent}
+        ];
+
+        const dataFetchPromises = endpoints.map(endpoint => {
+            return getAxiosQuery(endpoint.url)
+                .then(data => {
+                    const htmlContent = renderDataAsHtml(data, endpoint.contentFn);
+                    updateElementHtml(endpoint.elementId, htmlContent, 'replace');
+                })
+                .catch(error => {
+                    console.error(`Failed to load data from ${endpoint.url}:`, error);
+                    updateElementHtml(endpoint.elementId, `<p class="text-white">Error loading data.</p>`, 'replace');
+                    return null;
+                });
+        });
+
+        Promise.all(dataFetchPromises).then(() => {
+            actions.initVisibilityHandlers();
+        }).catch(error => {
+            console.error('Error initializing visibility handlers after data load:', error);
+        });
     },
-    chargeSeasons: async (data) => {
-        const seasonsData= await postAxiosQuery('/api/seasons_by_champion', data);
-        const SeasonsHtmlContent = renderDataAsHtml(seasonsData, content.createSeasonsContent);
-        updateElementHtml('champions_years', SeasonsHtmlContent, 'replace');
-        return seasonsData;
+
+    charge: async (data, url, htmlElementId, contentFunction) => {
+        try {
+            const responseData = await postAxiosQuery(url, data);
+            const htmlContent = renderDataAsHtml(responseData, contentFunction);
+            updateElementHtml(htmlElementId, htmlContent, 'replace');
+            return responseData;
+        } catch (error) {
+            console.error(`Error in charge function for URL ${url}:`, error);
+            return null;
+        }
     },
-    chargeGames: async (data) => {
-        const gamesData= await postAxiosQuery('/api/games_by_championNseason', data);
-        const GamesHtmlContent = renderDataAsHtml(gamesData, content.createGamesContent);
-        updateElementHtml('gamesxchampion', GamesHtmlContent, 'replace');
-        return gamesData;
-    },
-    chargePlayers: async (data) => {
-        const clubPlayersData = await postAxiosQuery('/api/clubplayers', data);
-        const ClubPlayersHtmlContent = renderDataAsHtml(clubPlayersData, content.createClubPlayersContent);
-        updateElementHtml('clubPlayers', ClubPlayersHtmlContent, 'replace');
-        return clubPlayersData;
-    },
+
     chargeBreadCrumbs: data => {
         const GamesBreadHtmlContent   = renderDataAsHtml(data, content.createBreadCrumbsContent);
         updateElementHtml('breadcrumbs', GamesBreadHtmlContent ,'replace');
