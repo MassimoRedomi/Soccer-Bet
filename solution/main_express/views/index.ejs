@@ -305,7 +305,7 @@
     <div class="row border-bottom-green">
 
       <div class="col-md-12">
-        <div class="container search-container p-5 d-flex flex-row align-items-center justify-content-between">
+        <div class="container search-container py-3 d-flex flex-row align-items-center justify-content-between">
           <textarea class="form-control search-area" placeholder="Competition"></textarea>
           <textarea class="form-control search-area" placeholder="Match"></textarea>
           <textarea class="form-control search-area" placeholder="Club"></textarea>
@@ -317,7 +317,7 @@
             SEARCH
           </button>
         </div>
-        <div class="container-fluid d-flex flex-column align-items-center my-2">
+        <div class="container py-3">
           <div id="breadcrumbs">
             <p class="text-white">Loading... </p>
           </div>
@@ -340,7 +340,7 @@
             <img src="images/calendar.png" class="me-2" alt="Apps" width="25px">
             <h4 class="mb-0 text-white">SEASONS</h4>
           </div>
-          <div class="container-fluid">
+          <div class="container-fluid mb-4">
             <div class="row" id="champions_years">
                 <p class="text-white">Loading... </p>
             </div>
@@ -350,8 +350,26 @@
 
       </div>
       <div class="col-md-3 border-left-green">
+        <div class="container-fluid d-flex flex-column align-items-center my-3">
+          <div id="championName">
+            <h4 class="text-white">Loading...</h4>
+          </div>
+        </div>
+        <div class="container-fluid">
+          <div class="row bg-black">
+            <div class="col-4 d-flex flex-column align-items-start">
+              <p class="mb-0 text-white">HOME</p>
+            </div>
+            <div class="col-4 d-flex flex-column align-items-center">
+              <p class="mb-0 text-white">GOALS</p>
+            </div>
+            <div class="col-4 d-flex flex-column align-items-end">
+              <p class="mb-0 text-white">AWAY</p>
+            </div>
+          </div>
+        </div>
         <div class="scroll-container">
-        <div class="container-fluid d-flex flex-column align-items-center my-4">
+        <div class="container-fluid my-4">
             <div id="gamesxchampion">
               <p class="text-white">Loading... </p>
             </div>
@@ -360,15 +378,15 @@
       </div>
     </div>
     <div class="container-fluid border-top-green">
-      <div class="row">
-        <div class="col-4 d-flex justify-content-center align-items-center"><p class="text-white bold mb-0">PLAYER</p></div>
-        <div class="col-1 d-flex justify-content-center align-items-center"><p class="text-white bold mb-0">AGE</p></div>
-        <div class="col-1 d-flex justify-content-center align-items-center"><p class="text-white bold mb-0">P.G</p></div>
-        <div class="col-2 d-flex justify-content-center align-items-center"><p class="text-white bold mb-0">MIN</p></div>
-        <div class="col-1 d-flex justify-content-center align-items-center"><p class="text-white bold mb-0">G</p></div>
-        <div class="col-1 d-flex justify-content-center align-items-center"><p class="text-white bold mb-0">A</p></div>
-        <div class="col-1 d-flex justify-content-center align-items-center"><div class="red_card"></div></div>
-        <div class="col-1 d-flex justify-content-center align-items-center"><div class="yellow_card"></div></div>
+      <div class="row bg-black">
+        <div class="col-4 d-flex justify-content-center align-items-center"><p class="tooltip-container text-white bold mb-0">PLAYER<span class="tooltip-text">Player name and surname</span></p></div>
+        <div class="col-1 d-flex justify-content-center align-items-center"><p class="tooltip-container text-white bold mb-0">AGE<span class="tooltip-text">Player age</span></p></div>
+        <div class="col-1 d-flex justify-content-center align-items-center"><p class="tooltip-container text-white bold mb-0">P.G<span class="tooltip-text">Total games played</span></p></div>
+        <div class="col-2 d-flex justify-content-center align-items-center"><p class="tooltip-container text-white bold mb-0">MIN<span class="tooltip-text">Total minutes played</span></p></div>
+        <div class="col-1 d-flex justify-content-center align-items-center"><p class="tooltip-container text-white bold mb-0">G<span class="tooltip-text">Total goals</span></p></div>
+        <div class="col-1 d-flex justify-content-center align-items-center"><p class="tooltip-container text-white bold mb-0">A<span class="tooltip-text">Total assists</span></p></div>
+        <div class="col-1 d-flex justify-content-center align-items-center"><div class="red_card tooltip-container"><span class="tooltip-text">Total red cards</span></div></div>
+        <div class="col-1 d-flex justify-content-center align-items-center"><div class="yellow_card tooltip-container"><span class="tooltip-text">Total yellow cards</span></div></div>
       </div>
     </div>
     <div class="scroll-container2">

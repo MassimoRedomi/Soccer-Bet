@@ -43,17 +43,17 @@ const content = {
                                                 </div>
                                              </div>`,
     createGamesContent:             data => `<div class="item my-2">
-                                                    <div class="row">
-                                                        <div class="col-4">
-                                                            <a href="#" class="interactable links d-flex align-items-center" data-action="controllerSoccerData" data-club="${data.home_club_id}" data-clubName="${data.home_club_name}">
+                                                    <div class="row border-bottom-grey">
+                                                        <div class="col-4 d-flex flex-column align-items-start">
+                                                            <a href="#" class="interactable links" data-action="controllerSoccerData" data-club="${data.home_club_id}" data-clubName="${data.home_club_name}">
                                                                 <p class="tooltip-container mb-0">${actions.setDimNames(data.home_club_name)} <span class="tooltip-text">${data.home_club_id}</span></p>
                                                             </a>
                                                         </div>
-                                                        <div class="col-4">
+                                                        <div class="col-4 d-flex flex-column align-items-center">
                                                            ${actions.setColorNumbers(data.home_club_goals, data.away_club_goals)}
                                                         </div>
-                                                        <div class="col-4">
-                                                            <a href="#" class="interactable links d-flex align-items-center" data-action="controllerSoccerData" data-club="${data.away_club_id}" data-clubName="${data.away_club_name}">
+                                                        <div class="col-4 d-flex flex-column align-items-end">
+                                                            <a href="#" class="interactable links" data-action="controllerSoccerData" data-club="${data.away_club_id}" data-clubName="${data.away_club_name}">
                                                                 <p class="mb-0">${actions.setDimNames(data.away_club_name)}</p>
                                                              </a>
                                                         </div>
@@ -62,8 +62,8 @@ const content = {
     createBreadCrumbsContent:       data => `<h4 class="mb-0 text-white">${actions.formatNames(data.name)} > ${data.season}</h4>`,
     createClubPlayersContent:       data => `<div class="item my-2">
                                                  <a href="#" class="interactable links" data-action="controllerSoccerData" data-playerId="${data.playerId}">
-                                                    <div class="row">
-                                                        <div class="col-4 d-flex justify-content-center align-items-center">
+                                                    <div class="row border-bottom-grey">
+                                                        <div class="col-4 d-flex align-items-start">
                                                             <p class="text-white bold mb-0">${data.name}</p>
                                                         </div>
                                                         <div class="col-1 d-flex justify-content-center align-items-center">

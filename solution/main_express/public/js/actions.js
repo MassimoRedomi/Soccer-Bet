@@ -1,3 +1,4 @@
+const breadcrumbs = [];
 
 const actions = {
     async controllerSoccerData(data) {
@@ -11,9 +12,11 @@ const actions = {
         try {
             activateSection('stats');
             if (data.club) {
+                console.log(data);
                 await actions.charge({clubId: data.club}, endpoints[3].url, endpoints[3].elementId, endpoints[3].contentFn);
             } else if (data.season) {
                 const gamesData = await actions.charge({competition_id: data.competition, season: data.season}, endpoints[2].url, endpoints[2].elementId, endpoints[2].contentFn);
+                updateElementHtml('championName', `<h4 class="text-white bold">${actions.formatNames(data.name)}</h4>`, 'replace');
                 await actions.controllerSoccerData({club: gamesData[0].home_club_id});
             } else if (data.champion) {
                 const seasonsData = await actions.charge({competitionId: data.champion}, endpoints[1].url, endpoints[1].elementId, endpoints[1].contentFn);
@@ -91,9 +94,32 @@ const actions = {
         }
     },
 
-    chargeBreadCrumbs: data => {
+    chargeBreadCrumbs: (data) => {
+        const keys = ['nation', 'season', 'name', 'clubname'];
+        keys.forEach(key => {
+            if (data[key]) {
+                const existingCrumbIndex = breadcrumbs.findIndex(crumb => crumb.key === key);
+                if (existingCrumbIndex !== -1) {
+                    breadcrumbs[existingCrumbIndex].value = data[key];
+                } else {
+                    breadcrumbs.push({ key: key, value: data[key] });
+                }
+            }
+        });
 
+        // Sort breadcrumbs by the fixed order of keys
+        const sortedBreadcrumbs = keys
+            .map(key => breadcrumbs.find(crumb => crumb.key === key))
+            .filter(crumb => crumb); // Filter out undefined values
+
+        const breadcrumbsHtml = sortedBreadcrumbs.map((crumb, index) =>
+            `<span>${actions.toUpperCase(crumb.value)}${index < sortedBreadcrumbs.length - 1 ? ' > ' : ''}</span>`
+        ).join('');
+
+        const wrappedBreadcrumbsHtml = `<h3 class="text-white">${breadcrumbsHtml}</h3>`;
+        updateElementHtml('breadcrumbs', wrappedBreadcrumbsHtml, 'replace');
     },
+
 
     setColorNumbers: (num1, num2) => {
     let result = '';
@@ -109,7 +135,7 @@ const actions = {
     return result;
     },
 
-    setDimNames: (data) => {
+    setDimNames: data => {
         if (data.length > 10) {
             const words = data.split(' ');
             if (words.length > 1) {
@@ -120,6 +146,14 @@ const actions = {
         }
         return data;
     },
+
+    toUpperCase: data => {
+        if (typeof data !== 'string') {
+            return data;
+        }
+        return data.replace(/-/g, ' ').toUpperCase();
+    },
+
 
     /**
      * Toggles the visibility of items in the "champions" section.
