@@ -1,5 +1,7 @@
 document.body.addEventListener('click', event => handleEvent(event));
 document.body.addEventListener('change', event => handleEvent(event));
+document.body.addEventListener('mouseover', event => handleHover(event));
+document.body.addEventListener('mouseout', event => handleHover(event));
 
 /**
  * Makes a POST request to a specified URL using axios and returns the response data.
@@ -165,6 +167,22 @@ function handleEvent(event) {
     }
 }
 
+
+function handleHover(event) {
+    const element = event.target.closest('.tooltip-container');
+    if (!element) return;
+
+    const tooltipText = element.querySelector('.tooltip-text');
+    if (!tooltipText) return;
+
+    if (event.type === 'mouseover') {
+        tooltipText.style.visibility = 'visible';
+        tooltipText.style.opacity = '1';
+    } else if (event.type === 'mouseout') {
+        tooltipText.style.visibility = 'hidden';
+        tooltipText.style.opacity = '0';
+    }
+}
 
 /**
  * Extracts data from a DOM element based on its type. This function determines the element's type and

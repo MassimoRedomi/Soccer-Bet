@@ -1,6 +1,6 @@
 const content = {
     createClubsContent:             data => `<div class="item my-2">
-                                                <a href="#" class="interactable links d-flex align-items-center" data-club="${data.clubId}">
+                                                <a href="#" class="interactable links d-flex align-items-center"  data-action="controllerSoccerData" data-club="${data.clubId}" data-clubName="${data.name}">
                                                     <img src="images/football-club.svg" alt="Offers" class="svg-container me-2">
                                                     <p class="mb-0">${data.name}</p>
                                                 </a>
@@ -12,12 +12,14 @@ const content = {
                                                     ${actions.formatNames(data.name)}
                                                 </a>
                                             </div>`,
-    createChampionsContent:         data => `<div class="item my-2">
-                                                <a href="#" class="interactable links d-flex align-items-center" data-action="controllerSoccerData"  data-champion="${data.competitionId}" data-nation="${data.countryName}">
-                                                    <div class="svg-container me-2">${data.sig}</div>
-                                                    <p class="mb-0">${actions.formatNames(data.name)}</p>
-                                                </a>
-                                            </div>`,
+    createChampionsContent:         data => `<div class="container rounded-3 my-2 selected-champion">
+                                                <div class="item my-2">
+                                                    <a href="#" class="interactable links d-flex align-items-center" data-action="controllerSoccerData"  data-champion="${data.competitionId}" data-nation="${data.countryName}">
+                                                        <div class="svg-container me-2">${data.sig}</div>
+                                                        <p class="mb-0">${actions.formatNames(data.name)}</p>
+                                                    </a>
+                                                </div>
+                                             </div>`,
     createLanguageContent:          data => `<div class="item my-2">
                                                 <a href="#" class="interactable links d-flex align-items-center" data-action="loadChampionsChats" data-language="${data.name}">
                                                     <div class="svg-container me-2">${data.sig}</div>
@@ -32,25 +34,27 @@ const content = {
                                                 </div>
                                             </div>`,
     createSeasonsContent:           data => `<div class="col-4">
-                                                <div class="item my-2">
-                                                    <a href="#" class="interactable links d-flex align-items-center" data-action="controllerSoccerData" data-season="${data.season}" data-competition="${data.competition_id}" data-name="${data.competition_name}">
-                                                        <p class="mb-0">${data.season}</p>
-                                                    </a>
+                                                <div class="container bg-black text-white rounded-3 my-2 selected-season">
+                                                    <div class="item">
+                                                        <a href="#" class="interactable links" data-action="controllerSoccerData" data-season="${data.season}" data-competition="${data.competition_id}" data-name="${data.competition_name}">
+                                                            <p class="mb-0">${data.season}</p>
+                                                        </a>
+                                                    </div>
                                                 </div>
                                              </div>`,
     createGamesContent:             data => `<div class="item my-2">
                                                     <div class="row">
-                                                        <div class="col-5">
-                                                            <a href="#" class="interactable links d-flex align-items-center" data-action="controllerSoccerData" data-club="${data.home_club_id}">
-                                                                <p class="mb-0">${data.home_club_name}</p>
+                                                        <div class="col-4">
+                                                            <a href="#" class="interactable links d-flex align-items-center" data-action="controllerSoccerData" data-club="${data.home_club_id}" data-clubName="${data.home_club_name}">
+                                                                <p class="tooltip-container mb-0">${actions.setDimNames(data.home_club_name)} <span class="tooltip-text">${data.home_club_id}</span></p>
                                                             </a>
                                                         </div>
-                                                        <div class="col-2">
-                                                            <p class="mb-0">${data.home_club_goals} ${data.away_club_goals}</p>
+                                                        <div class="col-4">
+                                                           ${actions.setColorNumbers(data.home_club_goals, data.away_club_goals)}
                                                         </div>
-                                                        <div class="col-5">
-                                                            <a href="#" class="interactable links d-flex align-items-center" data-action="controllerSoccerData" data-club="${data.away_club_id}">
-                                                                <p class="mb-0">${data.away_club_name}</p>
+                                                        <div class="col-4">
+                                                            <a href="#" class="interactable links d-flex align-items-center" data-action="controllerSoccerData" data-club="${data.away_club_id}" data-clubName="${data.away_club_name}">
+                                                                <p class="mb-0">${actions.setDimNames(data.away_club_name)}</p>
                                                              </a>
                                                         </div>
                                                     </div>

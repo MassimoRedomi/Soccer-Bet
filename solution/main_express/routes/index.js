@@ -614,7 +614,6 @@ router.post('/api/games_by_championNseason', async (req, res) => {
  */
 router.post('/api/seasons_by_champion', async (req, res) => {
   const { competitionId } = req.body;
-  console.log(req.body);
   try {
     const response = await fetch('http://localhost:3002/games/seasons_by_competition', {
       method: 'POST',

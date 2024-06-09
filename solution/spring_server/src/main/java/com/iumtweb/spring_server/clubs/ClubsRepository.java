@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface ClubsRepository extends JpaRepository<Clubs, Integer> {
-    @Query("SELECT c.name as name FROM Clubs c")
+    @Query("SELECT c.clubId as clubId, c.name as name FROM Clubs c")
     List<ClubsNames> findAllClubNames();
 }

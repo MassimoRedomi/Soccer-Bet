@@ -14,7 +14,6 @@ const actions = {
                 await actions.charge({clubId: data.club}, endpoints[3].url, endpoints[3].elementId, endpoints[3].contentFn);
             } else if (data.season) {
                 const gamesData = await actions.charge({competition_id: data.competition, season: data.season}, endpoints[2].url, endpoints[2].elementId, endpoints[2].contentFn);
-                actions.chargeBreadCrumbs([{name: data.name, season: data.season}]);
                 await actions.controllerSoccerData({club: gamesData[0].home_club_id});
             } else if (data.champion) {
                 const seasonsData = await actions.charge({competitionId: data.champion}, endpoints[1].url, endpoints[1].elementId, endpoints[1].contentFn);
@@ -25,11 +24,31 @@ const actions = {
                 const championsData = await actions.charge(data, endpoints[0].url, endpoints[0].elementId, endpoints[0].contentFn);
                 await actions.controllerSoccerData(data.champion?{champion: data.champion}:{champion: championsData[0].competitionId});
             }
+            actions.chargeBreadCrumbs(data);
         }catch (error) {
             console.error('Error processing data:', error);
             updateElementHtml('nation_dropdown', '<p class="text-white">Error loading data</p>', 'replace');
         }
     },
+
+    toggleSelectedClass(data) {
+        console.log(data);
+        Object.keys(data).forEach(key => {
+            const selectedClass = `.selected-${key}`;
+            document.querySelectorAll(selectedClass).forEach(container => {
+                container.classList.remove('selected');
+            });
+        });
+
+        Object.entries(data).forEach(([key, value]) => {
+            const selector = `[data-${key}="${value}"]`;
+            const selectedContainer = document.querySelector(selector)?.closest(`.selected-${key}`);
+            if (selectedContainer) {
+                selectedContainer.classList.add('selected');
+            }
+        });
+    },
+
     getInitialData: () => {
         const endpoints = [
             { url: '/api/clubs-names', elementId: 'clubs', contentFn: content.createClubsContent },
@@ -73,8 +92,33 @@ const actions = {
     },
 
     chargeBreadCrumbs: data => {
-        const GamesBreadHtmlContent   = renderDataAsHtml(data, content.createBreadCrumbsContent);
-        updateElementHtml('breadcrumbs', GamesBreadHtmlContent ,'replace');
+
+    },
+
+    setColorNumbers: (num1, num2) => {
+    let result = '';
+
+    if (num1 > num2) {
+        result = `<p><span class="text-green">${num1}</span> <span class="text-red">${num2}</span></p>`;
+    } else if (num1 < num2) {
+        result = `<p><span class="text-red">${num1}</span> <span class="text-green">${num2}</span></p>`;
+    } else {
+        result = `<p><span class="text-red">${num1}</span> <span class="text-red">${num2}</span></p>`;
+    }
+
+    return result;
+    },
+
+    setDimNames: (data) => {
+        if (data.length > 10) {
+            const words = data.split(' ');
+            if (words.length > 1) {
+                return words[1];
+            } else {
+                return data.substring(0, 8);
+            }
+        }
+        return data;
     },
 
     /**
