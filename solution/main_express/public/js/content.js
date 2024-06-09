@@ -6,13 +6,15 @@ const content = {
                                                 </a>
                                              </div>`,
     createNationsDropdownContent:   data => `<option value="${data.name}">${data.name}</option>`,
-    createNationsListContent:       data => `<div class="item my-2">
-                                                <a href="#" class="interactable links d-flex align-items-center" data-action="controllerSoccerData" data-nation="${data.name}">
-                                                    <div class="svg-container me-2">${data.sig}</div>
-                                                    ${actions.formatNames(data.name)}
-                                                </a>
-                                            </div>`,
-    createChampionsContent:         data => `<div class="container rounded-3 my-2 selected-champion">
+    createNationsListContent:       data => `<div class="container rounded-3 my-2">
+                                                <div class="item my-2">
+                                                    <a href="#" class="interactable links d-flex align-items-center" data-action="controllerSoccerData" data-nation="${data.name}">
+                                                        <div class="svg-container me-2">${data.sig}</div>
+                                                        ${actions.formatNames(data.name)}
+                                                    </a>
+                                                </div>
+                                             </div>`,
+    createChampionsContent:         data => `<div class="container rounded-3 my-2">
                                                 <div class="item my-2">
                                                     <a href="#" class="interactable links d-flex align-items-center" data-action="controllerSoccerData"  data-champion="${data.competitionId}" data-nation="${data.countryName}">
                                                         <div class="svg-container me-2">${data.sig}</div>

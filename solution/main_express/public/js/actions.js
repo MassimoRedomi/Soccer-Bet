@@ -1,4 +1,5 @@
 const breadcrumbs = [];
+const selectpath= [];
 
 const actions = {
     async controllerSoccerData(data) {
@@ -16,7 +17,7 @@ const actions = {
                 await actions.charge({clubId: data.club}, endpoints[3].url, endpoints[3].elementId, endpoints[3].contentFn);
             } else if (data.season) {
                 const gamesData = await actions.charge({competition_id: data.competition, season: data.season}, endpoints[2].url, endpoints[2].elementId, endpoints[2].contentFn);
-                updateElementHtml('championName', `<h4 class="text-white bold">${actions.formatNames(data.name)}</h4>`, 'replace');
+                updateElementHtml('championName', `<h4 class="text-white bold">${actions.toUpperCase(data.name)}</h4>`, 'replace');
                 await actions.controllerSoccerData({club: gamesData[0].home_club_id});
             } else if (data.champion) {
                 const seasonsData = await actions.charge({competitionId: data.champion}, endpoints[1].url, endpoints[1].elementId, endpoints[1].contentFn);
@@ -27,6 +28,7 @@ const actions = {
                 const championsData = await actions.charge(data, endpoints[0].url, endpoints[0].elementId, endpoints[0].contentFn);
                 await actions.controllerSoccerData(data.champion?{champion: data.champion}:{champion: championsData[0].competitionId});
             }
+            actions.toggleSelectedClass(data);
             actions.chargeBreadCrumbs(data);
         }catch (error) {
             console.error('Error processing data:', error);
@@ -34,18 +36,26 @@ const actions = {
         }
     },
 
-    toggleSelectedClass(data) {
-        console.log(data);
-        Object.keys(data).forEach(key => {
-            const selectedClass = `.selected-${key}`;
+    toggleSelectedClass: data => {
+        selectpath.forEach(crumb => {
+            const selectedClass = `.selected-${crumb.key}`;
             document.querySelectorAll(selectedClass).forEach(container => {
                 container.classList.remove('selected');
             });
         });
 
-        Object.entries(data).forEach(([key, value]) => {
-            const selector = `[data-${key}="${value}"]`;
-            const selectedContainer = document.querySelector(selector)?.closest(`.selected-${key}`);
+        Object.keys(data).forEach(key => {
+            const index = selectpath.findIndex(crumb => crumb.key === key);
+            if (index !== -1) {
+                selectpath[index].value = data[key];
+            } else {
+                selectpath.push({ key: key, value: data[key] });
+            }
+        });
+
+        selectpath.forEach(crumb => {
+            const selector = `[data-${crumb.key}="${crumb.value}"]`;
+            const selectedContainer = document.querySelector(selector)?.closest(`.selected-${crumb.key}`);
             if (selectedContainer) {
                 selectedContainer.classList.add('selected');
             }

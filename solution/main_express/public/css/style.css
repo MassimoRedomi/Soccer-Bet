@@ -198,23 +198,23 @@ html, body {
 
 /* BORDER COLORS */
 .border-bottom-green{
-  border-bottom: 0.5px solid #05A840!important
+  border-bottom: 0.5px solid rgba(5, 168, 64, 0.41)!important
 }
 
 .border-top-green{
-  border-top: 0.5px solid #05A840!important
+  border-top: 0.5px solid rgba(5, 168, 64, 0.41)!important
 }
 
 .border-left-green{
-  border-left:0.5px solid #05A840!important
+  border-left:0.5px solid rgba(5, 168, 64, 0.41) !important
 }
 
 .border-right-green{
-  border-right:0.5px solid #05A840!important
+  border-right:0.5px solid rgba(5, 168, 64, 0.41)!important
 }
 
 .border-green{
-  border:0.5px solid #05A840!important;
+  border:0.5px solid rgba(5, 168, 64, 0.41)!important;
 }
 .border-bottom-grey{
   border-bottom: 0.001rem solid #013244 !important;
