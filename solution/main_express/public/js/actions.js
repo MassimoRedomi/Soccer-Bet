@@ -33,7 +33,7 @@ const actions = {
                 const championsData = await actions.charge(data, endpoints[0].url, endpoints[0].elementId, endpoints[0].contentFn);
                 await actions.controllerSoccerData(data.champion?{champion: data.champion}:{champion: championsData[0].competitionId});
             }
-            actions.toggleSelectedClass({type: 'summary'});
+            actions.toggleSelectedClass(data);
             actions.chargeBreadCrumbs(data);
         }catch (error) {
             console.error('Error processing data:', error);
@@ -87,6 +87,8 @@ const actions = {
         } else if(data.game){
             const gameData= await actions.charge({game_id: data.game}, endpoints[0].url, endpoints[0].elementId, endpoints[0].contentFn);
         }
+
+        actions.toggleSelectedClass(data);
     },
 
     charge: async (data, url, htmlElementId, contentFunction) => {
