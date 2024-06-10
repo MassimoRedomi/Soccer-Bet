@@ -51,6 +51,27 @@ html, body {
   height: 100%;
 }
 
+.bg-links{
+  display: block;
+  color: #ffffff;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.bg-links:hover {
+  color: #05A840;
+  background-color: rgba(255, 255, 255, 0.11);
+  border-radius: 4%;
+}
+
+.bg-links:hover h4{
+  color: #05A840;
+}
+
+.bg-links:hover p{
+  color: #05A840;
+}
+
 .links {
   display: block;
   color: #ffffff;
@@ -59,6 +80,14 @@ html, body {
 }
 
 .links:hover {
+  color: #05A840;
+}
+
+.links:hover h4{
+  color: #05A840;
+}
+
+.links:hover p{
   color: #05A840;
 }
 
@@ -599,65 +628,71 @@ footer ul.list-unstyled li:hover p {
 }
 /* END MODAL */
 
-.scroll-container {
-  max-height:440px; /* Set the desired height */
-  overflow-y: auto; /* Add vertical scroll bar if content exceeds height */
-}
-
-/* For WebKit browsers (Chrome, Safari) */
-.scroll-container::-webkit-scrollbar {
-  width: 8px; /* Make the scrollbar thinner */
-}
-
-.scroll-container::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.2); /* Track color */
-}
-
-.scroll-container::-webkit-scrollbar-thumb {
-  background: #888888; /* Thumb color */
-  border-radius: 10px; /* Rounded corners for the thumb */
-}
-
-/* For Firefox */
-.scroll-container {
+/* SCROLL BAR */
+.scrollbar-style {
+  overflow-y: auto;
+  overflow-x: hidden;
   scrollbar-width: thin;
   scrollbar-color: #888888 rgba(0, 0, 0, 0.2);
-}
-
-/* For Internet Explorer and Edge */
-.scroll-container {
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
+
+.scrollbar-style::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar-style::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.scrollbar-style::-webkit-scrollbar-thumb {
+  background: #888888;
+  border-radius: 10px;
+}
+
+.scroll-container {
+  max-height: 550px;
+  overflow-x: hidden;
+}
+.scroll-container1 {
+  max-height: 450px;
+  overflow-x: hidden;
+}
 .scroll-container2 {
   height: 300px;
-  overflow-y: auto;
+  overflow-x: hidden;
 }
 
-/* For WebKit browsers (Chrome, Safari) */
-.scroll-container2::-webkit-scrollbar {
-  width: 8px; /* Make the scrollbar thinner */
-}
-
-.scroll-container2::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.2); /* Track color */
-}
-
-.scroll-container2::-webkit-scrollbar-thumb {
-  background: #888888; /* Thumb color */
-  border-radius: 10px; /* Rounded corners for the thumb */
-}
-
-/* For Firefox */
+.scroll-container,
+.scroll-container1,
 .scroll-container2 {
+  overflow-y: auto;
+  overflow-x: hidden;
   scrollbar-width: thin;
   scrollbar-color: #888888 rgba(0, 0, 0, 0.2);
-}
-
-/* For Internet Explorer and Edge */
-.scroll-container2 {
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
+
+.scroll-container::-webkit-scrollbar,
+.scroll-container1::-webkit-scrollbar,
+.scroll-container2::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scroll-container::-webkit-scrollbar-track,
+.scroll-container1::-webkit-scrollbar-track,
+.scroll-container2::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.scroll-container::-webkit-scrollbar-thumb,
+.scroll-container1::-webkit-scrollbar-thumb,
+.scroll-container2::-webkit-scrollbar-thumb {
+  background: #888888;
+  border-radius: 10px;
+}
+/* END SCROLL BAR */
 
 .red_card {
   width: 20px;
@@ -681,6 +716,13 @@ footer ul.list-unstyled li:hover p {
   color: #05A840;
 }
 
+.selected p{
+  color: #05A840;
+}
+
+.selected h4{
+  color: #05A840;
+}
 /* Tooltip container */
 .tooltip-container {
   position: relative;

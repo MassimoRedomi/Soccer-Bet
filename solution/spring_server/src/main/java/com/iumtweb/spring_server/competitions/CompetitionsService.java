@@ -23,4 +23,8 @@ public class CompetitionsService {
         return competitionsRepository.findByCountryName(countryName);
     }
 
+    public Competitions getCompetitionById(String competitionId) {
+        return competitionsRepository.findByCompetitionId(competitionId);
+    }
+
 }

@@ -1,5 +1,5 @@
 const breadcrumbs = [];
-const selectpath= [];
+let selectpath= [];
 
 const actions = {
     async controllerSoccerData(data) {
@@ -7,18 +7,23 @@ const actions = {
             { url: '/api/send-country', elementId:'champions_nation_list', contentFn: content.createChampionsContent },
             { url: '/api/seasons_by_champion', elementId: 'champions_years', contentFn: content.createSeasonsContent },
             { url: '/api/games_by_championNseason', elementId: 'gamesxchampion', contentFn:content.createGamesContent },
-            { url: '/api/clubplayers', elementId: 'clubPlayers', contentFn: content.createClubPlayersContent }
+            { url: '/api/clubplayers', elementId: 'clubPlayers', contentFn: content.createClubPlayersContent },
+            { url: '/api/competitionbyid', elementId:'dataDisplay', contentFn: content.createCompetitionDisplayContent},
+            { url: '/api/gamebyid', elementId: 'dataDisplay', contentFn: content.createGameDisplayContent}
         ];
 
         try {
             activateSection('stats');
             if (data.club) {
-                console.log(data);
                 await actions.charge({clubId: data.club}, endpoints[3].url, endpoints[3].elementId, endpoints[3].contentFn);
+            } else if (data.game){
+                const gameData= await actions.charge({game_id: data.game}, endpoints[5].url, endpoints[5].elementId, endpoints[5].contentFn);
+                await actions.controllerGameData(data);
+                await actions.controllerSoccerData({club: gameData.home_club_id});
             } else if (data.season) {
                 const gamesData = await actions.charge({competition_id: data.competition, season: data.season}, endpoints[2].url, endpoints[2].elementId, endpoints[2].contentFn);
                 updateElementHtml('championName', `<h4 class="text-white bold">${actions.toUpperCase(data.name)}</h4>`, 'replace');
-                await actions.controllerSoccerData({club: gamesData[0].home_club_id});
+                await actions.controllerSoccerData({game: gamesData[0].game_id});
             } else if (data.champion) {
                 const seasonsData = await actions.charge({competitionId: data.champion}, endpoints[1].url, endpoints[1].elementId, endpoints[1].contentFn);
                 await actions.controllerSoccerData({competition: seasonsData[0].competition_id, season: seasonsData[0].season, name: seasonsData[0].competition_name});
@@ -28,38 +33,12 @@ const actions = {
                 const championsData = await actions.charge(data, endpoints[0].url, endpoints[0].elementId, endpoints[0].contentFn);
                 await actions.controllerSoccerData(data.champion?{champion: data.champion}:{champion: championsData[0].competitionId});
             }
-            actions.toggleSelectedClass(data);
+            actions.toggleSelectedClass({type: 'summary'});
             actions.chargeBreadCrumbs(data);
         }catch (error) {
             console.error('Error processing data:', error);
             updateElementHtml('nation_dropdown', '<p class="text-white">Error loading data</p>', 'replace');
         }
-    },
-
-    toggleSelectedClass: data => {
-        selectpath.forEach(crumb => {
-            const selectedClass = `.selected-${crumb.key}`;
-            document.querySelectorAll(selectedClass).forEach(container => {
-                container.classList.remove('selected');
-            });
-        });
-
-        Object.keys(data).forEach(key => {
-            const index = selectpath.findIndex(crumb => crumb.key === key);
-            if (index !== -1) {
-                selectpath[index].value = data[key];
-            } else {
-                selectpath.push({ key: key, value: data[key] });
-            }
-        });
-
-        selectpath.forEach(crumb => {
-            const selector = `[data-${crumb.key}="${crumb.value}"]`;
-            const selectedContainer = document.querySelector(selector)?.closest(`.selected-${crumb.key}`);
-            if (selectedContainer) {
-                selectedContainer.classList.add('selected');
-            }
-        });
     },
 
     getInitialData: () => {
@@ -92,16 +71,74 @@ const actions = {
         });
     },
 
+    async controllerGameData(data){
+        const endpoints = [
+            { url: '/api/gamebyid', elementId: 'dataDisplay2', contentFn: content.createGameDisplay2Content},
+            { url: 'api/lineupsbyid', elementId: "dataDisplay2", contentFn: content.createLineupContent, contentFn2: content.createLineupDisplay2Content}
+        ];
+
+        if(data.formation){
+            const mixedLineupsData = await postAxiosQuery(endpoints[1].url, {game_id: data.game});
+            const separatedLineupsData = actions.separateLineups(mixedLineupsData);
+            const htmlContentHome = renderDataAsHtml(separatedLineupsData[0], endpoints[1].contentFn);
+            const htmlContentAway = renderDataAsHtml(separatedLineupsData[1], endpoints[1].contentFn);
+            const lineupDisplayContent = endpoints[1].contentFn2(htmlContentHome, htmlContentAway);
+            updateElementHtml(endpoints[1].elementId, lineupDisplayContent, 'replace');
+        } else if(data.game){
+            const gameData= await actions.charge({game_id: data.game}, endpoints[0].url, endpoints[0].elementId, endpoints[0].contentFn);
+        }
+    },
+
     charge: async (data, url, htmlElementId, contentFunction) => {
         try {
             const responseData = await postAxiosQuery(url, data);
-            const htmlContent = renderDataAsHtml(responseData, contentFunction);
+            const htmlContent = renderDataAsHtml(Array.isArray(responseData) ? responseData : [responseData], contentFunction);
             updateElementHtml(htmlElementId, htmlContent, 'replace');
             return responseData;
         } catch (error) {
             console.error(`Error in charge function for URL ${url}:`, error);
             return null;
         }
+    },
+
+    toggleSelectedClass:  data => {
+        const keys = ['season', 'type'];
+
+        // Clear previously selected class for updated keys
+        keys.forEach(key => {
+            if (data[key]) {
+                const selectedClass = `.selected-${key}`;
+                document.querySelectorAll(selectedClass).forEach(container => {
+                    container.classList.remove('selected');
+                });
+            }
+        });
+
+        // Update selectpath with current data, keeping only relevant keys
+        keys.forEach(key => {
+            if (data[key]) {
+                const index = selectpath.findIndex(crumb => crumb.key === key);
+                if (index !== -1) {
+                    selectpath[index].value = data[key];
+                } else {
+                    selectpath.push({ key: key, value: data[key] });
+                }
+            }
+        });
+
+        // Add selected class to new elements based on updated selectpath
+        selectpath.forEach(crumb => {
+            if (data[crumb.key]) {
+                const selector = `[data-${crumb.key}="${crumb.value}"]`;
+                const selectedContainer = document.querySelector(selector)?.closest(`.selected-${crumb.key}`);
+                if (selectedContainer) {
+                    selectedContainer.classList.add('selected');
+                }
+            }
+        });
+
+        // Ensure selectpath only contains entries for 'season' and 'game'
+        selectpath = selectpath.filter(crumb => keys.includes(crumb.key));
     },
 
     chargeBreadCrumbs: (data) => {
@@ -117,16 +154,15 @@ const actions = {
             }
         });
 
-        // Sort breadcrumbs by the fixed order of keys
         const sortedBreadcrumbs = keys
             .map(key => breadcrumbs.find(crumb => crumb.key === key))
-            .filter(crumb => crumb); // Filter out undefined values
+            .filter(crumb => crumb);
 
         const breadcrumbsHtml = sortedBreadcrumbs.map((crumb, index) =>
             `<span>${actions.toUpperCase(crumb.value)}${index < sortedBreadcrumbs.length - 1 ? ' > ' : ''}</span>`
         ).join('');
 
-        const wrappedBreadcrumbsHtml = `<h3 class="text-white">${breadcrumbsHtml}</h3>`;
+        const wrappedBreadcrumbsHtml = `<h4 class="text-white">${breadcrumbsHtml}</h4>`;
         updateElementHtml('breadcrumbs', wrappedBreadcrumbsHtml, 'replace');
     },
 
@@ -135,11 +171,11 @@ const actions = {
     let result = '';
 
     if (num1 > num2) {
-        result = `<p><span class="text-green">${num1}</span> <span class="text-red">${num2}</span></p>`;
+        result = `<p><span class="text-green">${num1}</span> : <span class="text-red">${num2}</span></p>`;
     } else if (num1 < num2) {
-        result = `<p><span class="text-red">${num1}</span> <span class="text-green">${num2}</span></p>`;
+        result = `<p><span class="text-red">${num1}</span> : <span class="text-green">${num2}</span></p>`;
     } else {
-        result = `<p><span class="text-red">${num1}</span> <span class="text-red">${num2}</span></p>`;
+        result = `<p><span class="text-red">${num1}</span> : <span class="text-red">${num2}</span></p>`;
     }
 
     return result;
@@ -164,7 +200,55 @@ const actions = {
         return data.replace(/-/g, ' ').toUpperCase();
     },
 
+    formatDate: data => {
+        const date = new Date(data);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+        const year = date.getFullYear();
 
+        const hours = date.getUTCHours();
+        const minutes = date.getUTCMinutes();
+
+        if (hours === 0 && minutes === 0) {
+            return `${day}.${month}.${year}`;
+        } else {
+            const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+            return `${day}.${month}.${year} ${formattedTime}`;
+        }
+    },
+
+    separateLineups: mixedLineupsData => {
+        if (!Array.isArray(mixedLineupsData)) {
+            console.error("Invalid data format, expected an array");
+            return [[], []];
+        }
+
+        const lineupsByClub = mixedLineupsData.reduce((acc, lineup) => {
+            if (!acc[lineup.club_id]) {
+                acc[lineup.club_id] = [];
+            }
+            acc[lineup.club_id].push(lineup);
+            return acc;
+        }, {});
+
+        const separatedLineups = Object.values(lineupsByClub);
+        if (separatedLineups.length !== 2) {
+            console.warn("Expected exactly two different club IDs in the data");
+        }
+        return separatedLineups;
+    },
+
+    formatPlayerNames: data => {
+        if (typeof data !== 'string') return '';
+
+        const names = data.trim().split(' ');
+        if (names.length < 2) return data;
+
+        const surname = names[names.length - 1];
+        const initial = names[0].charAt(0).toUpperCase() + '.';
+
+        return `${surname} ${initial}`;
+    },
     /**
      * Toggles the visibility of items in the "champions" section.
      * @function

@@ -11,5 +11,6 @@ router.post('/games_by_competitionNseason', gamesController.getGamesByCompetitio
 // POST request to get unique seasons by competition_id
 router.post('/seasons_by_competition', gamesController.getSeasonsByCompetitionId);
 
+router.post('/getgame-by-id', gamesController.getGameByGameId);
 module.exports = router;
 

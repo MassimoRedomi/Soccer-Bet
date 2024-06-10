@@ -24,4 +24,5 @@ public interface CompetitionsRepository extends JpaRepository<Competitions, Stri
             "WHERE c.countryName = n.name AND n.name = :countryName")
     List<CompetitionsAndFlags> findByCountryName(@Param("countryName") String countryName);
 
+    Competitions findByCompetitionId(String competitionId);
 }

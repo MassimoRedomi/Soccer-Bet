@@ -694,5 +694,69 @@ router.post('/api/clubplayers', async (req, res) => {
   }
 });
 
+router.post('/api/competitionbyid', async (req, res) => {
+  const { competitionId } = req.body;
+  try {
+    const response = await fetch('http://localhost:8082/getcompetition-by-id', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ competitionId: competitionId })
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch seasons from the competition service');
+    }
+
+    const data = await response.json();
+    res.status(200).json(data);
+  } catch (error) {
+    console.error('Error forwarding request:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+router.post('/api/gamebyid', async (req, res) => {
+  const { game_id } = req.body;
+  try {
+    const response = await fetch('http://localhost:3002/games/getgame-by-id', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ game_id: game_id })
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch seasons from the competition service');
+    }
+
+    const data = await response.json();
+    res.status(200).json(data);
+  } catch (error) {
+    console.error('Error forwarding request:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+
+router.post('/api/lineupsbyid', async (req, res) => {
+  const { game_id } = req.body;
+  try {
+    const response = await fetch('http://localhost:3002/lineups/lineupbygameid', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ game_id: game_id })
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch seasons from the competition service');
+    }
+
+    const data = await response.json();
+    res.status(200).json(data);
+  } catch (error) {
+    console.error('Error forwarding request:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
 module.exports = router;
 

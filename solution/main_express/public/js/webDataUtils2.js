@@ -10,7 +10,7 @@ document.body.addEventListener('mouseout', event => handleHover(event));
  * @param {string} url - The URL to which the POST request should be sent.
  * @param {Object} data - The payload to be sent in the POST request. This should be a JSON object.
  * @returns {Promise<Object>} A promise that resolves with the response data if the request is successful.
- * If the request fails, the promise will resolve with an error message, and an alert may be displayed.
+ * If the request fails, the promise will resolve with an error message.
  */
 function postAxiosQuery(url, data) {
     return axios.post(url, data)
@@ -22,10 +22,8 @@ function postAxiosQuery(url, data) {
                 console.error("Error status:", error.response.status);
                 console.error("Error data:", error.response.data);
                 console.error("Error headers:", error.response.headers);
-                alert(`Error ${error.response.status}: ${error.response.data.message}`);
             } else if (error.request) {
                 console.error("Error request:", error.request);
-                alert("No response was received from the server.");
             } else {
                 console.error("Error message:", error.message);
             }
@@ -51,13 +49,10 @@ function getAxiosQuery(url) {
             if (error.response) {
                 console.error("Error status:", error.response.status);
                 console.error("Error data:", error.response.data);
-                alert(`Error ${error.response.status}: ${error.response.data.message}`);
             } else if (error.request) {
                 console.error("Error request:", error.request);
-                alert("No response was received from the server.");
             } else {
                 console.error("Error message:", error.message);
-                alert("Error: " + error.message);
             }
             console.error("Error config:", error.config);
         });
@@ -144,26 +139,24 @@ function updateElementHtml(elementId, htmlContent, updateMode = 'replace') {
  *                        This contains all the data about the event, including the target element.
  */
 function handleEvent(event) {
-    const element = event.target;
-    const selector = '.interactable';
+    const element = event.target.closest('.interactable');
+    if (!element) return;
 
-    if (element.matches(selector)) {
-        event.preventDefault();
+    event.preventDefault();
 
-        const data = extractDataFromElement(element);
+    const data = extractDataFromElement(element);
 
-        const actionName = element.getAttribute('data-action');
-        const action = actions[actionName];
+    const actionName = element.getAttribute('data-action');
+    const action = actions[actionName];
 
-        if (typeof action === 'function') {
-            try {
-                action(data);
-            } catch (error) {
-                console.error('Error executing action:', error);
-            }
-        } else {
-            console.warn('Action not found:', actionName);
+    if (typeof action === 'function') {
+        try {
+            action(data);
+        } catch (error) {
+            console.error('Error executing action:', error);
         }
+    } else {
+        console.warn('Action not found:', actionName);
     }
 }
 

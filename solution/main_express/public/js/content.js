@@ -35,8 +35,8 @@ const content = {
                                                     </a>
                                                 </div>
                                             </div>`,
-    createSeasonsContent:           data => `<div class="col-4">
-                                                <div class="container bg-black text-white rounded-3 my-2 selected-season">
+    createSeasonsContent:           data => `<div class="col-6">
+                                                <div class="container-fluid bg-black text-white rounded-3  px-0 my-2 text-center selected-season">
                                                     <div class="item">
                                                         <a href="#" class="interactable links" data-action="controllerSoccerData" data-season="${data.season}" data-competition="${data.competition_id}" data-name="${data.competition_name}">
                                                             <p class="mb-0">${data.season}</p>
@@ -45,25 +45,22 @@ const content = {
                                                 </div>
                                              </div>`,
     createGamesContent:             data => `<div class="item my-2">
+                                                <a href="#" class="interactable bg-links" data-action="controllerSoccerData" data-game="${data.game_id}" data-clubname="${data.home_club_name} vs ${data.away_club_name}">
                                                     <div class="row border-bottom-grey">
                                                         <div class="col-4 d-flex flex-column align-items-start">
-                                                            <a href="#" class="interactable links" data-action="controllerSoccerData" data-club="${data.home_club_id}" data-clubName="${data.home_club_name}">
                                                                 <p class="tooltip-container mb-0">${actions.setDimNames(data.home_club_name)} <span class="tooltip-text">${data.home_club_id}</span></p>
-                                                            </a>
                                                         </div>
                                                         <div class="col-4 d-flex flex-column align-items-center">
                                                            ${actions.setColorNumbers(data.home_club_goals, data.away_club_goals)}
                                                         </div>
                                                         <div class="col-4 d-flex flex-column align-items-end">
-                                                            <a href="#" class="interactable links" data-action="controllerSoccerData" data-club="${data.away_club_id}" data-clubName="${data.away_club_name}">
                                                                 <p class="mb-0">${actions.setDimNames(data.away_club_name)}</p>
-                                                             </a>
                                                         </div>
                                                     </div>
+                                                </a>
                                             </div>`,
-    createBreadCrumbsContent:       data => `<h4 class="mb-0 text-white">${actions.formatNames(data.name)} > ${data.season}</h4>`,
     createClubPlayersContent:       data => `<div class="item my-2">
-                                                 <a href="#" class="interactable links" data-action="controllerSoccerData" data-playerId="${data.playerId}">
+                                                 <a href="#" class="interactable bg-links" data-action="controllerSoccerData" data-playerId="${data.playerId}">
                                                     <div class="row border-bottom-grey">
                                                         <div class="col-4 d-flex align-items-start">
                                                             <p class="text-white bold mb-0">${data.name}</p>
@@ -91,5 +88,177 @@ const content = {
                                                         </div>
                                                     </div>
                                                  </a>
-                                             </div>`
+                                             </div>`,
+    createCompetitionDisplayContent: data =>`<p class="text-white">${data.name}</p>
+                                             <p class="text-white">${data.type}</p>
+                                             <p class="text-white">${data.countryName}</p>
+                                             <p class="text-white">${data.url}</p>
+                                             <p class="text-white">${data.confederation}</p>`,
+
+    createGameDisplayContent:        data => `<div class="item my-2">
+                                                <div class="container-fluid bg-black rounded-3">
+                                                    <div class="row">
+                                                        <div class="col-4 d-flex flex-column justify-content-center align-items-center text-center">
+                                                            <a href="#" class="interactable bg-links" data-action="controllerSoccerData" data-club="${data.home_club_id}" data-clubName="${data.home_club_name}">
+                                                                <img src="images/football-club.png" alt="CLub" style="width: 100px;">
+                                                                <p class="text-grey">${data.home_club_name}</p>
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-4 d-flex flex-column justify-content-center align-items-center text-center">
+                                                            <p class="text-grey">${actions.formatDate(data.date)}</p>
+                                                            <h3 class="text-grey">${actions.setColorNumbers(data.home_club_goals, data.away_club_goals)}</h3>
+                                                            <p class="text-grey">${data.round}</p>
+                                                            <p class="text-grey">${data.stadium}</p>
+                                                        </div>
+                                                        <div class="col-4 d-flex flex-column justify-content-center align-items-center text-center">
+                                                            <a href="#" class="interactable bg-links" data-action="controllerSoccerData" data-club="${data.away_club_id}" data-clubName="${data.away_club_name}">
+                                                                <img src="images/football-club.png" alt="CLub" style="width: 100px;">
+                                                                <p class="text-grey">${data.away_club_name}</p>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row border-top-green mt-2 py-2">
+                                                        <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center rounded-3 selected-type">
+                                                            <a href="#" class="interactable links" data-action="controllerGameData" data-game="${data.game_id}" data-type="summary">
+                                                                <p class="text-grey">SUMMARY</p>
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center selected-type">
+                                                            <a href="#" class="interactable links" data-action="controllerSoccerData" data-game="${data.game_id}" data-formation="True" data-type="formation">
+                                                                <p class="text-grey">FORMATION</p>
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center selected-type">
+                                                            <a href="#" class="interactable links" data-action="controllerSoccerData" data-type="events">
+                                                                <p class="text-grey">EVENTS</p>
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center selected-type">
+                                                            <a href="#" class="interactable links" data-action="controllerSoccerData" data-type="charts">
+                                                                <p class="text-grey">CHARTS</p>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                              </div>`,
+    createGameDisplay2Content:        data => `<div class="item my-2">
+                                                <div class="container-fluid bg-black rounded-3 my-4 py-4">
+                                                    <div class="row my-2 rounded-3" style="background-color: rgba(5,168,64,0.21);">
+                                                        <h4 class="text-white mb-0">INFORMATION</h4>
+                                                    </div>
+                                                    <div class="row border-bottom-grey">
+                                                        <div class="col-6 d-flex flex-row align-items-start">
+                                                           <img src="images/whistle.png" alt="Offers" class="svg-container me-2">
+                                                           <p class="text-white">REFEREE:</p>
+                                                        </div>
+                                                        <div class="col-6 d-flex flex-column align-items-end">
+                                                            <p class="text-white">${data.referee}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row border-bottom-grey">
+                                                        <div class="col-6 d-flex flex-row align-items-start">
+                                                            <img src="images/football-field.png" alt="Offers" class="svg-container me-2">
+                                                            <p class="text-white">STADIUM:</p>
+                                                        </div>
+                                                        <div class="col-6 d-flex flex-column align-items-end">
+                                                           <p class="text-white">${data.stadium}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row border-bottom-grey">
+                                                        <div class="col-6 d-flex flex-row align-items-start">
+                                                            <img src="images/customer.png" alt="Offers" class="svg-container me-2">
+                                                            <p class="text-white">ATTENDANCE:</p>
+                                                        </div>
+                                                        <div class="col-6 d-flex flex-column align-items-end">
+                                                           <p class="text-white">${data.attendance}</p>
+                                                        </div>
+                                                    </div>
+                                                     <div class="row">
+                                                        <div class="col-6 d-flex flex-row align-items-start">
+                                                            <img src="images/calendar.png" alt="Offers" class="svg-container me-2">
+                                                            <p class="text-white">SEASON:</p>
+                                                        </div>
+                                                        <div class="col-6 d-flex flex-column align-items-end">
+                                                           <p class="text-white">${data.season}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="container-fluid bg-black rounded-3 my-4 py-4">
+                                                     <div class="row rounded-3" style="background-color: rgba(5,168,64,0.21);">
+                                                        <div class="col-6 d-flex flex-column justify-content-center align-items-center text-center">
+                                                            <h4 class="text-white mb-0">HOME</h4>
+                                                        </div>
+                                                        <div class="col-6 d-flex flex-column justify-content-center align-items-center text-center">
+                                                           <h4 class="text-white mb-0">AWAY</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row border-bottom-grey">
+                                                        <div class="col-12">
+                                                            <p class="text-white">POSITIONS:</p>
+                                                        </div>
+                                                        <div class="col-6 d-flex flex-column justify-content-center align-items-center text-center">
+                                                           <p class="text-white">${data.home_club_position}</p>
+                                                        </div>
+                                                        <div class="col-6 d-flex flex-column justify-content-center align-items-center text-center">
+                                                            <p class="text-white">${data.away_club_position}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row border-bottom-grey">
+                                                        <div class="col-12">
+                                                            <p class="text-white">MANAGERS:</p>
+                                                        </div>
+                                                        <div class="col-6 d-flex flex-column justify-content-center align-items-center text-center">
+                                                            <p class="text-white">${data.home_club_manager_name}</p>
+                                                        </div>
+                                                        <div class="col-6 d-flex flex-column justify-content-center align-items-center text-center">
+                                                           <p class="text-white">${data.away_club_manager_name}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                              </div>`,
+    createLineupContent:               data =>`<div class="row">
+                                                    <div class="col-1">
+                                                        <p class="text-white">${data.number}</p>
+                                                    </div>
+                                                    <div class="col-5">
+                                                        <p class="text-white">${actions.formatPlayerNames(data.player_name)}</p>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <p class="text-white">${data.position}</p>
+                                                    </div>
+                                                </div>`,
+    createLineupDisplay2Content:(home, away) =>`<div class="item my-2">
+                                                            <div class="container-fluid bg-black rounded-3 my-4 py-4">
+                                                                <div class="container-fluid mb-4 rounded-3" style="background-color: rgba(5,168,64,0.21);">
+                                                                    <h4 class="text-white mb-0">FORMATION</h4>
+                                                                </div>
+                                                                <div class="container-fluid px-0">
+                                                                    <div class="row">
+                                                                        <div class="col-5 border-green rounded-3">
+                                                                            <div class="row bg-black mb-2">
+                                                                                <div class="col-1"><p class="text-white mb-0">#</p></div>
+                                                                                <div class="col-6"><p class="text-white mb-0">NAME</p></div>
+                                                                                <div class="col-5"><p class="text-white mb-0">POSITION</p></div>
+                                                                            </div>
+                                                                            <div class="scroll-container2">
+                                                                                ${home}
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-2 d-flex flex-row align-items-center align-content-center"><img src="images/versus.png" class="me-2" style="width: 100%;"></div>
+                                                                        <div class="col-5 border-green rounded-3">
+                                                                            <div class="row bg-black mb-2">
+                                                                                <div class="col-1"><p class="text-white mb-0">#</p></div>
+                                                                                <div class="col-6"><p class="text-white mb-0">NAME</p></div>
+                                                                                <div class="col-5"><p class="text-white mb-0">POSITION</p></div>  
+                                                                            </div>
+                                                                            <div class="scroll-container2">
+                                                                                ${away}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                       </div>`
 };
+
+//                                              <p class="text-white">${data.url}</p>

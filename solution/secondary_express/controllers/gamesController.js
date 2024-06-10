@@ -59,3 +59,18 @@ exports.getSeasonsByCompetitionId = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
+
+exports.getGameByGameId = async (req, res) => {
+    const { game_id } = req.body;
+
+    try {
+        const game = await Game.findOne({ game_id });
+        if (!game) {
+            return res.status(404).json({ message: 'Game not found' });
+        }
+        res.json(game);
+    } catch (error) {
+        console.error('Error retrieving game by game ID:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};

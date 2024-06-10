@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+
 @RestController
 public class CompetitionsController {
 
@@ -27,6 +29,12 @@ public class CompetitionsController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(competitions);
+    }
+
+    @PostMapping("/getcompetition-by-id")
+    public Competitions getCompetitionById(@RequestBody Map<String, String> request) {
+        String competitionId = request.get("competitionId");
+        return competitionsService.getCompetitionById(competitionId);
     }
 
 }
