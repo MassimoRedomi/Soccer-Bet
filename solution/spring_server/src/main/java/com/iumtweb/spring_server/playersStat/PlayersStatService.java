@@ -17,6 +17,6 @@ public class PlayersStatService {
     }
 
     public List<PlayersStat> getPlayersByCurrentClub(Clubs currentClub) {
-        return playersStatRepository.findByCurrentClub(currentClub);
+        return playersStatRepository.findByCurrentClubOrderByNameAsc(currentClub);
     }
 }

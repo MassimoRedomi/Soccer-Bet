@@ -100,6 +100,7 @@ const content = {
                                                     <div class="row">
                                                         <div class="col-4 d-flex flex-column justify-content-center align-items-center text-center">
                                                             <a href="#" class="interactable bg-links" data-action="controllerSoccerData" data-club="${data.home_club_id}" data-clubName="${data.home_club_name}">
+                                                                <p class="text-grey">HOME</p>
                                                                 <img src="images/football-club.png" alt="CLub" style="width: 100px;">
                                                                 <p class="text-grey">${data.home_club_name}</p>
                                                             </a>
@@ -112,6 +113,7 @@ const content = {
                                                         </div>
                                                         <div class="col-4 d-flex flex-column justify-content-center align-items-center text-center">
                                                             <a href="#" class="interactable bg-links" data-action="controllerSoccerData" data-club="${data.away_club_id}" data-clubName="${data.away_club_name}">
+                                                                <p class="text-grey">AWAY</p>
                                                                 <img src="images/football-club.png" alt="CLub" style="width: 100px;">
                                                                 <p class="text-grey">${data.away_club_name}</p>
                                                             </a>
@@ -124,17 +126,17 @@ const content = {
                                                             </a>
                                                         </div>
                                                         <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center selected-type">
-                                                            <a href="#" class="interactable links" data-action="controllerSoccerData" data-game="${data.game_id}" data-formation="True" data-type="formation">
+                                                            <a href="#" class="interactable links" data-action="controllerGameData" data-game="${data.game_id}" data-homeclub="${data.home_club_id}" data-awayclub="${data.away_club_id}" data-formation="True" data-type="formation">
                                                                 <p class="text-grey">FORMATION</p>
                                                             </a>
                                                         </div>
                                                         <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center selected-type">
-                                                            <a href="#" class="interactable links" data-action="controllerSoccerData" data-type="events">
+                                                            <a href="#" class="interactable links" data-action="controllerGameData" data-type="events" data-game="${data.game_id}" data-events="True">
                                                                 <p class="text-grey">EVENTS</p>
                                                             </a>
                                                         </div>
                                                         <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center selected-type">
-                                                            <a href="#" class="interactable links" data-action="controllerSoccerData" data-type="charts">
+                                                            <a href="#" class="interactable links" data-action="controllerGameData" data-type="charts">
                                                                 <p class="text-grey">CHARTS</p>
                                                             </a>
                                                         </div>
@@ -258,7 +260,34 @@ const content = {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                       </div>`
+                                                       </div>`,
+    createEventsContent:                    data => `<div class="row">
+                                                        <div class="col-12 d-flex flex-row">
+                                                            <p class="text-grey">${data.minute}</p>
+                                                            <p class="text-grey">${data.type}</p>
+                                                            <p class="text-grey">${data.player_name}</p>
+                                                            <p class="text-grey">${data.assist_name}</p>
+                                                        </div>
+                                                    </div>`,
+    createEventDisplay2Content:(first, second) =>   `<div class="item my-2">
+                                                                <div class="container-fluid bg-black rounded-3 my-4 py-4">
+                                                                    <div class="container-fluid mb-4 rounded-3" style="background-color: rgba(5,168,64,0.21);">
+                                                                        <h4 class="text-white mb-0">1° TIME</h4>
+                                                                    </div>
+                                                                    <div class="scroll-container2">
+                                                                        ${first}
+                                                                    </div>
+                                                                    
+                                                                </div>
+                                                                <div class="container-fluid bg-black rounded-3 my-4 py-4">
+                                                                    <div class="container-fluid mb-4 rounded-3" style="background-color: rgba(5,168,64,0.21);">
+                                                                        <h4 class="text-white mb-0">2° TIME</h4>
+                                                                    </div>
+                                                                    <div class="scroll-container2">
+                                                                        ${second}
+                                                                    </div>
+                                                                </div>
+                                                            </div>`
 };
 
 //                                              <p class="text-white">${data.url}</p>

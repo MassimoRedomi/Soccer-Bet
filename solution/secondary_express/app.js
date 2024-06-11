@@ -11,6 +11,7 @@ const usersRouter = require('./routes/users');
 const app = express();
 const gamesRouter = require('./routes/games');
 const gameLineupsRouter = require('./routes/gameLineups');
+const gameEventsRouter = require('./routes/gameEvents');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -26,6 +27,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/games', gamesRouter);
 app.use('/lineups', gameLineupsRouter);
+app.use('/events', gameEventsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

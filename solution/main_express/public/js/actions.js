@@ -74,12 +74,22 @@ const actions = {
     async controllerGameData(data){
         const endpoints = [
             { url: '/api/gamebyid', elementId: 'dataDisplay2', contentFn: content.createGameDisplay2Content},
-            { url: 'api/lineupsbyid', elementId: "dataDisplay2", contentFn: content.createLineupContent, contentFn2: content.createLineupDisplay2Content}
+            { url: 'api/lineupsbyid', elementId: "dataDisplay2", contentFn: content.createLineupContent, contentFn2: content.createLineupDisplay2Content},
+            { url: 'api/eventsbygameid', elementId: "dataDisplay2", contentFn: content.createEventsContent, contentFn2: content.createEventDisplay2Content}
         ];
 
-        if(data.formation){
+        if(data.events){
+            const events = await postAxiosQuery(endpoints[2].url, {game_id: data.game});
+            console.log(events);
+            console.log(data.game);
+            const timeEvents = actions.separateEvents(events);
+            const htmlContentFirst = renderDataAsHtml(timeEvents[0], endpoints[2].contentFn);
+            const htmlContentSecond = renderDataAsHtml(timeEvents[1], endpoints[2].contentFn);
+            const eventDisplayContent = endpoints[2].contentFn2(htmlContentFirst, htmlContentSecond);
+            updateElementHtml(endpoints[2].elementId, eventDisplayContent, 'replace');
+        } else if (data.formation){
             const mixedLineupsData = await postAxiosQuery(endpoints[1].url, {game_id: data.game});
-            const separatedLineupsData = actions.separateLineups(mixedLineupsData);
+            const separatedLineupsData = actions.separateLineups(mixedLineupsData, data.homeclub, data.awayclub);
             const htmlContentHome = renderDataAsHtml(separatedLineupsData[0], endpoints[1].contentFn);
             const htmlContentAway = renderDataAsHtml(separatedLineupsData[1], endpoints[1].contentFn);
             const lineupDisplayContent = endpoints[1].contentFn2(htmlContentHome, htmlContentAway);
@@ -105,8 +115,6 @@ const actions = {
 
     toggleSelectedClass:  data => {
         const keys = ['season', 'type'];
-
-        // Clear previously selected class for updated keys
         keys.forEach(key => {
             if (data[key]) {
                 const selectedClass = `.selected-${key}`;
@@ -115,8 +123,6 @@ const actions = {
                 });
             }
         });
-
-        // Update selectpath with current data, keeping only relevant keys
         keys.forEach(key => {
             if (data[key]) {
                 const index = selectpath.findIndex(crumb => crumb.key === key);
@@ -127,8 +133,6 @@ const actions = {
                 }
             }
         });
-
-        // Add selected class to new elements based on updated selectpath
         selectpath.forEach(crumb => {
             if (data[crumb.key]) {
                 const selector = `[data-${crumb.key}="${crumb.value}"]`;
@@ -138,8 +142,6 @@ const actions = {
                 }
             }
         });
-
-        // Ensure selectpath only contains entries for 'season' and 'game'
         selectpath = selectpath.filter(crumb => keys.includes(crumb.key));
     },
 
@@ -219,25 +221,60 @@ const actions = {
         }
     },
 
-    separateLineups: mixedLineupsData => {
+    separateLineups: (mixedLineupsData, homeId, awayId) => {
         if (!Array.isArray(mixedLineupsData)) {
             console.error("Invalid data format, expected an array");
             return [[], []];
         }
 
-        const lineupsByClub = mixedLineupsData.reduce((acc, lineup) => {
-            if (!acc[lineup.club_id]) {
-                acc[lineup.club_id] = [];
-            }
-            acc[lineup.club_id].push(lineup);
-            return acc;
-        }, {});
+        // Convert homeId and awayId to strings
+        const homeIdStr = String(homeId);
+        const awayIdStr = String(awayId);
 
-        const separatedLineups = Object.values(lineupsByClub);
-        if (separatedLineups.length !== 2) {
-            console.warn("Expected exactly two different club IDs in the data");
+        const homeLineup = [];
+        const awayLineup = [];
+
+        mixedLineupsData.forEach(lineup => {
+            // Convert lineup.club_id to string for comparison
+            const clubIdStr = String(lineup.club_id);
+
+            if (clubIdStr === homeIdStr) {
+                homeLineup.push(lineup);
+            } else if (clubIdStr === awayIdStr) {
+                awayLineup.push(lineup);
+            } else {
+                console.warn("Unexpected club_id found in the data");
+            }
+        });
+
+        if (homeLineup.length === 0 || awayLineup.length === 0) {
+            console.warn("Expected lineups for both home and away clubs");
         }
-        return separatedLineups;
+
+        return [homeLineup, awayLineup];
+    },
+
+    separateEvents: data => {
+        // Check if data is an array
+        if (!Array.isArray(data)) {
+            console.error("Invalid data format, expected an array");
+            return [[], []];
+        }
+
+        // Initialize two arrays to hold the separated events
+        const firstHalfEvents = [];
+        const secondHalfEvents = [];
+
+        // Loop through the events and separate them based on the minute
+        data.forEach(event => {
+            if (event.minute <= 45) {
+                firstHalfEvents.push(event);
+            } else {
+                secondHalfEvents.push(event);
+            }
+        });
+
+        return [firstHalfEvents, secondHalfEvents];
     },
 
     formatPlayerNames: data => {

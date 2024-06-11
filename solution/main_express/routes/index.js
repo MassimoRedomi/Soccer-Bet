@@ -758,5 +758,26 @@ router.post('/api/lineupsbyid', async (req, res) => {
   }
 });
 
+router.post('/api/eventsbygameid', async (req, res) => {
+  const { game_id } = req.body;
+  try {
+    const response = await fetch('http://localhost:3002/events/getgamevents-by-id', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ game_id: game_id })
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch seasons from the competition service');
+    }
+
+    const data = await response.json();
+    res.status(200).json(data);
+  } catch (error) {
+    console.error('Error forwarding request:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
 module.exports = router;
 

@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface PlayersStatRepository extends JpaRepository<PlayersStat, Integer> {
-    List<PlayersStat> findByCurrentClub(Clubs currentClub);
+    List<PlayersStat> findByCurrentClubOrderByNameAsc(Clubs currentClub);
 }
