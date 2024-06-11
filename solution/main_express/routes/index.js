@@ -779,5 +779,25 @@ router.post('/api/eventsbygameid', async (req, res) => {
   }
 });
 
+router.post('/api/clubbyid', async (req, res) => {
+  const { clubId } = req.body;
+  try {
+    const response = await fetch('http://localhost:8082/clubbyid', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ clubId: clubId })
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch seasons from the competition service');
+    }
+
+    const data = await response.json();
+    res.status(200).json(data);
+  } catch (error) {
+    console.error('Error forwarding request:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
 module.exports = router;
 

@@ -17,4 +17,8 @@ public class ClubsService {
     public List<ClubsNames> getClubNames() {
         return clubsRepository.findAllClubNames();
     }
+
+    public Clubs getClubById(Integer clubId) {
+        return clubsRepository.findById(clubId).orElse(null);
+    }
 }

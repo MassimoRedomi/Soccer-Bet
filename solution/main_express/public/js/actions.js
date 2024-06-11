@@ -18,12 +18,12 @@ const actions = {
                 await actions.charge({clubId: data.club}, endpoints[3].url, endpoints[3].elementId, endpoints[3].contentFn);
             } else if (data.game){
                 const gameData= await actions.charge({game_id: data.game}, endpoints[5].url, endpoints[5].elementId, endpoints[5].contentFn);
-                await actions.controllerGameData(data);
+                await actions.controllerGameData({game: data.game, type:'summary'});
                 await actions.controllerSoccerData({club: gameData.home_club_id});
             } else if (data.season) {
                 const gamesData = await actions.charge({competition_id: data.competition, season: data.season}, endpoints[2].url, endpoints[2].elementId, endpoints[2].contentFn);
                 updateElementHtml('championName', `<h4 class="text-white bold">${actions.toUpperCase(data.name)}</h4>`, 'replace');
-                await actions.controllerSoccerData({game: gamesData[0].game_id});
+                await actions.controllerSoccerData({game: gamesData[0].game_id, gamef: gamesData[0].game_id, clubname: `${gamesData[0].home_club_name} vs ${gamesData[0].away_club_name}`});
             } else if (data.champion) {
                 const seasonsData = await actions.charge({competitionId: data.champion}, endpoints[1].url, endpoints[1].elementId, endpoints[1].contentFn);
                 await actions.controllerSoccerData({competition: seasonsData[0].competition_id, season: seasonsData[0].season, name: seasonsData[0].competition_name});
@@ -97,6 +97,20 @@ const actions = {
         actions.toggleSelectedClass(data);
     },
 
+    async controllerClubData(data) {
+        endpoints=[
+            {url: '/api/clubbyid', elementId: 'dataDisplay', contentFn: content.createClubDisplayContent},
+            {url: '/api/clubbyid', elementId: 'dataDisplay2', contentFn: content.createClubDisplay2Content}
+        ];
+        if(data.type && data.club){
+            await actions.charge({clubId: data.club}, endpoints[1].url, endpoints[1].elementId, endpoints[1].contentFn);
+        } else if(data.club){
+            await actions.charge({clubId: data.club}, endpoints[0].url, endpoints[0].elementId, endpoints[0].contentFn);
+            actions.controllerClubData({type:'summary', club: data.club});
+        }
+        actions.chargeBreadCrumbs(data);
+    },
+
     charge: async (data, url, htmlElementId, contentFunction) => {
         try {
             const responseData = await postAxiosQuery(url, data);
@@ -110,7 +124,7 @@ const actions = {
     },
 
     toggleSelectedClass:  data => {
-        const keys = ['season', 'type'];
+        const keys = ['season', 'type', 'nationlist', 'gamef'];
         keys.forEach(key => {
             if (data[key]) {
                 const selectedClass = `.selected-${key}`;
@@ -521,7 +535,6 @@ const actions = {
      * @param {Object} data - The data returned from the signup request.
      */
     moveToLogin: data => {
-        console.log('we are here');
         const modaLogin = document.getElementById('loginModal');
         const modalSign = document.getElementById('signinModal');
         updateElementHtml('congrats', '<h3>Congratulations! Your account is created</h3>', 'replace');

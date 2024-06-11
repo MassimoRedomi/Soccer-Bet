@@ -14,9 +14,9 @@ const content = {
                                                     </a>
                                                 </div>
                                              </div>`,
-    createChampionsContent:         data => `<div class="container rounded-3 my-2">
+    createChampionsContent:         data => `<div class="container rounded-3 my-2 selected-nationlist">
                                                 <div class="item my-2">
-                                                    <a href="#" class="interactable links d-flex align-items-center" data-action="controllerSoccerData"  data-champion="${data.competitionId}" data-nation="${data.countryName}">
+                                                    <a href="#" class="interactable links d-flex align-items-center" data-action="controllerSoccerData"  data-champion="${data.competitionId}" data-nation="${data.countryName}" data-nationlist="${data.name}">
                                                         <div class="svg-container me-2">${data.sig}</div>
                                                         <p class="mb-0">${actions.formatNames(data.name)}</p>
                                                     </a>
@@ -45,7 +45,8 @@ const content = {
                                                 </div>
                                              </div>`,
     createGamesContent:             data => `<div class="item my-2">
-                                                <a href="#" class="interactable bg-links" data-action="controllerSoccerData" data-game="${data.game_id}" data-clubname="${data.home_club_name} vs ${data.away_club_name}">
+                                                <div class="container-fluid p-0 m-0 selected-gamef">
+                                                <a href="#" class="interactable bg-links" data-action="controllerSoccerData" data-gamef="${data.game_id}" data-game="${data.game_id}" data-clubname="${data.home_club_name} vs ${data.away_club_name}">
                                                     <div class="row border-bottom-grey">
                                                         <div class="col-4 d-flex flex-column align-items-start">
                                                                 <p class="tooltip-container mb-0">${actions.setDimNames(data.home_club_name)} <span class="tooltip-text">${data.home_club_id}</span></p>
@@ -58,6 +59,7 @@ const content = {
                                                         </div>
                                                     </div>
                                                 </a>
+                                                </div>
                                             </div>`,
     createClubPlayersContent:       data => `<div class="item my-2">
                                                  <a href="#" class="interactable bg-links" data-action="controllerSoccerData" data-playerId="${data.playerId}">
@@ -99,7 +101,7 @@ const content = {
                                                 <div class="container-fluid bg-black rounded-3">
                                                     <div class="row">
                                                         <div class="col-4 d-flex flex-column justify-content-center align-items-center text-center">
-                                                            <a href="#" class="interactable bg-links" data-action="controllerSoccerData" data-club="${data.home_club_id}" data-clubName="${data.home_club_name}">
+                                                            <a href="#" class="interactable bg-links" data-action="controllerClubData" data-club="${data.home_club_id}" data-clubName="${data.home_club_name}">
                                                                 <p class="text-grey">HOME</p>
                                                                 <img src="images/football-club.png" alt="CLub" style="width: 100px;">
                                                                 <p class="text-grey">${data.home_club_name}</p>
@@ -112,7 +114,7 @@ const content = {
                                                             <p class="text-grey">${data.stadium}</p>
                                                         </div>
                                                         <div class="col-4 d-flex flex-column justify-content-center align-items-center text-center">
-                                                            <a href="#" class="interactable bg-links" data-action="controllerSoccerData" data-club="${data.away_club_id}" data-clubName="${data.away_club_name}">
+                                                            <a href="#" class="interactable bg-links" data-action="controllerClubData" data-club="${data.away_club_id}" data-clubName="${data.away_club_name}">
                                                                 <p class="text-grey">AWAY</p>
                                                                 <img src="images/football-club.png" alt="CLub" style="width: 100px;">
                                                                 <p class="text-grey">${data.away_club_name}</p>
@@ -283,7 +285,125 @@ const content = {
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>`
+                                                            </div>`,
+    createClubDisplayContent: data => `<div class="item my-2">
+                                                <div class="container-fluid bg-black rounded-3">
+                                                    <a href="${data.url}" class="bg-links" target="_blank">
+                                                    <div class="row py-3">
+                                                        <div class="col-3 d-flex flex-column justify-content-center align-items-end">
+                                                            <img src="images/football-club.png" alt="CLub" style="width: 100px;">
+                                                        </div>
+                                                        <div class="col-9 d-flex flex-column justify-content-center align-items-start">
+                                                            <h3 class="text-grey">${actions.formatNames(data.name)}</h3>
+                                                            <p class="text-grey">Stadium: ${data.stadiumName}</p>
+                                                            <p class="text-grey">Capacity: ${data.stadiumSeats}</p>
+                                                        </div>
+                                                    </div>
+                                                    </a>
+                                                    <div class="row border-top-green mt-2 py-2">
+                                                        <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center rounded-3 selected-type">
+                                                            <a href="#" class="interactable links" data-action="controllerGameData" data-club="${data.clubId}" data-type="summary">
+                                                                <p class="text-grey">SUMMARY</p>
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center selected-type">
+                                                            <a href="#" class="interactable links" data-action="controllerGameData" data-game="${data.game_id}" data-homeclub="${data.home_club_id}" data-awayclub="${data.away_club_id}" data-results="True" data-type="results">
+                                                                <p class="text-grey">RESULTS</p>
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center selected-type">
+                                                            <a href="#" class="interactable links" data-action="controllerGameData" data-type="charts" data-game="${data.game_id}" data-homeclub="${data.home_club_id}" data-awayclub="${data.away_club_id}" data-events="True">
+                                                                <p class="text-grey">CHARTS</p>
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center selected-type">
+                                                            <a href="#" class="interactable links" data-action="controllerGameData" data-type="lineups">
+                                                                <p class="text-grey">LINEUPS</p>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                              </div>`,
+    createClubDisplay2Content: data =>`<div class="item my-2">
+                                                <div class="container-fluid bg-black rounded-3 my-4 py-4">
+                                                    <div class="row my-2 rounded-3" style="background-color: rgba(5,168,64,0.21);">
+                                                        <h4 class="text-white mb-0">INFORMATION</h4>
+                                                    </div>
+                                                    <div class="row border-bottom-grey">
+                                                        <div class="col-6 d-flex flex-row align-items-start">
+                                                           <img src="images/whistle.png" alt="Offers" class="svg-container me-2">
+                                                           <p class="text-white">MARKET VALUE:</p>
+                                                        </div>
+                                                        <div class="col-6 d-flex flex-column align-items-end">
+                                                            <p class="text-white">${data.totalMarketValue}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row border-bottom-grey">
+                                                        <div class="col-6 d-flex flex-row align-items-start">
+                                                            <img src="images/football-field.png" alt="Offers" class="svg-container me-2">
+                                                            <p class="text-white">SQUAD SIZE:</p>
+                                                        </div>
+                                                        <div class="col-6 d-flex flex-column align-items-end">
+                                                           <p class="text-white">${data.squadSize}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row border-bottom-grey">
+                                                        <div class="col-6 d-flex flex-row align-items-start">
+                                                            <img src="images/football-field.png" alt="Offers" class="svg-container me-2">
+                                                            <p class="text-white">AVARAGE AGE:</p>
+                                                        </div>
+                                                        <div class="col-6 d-flex flex-column align-items-end">
+                                                           <p class="text-white">${data.averageAge}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row border-bottom-grey">
+                                                        <div class="col-6 d-flex flex-row align-items-start">
+                                                            <img src="images/customer.png" alt="Offers" class="svg-container me-2">
+                                                            <p class="text-white">FOREIGNERS PLAYERS:</p>
+                                                        </div>
+                                                        <div class="col-6 d-flex flex-column align-items-end">
+                                                           <p class="text-white">${data.foreignersNumber}/${data.squadSize} (${data.foreignersPercentage})</p>
+                                                        </div>
+                                                    </div>
+                                                     <div class="row border-bottom-grey">
+                                                        <div class="col-6 d-flex flex-row align-items-start">
+                                                            <img src="images/calendar.png" alt="Offers" class="svg-container me-2">
+                                                            <p class="text-white">NATIONAL PLAYERS:</p>
+                                                        </div>
+                                                        <div class="col-6 d-flex flex-column align-items-end">
+                                                           <p class="text-white">${data.nationalTeamPlayers}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row border-bottom-grey">
+                                                        <div class="col-6 d-flex flex-row align-items-start">
+                                                            <img src="images/calendar.png" alt="Offers" class="svg-container me-2">
+                                                            <p class="text-white">NET TRANSFER RECORD:</p>
+                                                        </div>
+                                                        <div class="col-6 d-flex flex-column align-items-end">
+                                                           <p class="text-white">${data.netTransferRecord}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row border-bottom-grey">
+                                                        <div class="col-6 d-flex flex-row align-items-start">
+                                                            <img src="images/calendar.png" alt="Offers" class="svg-container me-2">
+                                                            <p class="text-white">COACH:</p>
+                                                        </div>
+                                                        <div class="col-6 d-flex flex-column align-items-end">
+                                                           <p class="text-white">${data.coachName}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row border-bottom-grey">
+                                                        <div class="col-6 d-flex flex-row align-items-start">
+                                                            <img src="images/calendar.png" alt="Offers" class="svg-container me-2">
+                                                            <p class="text-white">LAST SEASON:</p>
+                                                        </div>
+                                                        <div class="col-6 d-flex flex-column align-items-end">
+                                                           <p class="text-white">${data.lastSeason}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                              </div>`
 };
 
 //                                              <p class="text-white">${data.url}</p>
