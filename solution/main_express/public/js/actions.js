@@ -1,75 +1,126 @@
-const breadcrumbs = [];
-let selectpath= [];
+
 
 const actions = {
-    async controllerSoccerData(data) {
-        const endpoints = [
-            { url: '/api/send-country', elementId:'champions_nation_list', contentFn: content.createChampionsContent },
-            { url: '/api/seasons_by_champion', elementId: 'champions_years', contentFn: content.createSeasonsContent },
-            { url: '/api/games_by_championNseason', elementId: 'gamesxchampion', contentFn:content.createGamesContent },
-            { url: '/api/clubplayers', elementId: 'clubPlayers', contentFn: content.createClubPlayersContent },
-            { url: '/api/competitionbyid', elementId:'dataDisplay', contentFn: content.createCompetitionDisplayContent},
-            { url: '/api/gamebyid', elementId: 'dataDisplay', contentFn: content.createGameDisplayContent}
-        ];
 
+
+    /**
+     * Initiate fetching and updating data from multiple endpoints.
+     * Fetches data from the first five predefined endpoints, updates the corresponding HTML elements,
+     * and initializes visibility handlers. Handles any errors that may occur during the process.
+     */
+    async objMain() {
+        const endpoints = [
+            /*01*/{ url: '/api/clubs-names',      elementId: 'clubs',             contentFn: content.createClubsContent               },
+            /*02*/{ url: '/api/champions',        elementId: 'champions',         contentFn: content.createChampionsContent           },
+            /*03*/{ url: '/api/soccer-nations',   elementId: 'nations',           contentFn: content.createNationsListContent         },
+            /*04*/{ url: '/api/soccer-nations',   elementId: 'nation_dropdown',   contentFn: content.createNationsDropdownContent     },
+            /*05*/{ url: '/api/soccer-nations',   elementId: 'language',          contentFn: content.createLanguageContent            },
+            /*06*/{ url: '/api/champions',        elementId: 'championChat',      contentFn: content.createChampionChatContent        }
+        ];
         try {
-            activateSection('stats');
-            if (data.club) {
-                await actions.charge({clubId: data.club}, endpoints[3].url, endpoints[3].elementId, endpoints[3].contentFn);
-            } else if (data.game){
-                const gameData= await actions.charge({game_id: data.game}, endpoints[5].url, endpoints[5].elementId, endpoints[5].contentFn);
-                await actions.controllerGameData({game: data.game, type:'summary'});
-                await actions.controllerSoccerData({club: gameData.home_club_id});
-            } else if (data.season) {
-                const gamesData = await actions.charge({competition_id: data.competition, season: data.season}, endpoints[2].url, endpoints[2].elementId, endpoints[2].contentFn);
-                updateElementHtml('championName', `<h4 class="text-white bold">${actions.toUpperCase(data.name)}</h4>`, 'replace');
-                await actions.controllerSoccerData({game: gamesData[0].game_id, gamef: gamesData[0].game_id, clubname: `${gamesData[0].home_club_name} vs ${gamesData[0].away_club_name}`});
-            } else if (data.champion) {
-                const seasonsData = await actions.charge({competitionId: data.champion}, endpoints[1].url, endpoints[1].elementId, endpoints[1].contentFn);
-                await actions.controllerSoccerData({competition: seasonsData[0].competition_id, season: seasonsData[0].season, name: seasonsData[0].competition_name});
-            }
-            if (data.nation) {
-                actions.updateSelectOptions('nation_dropdown', data);
-                const championsData = await actions.charge(data, endpoints[0].url, endpoints[0].elementId, endpoints[0].contentFn);
-                await actions.controllerSoccerData(data.champion?{champion: data.champion}:{champion: championsData[0].competitionId});
-            }
-            actions.toggleSelectedClass(data);
-            actions.chargeBreadCrumbs(data);
-        }catch (error) {
-            console.error('Error processing data:', error);
-            updateElementHtml('nation_dropdown', '<p class="text-white">Error loading data</p>', 'replace');
+            await Promise.all(endpoints.slice(0, 6).map(endpoint =>
+                fetchAndUpdate(endpoint.url, endpoint.elementId, endpoint.contentFn)
+            ));
+            [
+                { elementId: 'clubs', buttonId: 'toggleClubs', limit: 14 },
+                { elementId: 'champions', buttonId: 'toggleChampions', limit: 14 }
+            ].forEach(config => initializeItemsVisibility(config.elementId, config.buttonId, config.limit));
+            await actions.objNation({nation: "Greece"});
+        } catch (error) {
+            console.error('Error in objMain function:', error);
         }
     },
 
-    getInitialData: () => {
+
+    //nation: data.nation
+    async objNation(data) {
         const endpoints = [
-            { url: '/api/clubs-names', elementId: 'clubs', contentFn: content.createClubsContent },
-            { url: '/api/champions', elementId: 'champions', contentFn: content.createChampionsContent },
-            { url: '/api/soccer-nations', elementId: 'nations', contentFn: content.createNationsListContent },
-            { url: '/api/soccer-nations', elementId: 'nation_dropdown', contentFn: content.createNationsDropdownContent },
-            { url: '/api/soccer-nations', elementId: 'language', contentFn: content.createLanguageContent},
-            { url: '/api/champions', elementId: 'championChat', contentFn: content.createChampionChatContent}
+            /*07*/{ url: '/api/send-country', elementId: 'champions_nation_list', contentFn: content.createChampionsContent }
         ];
-
-        const dataFetchPromises = endpoints.map(endpoint => {
-            return getAxiosQuery(endpoint.url)
-                .then(data => {
-                    const htmlContent = renderDataAsHtml(data, endpoint.contentFn);
-                    updateElementHtml(endpoint.elementId, htmlContent, 'replace');
-                })
-                .catch(error => {
-                    console.error(`Failed to load data from ${endpoint.url}:`, error);
-                    updateElementHtml(endpoint.elementId, `<p class="text-white">Error loading data.</p>`, 'replace');
-                    return null;
-                });
-        });
-
-        Promise.all(dataFetchPromises).then(() => {
-            actions.initVisibilityHandlers();
-        }).catch(error => {
-            console.error('Error initializing visibility handlers after data load:', error);
-        });
+        try {
+            chargeBreadCrumbs(data);
+            activateSection('stats');
+            const selectElement = document.getElementById('nation_dropdown');
+            selectElement.innerHTML = Array.from(selectElement.options).map(option =>
+                `<option value="${option.value}"${option.value === data.nation ? ' selected' : ''}>${option.value}</option>`
+            ).join('');
+            const championsData = await fetchAndUpdate(endpoints[0].url, endpoints[0].elementId, endpoints[0].contentFn, {nation: data.nation});
+            await actions.objChampion( { champion: championsData[0].competitionId });
+        } catch (error) {
+            console.error('Error processing objNation data:', error);
+        }
     },
+
+
+    //nation: data.nation
+    async objNatDrop(data){
+        const endpoints = [
+            /*07*/{ url: '/api/send-country', elementId: 'champions_nation_list', contentFn: content.createChampionsContent }
+        ];
+        try{
+            chargeBreadCrumbs(data);
+            const championsData = await fetchAndUpdate(endpoints[0].url, endpoints[0].elementId, endpoints[0].contentFn, {nation: data.nation});
+            await actions.objChampion({champion: championsData[0].competitionId});
+        }catch (error){
+            console.error('Error processing  objNatDrop data:', error);
+        }
+    },
+
+
+    //champion: data.champion
+    async objChampion(data){
+        const endpoints = [
+            /*08*/{ url: '/api/seasons_by_champion', elementId: 'champions_years', contentFn: content.createSeasonsContent }
+        ];
+        try{
+            activateSection('stats');
+            const seasonsData = await fetchAndUpdate( endpoints[0].url, endpoints[0].elementId, endpoints[0].contentFn, {competitionId: data.champion});
+            console.log(seasonsData[0]);
+            await actions.objSeason({competition: seasonsData[0].competition_id, season: seasonsData[0].season, name: seasonsData[0].competition_name});
+        } catch (error){
+            console.error('Error processing objChampion data:', error);
+        }
+    },
+
+
+    //champion: data.competition, season: data.season, name: data.competitionName
+    async objSeason(data){
+        const endpoints = [
+            /*09*/{ url: '/api/games_by_championNseason', elementId: 'gamesxchampion', contentFn:content.createGamesContent }
+        ];
+        try{
+            chargeBreadCrumbs(data);
+            const gamesData = await fetchAndUpdate(endpoints[0].url, endpoints[0].elementId, endpoints[0].contentFn, {competition_id: data.competition, season: data.season});
+            updateElementHtml('championName', `<h4 class="text-white bold">${actions.toUpperCase(data.name)}</h4>`, 'replace');
+            await actions.objGamesChamp({game: gamesData[0].game_id, clubname:`${gamesData[0].home_club_name} vs ${gamesData[0].away_club_name}` });
+        }catch (error){
+            console.error('Error processing objSeason data:', error);
+        }
+    },
+
+
+    //gameId: data.game, clubname:
+    async objGamesChamp(data){
+        const endpoints = [
+            /*10*/ { url: '/api/gamebyid', elementId: 'dataDisplay', contentFn: content.createGameDisplayContent}
+        ];
+        try{
+            chargeBreadCrumbs(data);
+            const gameData= await fetchAndUpdate(endpoints[0].url, endpoints[0].elementId, endpoints[0].contentFn, {game_id: data.game});
+
+        }catch (error){
+            console.error('Error processing objClubPlayers data:', error);
+        }
+    },
+
+
+
+
+
+//await actions.charge({clubId: data.club}, endpoints[3].url, endpoints[3].elementId, endpoints[3].contentFn);
+
+
+
 
     async controllerGameData(data){
         const endpoints = [
@@ -94,7 +145,6 @@ const actions = {
             const gameData= await actions.charge({game_id: data.game}, endpoints[0].url, endpoints[0].elementId, endpoints[0].contentFn);
         }
 
-        actions.toggleSelectedClass(data);
     },
 
     async controllerClubData(data) {
@@ -108,7 +158,6 @@ const actions = {
             await actions.charge({clubId: data.club}, endpoints[0].url, endpoints[0].elementId, endpoints[0].contentFn);
             actions.controllerClubData({type:'summary', club: data.club});
         }
-        actions.chargeBreadCrumbs(data);
     },
 
     charge: async (data, url, htmlElementId, contentFunction) => {
@@ -121,63 +170,6 @@ const actions = {
             console.error(`Error in charge function for URL ${url}:`, error);
             return null;
         }
-    },
-
-    toggleSelectedClass:  data => {
-        const keys = ['season', 'type', 'nationlist', 'gamef'];
-        keys.forEach(key => {
-            if (data[key]) {
-                const selectedClass = `.selected-${key}`;
-                document.querySelectorAll(selectedClass).forEach(container => {
-                    container.classList.remove('selected');
-                });
-            }
-        });
-        keys.forEach(key => {
-            if (data[key]) {
-                const index = selectpath.findIndex(crumb => crumb.key === key);
-                if (index !== -1) {
-                    selectpath[index].value = data[key];
-                } else {
-                    selectpath.push({ key: key, value: data[key] });
-                }
-            }
-        });
-        selectpath.forEach(crumb => {
-            if (data[crumb.key]) {
-                const selector = `[data-${crumb.key}="${crumb.value}"]`;
-                const selectedContainer = document.querySelector(selector)?.closest(`.selected-${crumb.key}`);
-                if (selectedContainer) {
-                    selectedContainer.classList.add('selected');
-                }
-            }
-        });
-        selectpath = selectpath.filter(crumb => keys.includes(crumb.key));
-    },
-
-    chargeBreadCrumbs: (data) => {
-        const keys = ['nation', 'season', 'name', 'clubname'];
-        keys.forEach(key => {
-            if (data[key]) {
-                const existingCrumbIndex = breadcrumbs.findIndex(crumb => crumb.key === key);
-                if (existingCrumbIndex !== -1) {
-                    breadcrumbs[existingCrumbIndex].value = data[key];
-                } else {
-                    breadcrumbs.push({ key: key, value: data[key] });
-                }
-            }
-        });
-
-        const sortedBreadcrumbs = keys
-            .map(key => breadcrumbs.find(crumb => crumb.key === key))
-            .filter(crumb => crumb);
-
-        const breadcrumbsHtml = sortedBreadcrumbs.map((crumb, index) =>
-            `<span>${actions.toUpperCase(crumb.value)}${index < sortedBreadcrumbs.length - 1 ? ' > ' : ''}</span>`
-        ).join('');
-
-        const wrappedBreadcrumbsHtml = `<h4 class="text-white">${breadcrumbsHtml}</h4>`;
-        updateElementHtml('breadcrumbs', wrappedBreadcrumbsHtml, 'replace');
     },
 
 

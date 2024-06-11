@@ -6,17 +6,17 @@ const content = {
                                                 </a>
                                              </div>`,
     createNationsDropdownContent:   data => `<option value="${data.name}">${data.name}</option>`,
-    createNationsListContent:       data => `<div class="container rounded-3 my-2">
+    createNationsListContent:       data => `<div class="container rounded-3 my-2 selected-nation">
                                                 <div class="item my-2">
-                                                    <a href="#" class="interactable links d-flex align-items-center" data-action="controllerSoccerData" data-nation="${data.name}">
+                                                    <a href="#" class="interactable links d-flex align-items-center" data-action="objNation" data-nation="${data.name}">
                                                         <div class="svg-container me-2">${data.sig}</div>
                                                         ${actions.formatNames(data.name)}
                                                     </a>
                                                 </div>
                                              </div>`,
-    createChampionsContent:         data => `<div class="container rounded-3 my-2 selected-nationlist">
+    createChampionsContent:         data => `<div class="container rounded-3 my-2">
                                                 <div class="item my-2">
-                                                    <a href="#" class="interactable links d-flex align-items-center" data-action="controllerSoccerData"  data-champion="${data.competitionId}" data-nation="${data.countryName}" data-nationlist="${data.name}">
+                                                    <a href="#" class="interactable links d-flex align-items-center" data-action="objChampion"  data-champion="${data.competitionId}">
                                                         <div class="svg-container me-2">${data.sig}</div>
                                                         <p class="mb-0">${actions.formatNames(data.name)}</p>
                                                     </a>
@@ -38,7 +38,7 @@ const content = {
     createSeasonsContent:           data => `<div class="col-6">
                                                 <div class="container-fluid bg-black text-white rounded-3  px-0 my-2 text-center selected-season">
                                                     <div class="item">
-                                                        <a href="#" class="interactable links" data-action="controllerSoccerData" data-season="${data.season}" data-competition="${data.competition_id}" data-name="${data.competition_name}">
+                                                        <a href="#" class="interactable links" data-action="objSeason" data-season="${data.season}" data-competition="${data.competition_id}" data-name="${data.competition_name}">
                                                             <p class="mb-0">${data.season}</p>
                                                         </a>
                                                     </div>
@@ -46,7 +46,7 @@ const content = {
                                              </div>`,
     createGamesContent:             data => `<div class="item my-2">
                                                 <div class="container-fluid p-0 m-0 selected-gamef">
-                                                <a href="#" class="interactable bg-links" data-action="controllerSoccerData" data-gamef="${data.game_id}" data-game="${data.game_id}" data-clubname="${data.home_club_name} vs ${data.away_club_name}">
+                                                <a href="#" class="interactable bg-links" data-action="objGamesChamp" data-gamef="${data.game_id}" data-game="${data.game_id}" data-clubname="${data.home_club_name} vs ${data.away_club_name}">
                                                     <div class="row border-bottom-grey">
                                                         <div class="col-4 d-flex flex-column align-items-start">
                                                                 <p class="tooltip-container mb-0">${actions.setDimNames(data.home_club_name)} <span class="tooltip-text">${data.home_club_id}</span></p>
@@ -62,7 +62,7 @@ const content = {
                                                 </div>
                                             </div>`,
     createClubPlayersContent:       data => `<div class="item my-2">
-                                                 <a href="#" class="interactable bg-links" data-action="controllerSoccerData" data-playerId="${data.playerId}">
+                                                 <a href="#" class="interactable bg-links" data-action="" data-playerId="${data.playerId}">
                                                     <div class="row border-bottom-grey">
                                                         <div class="col-4 d-flex align-items-start">
                                                             <p class="text-white bold mb-0">${data.name}</p>

@@ -1,8 +1,5 @@
-defaultValue={nation: "Greece"};
-
 document.addEventListener('DOMContentLoaded', function () {
-    actions.getInitialData();
-    actions.controllerSoccerData(defaultValue);
+    actions.objMain();
     setupEventListeners();
     checkLoginStatus();
     loadLastActiveSection();
