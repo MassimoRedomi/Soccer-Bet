@@ -75,17 +75,13 @@ const actions = {
         const endpoints = [
             { url: '/api/gamebyid', elementId: 'dataDisplay2', contentFn: content.createGameDisplay2Content},
             { url: 'api/lineupsbyid', elementId: "dataDisplay2", contentFn: content.createLineupContent, contentFn2: content.createLineupDisplay2Content},
-            { url: 'api/eventsbygameid', elementId: "dataDisplay2", contentFn: content.createEventsContent, contentFn2: content.createEventDisplay2Content}
+            { url: 'api/eventsbygameid', elementId: "dataDisplay2", contentFn: content.createEventDisplay2Content}
         ];
 
         if(data.events){
             const events = await postAxiosQuery(endpoints[2].url, {game_id: data.game});
-            console.log(events);
-            console.log(data.game);
-            const timeEvents = actions.separateEvents(events);
-            const htmlContentFirst = renderDataAsHtml(timeEvents[0], endpoints[2].contentFn);
-            const htmlContentSecond = renderDataAsHtml(timeEvents[1], endpoints[2].contentFn);
-            const eventDisplayContent = endpoints[2].contentFn2(htmlContentFirst, htmlContentSecond);
+            const timeEvents = actions.separateEvents(events, data.homeclub, data.awayclub);
+            const eventDisplayContent = endpoints[2].contentFn(timeEvents[0], timeEvents[1]);
             updateElementHtml(endpoints[2].elementId, eventDisplayContent, 'replace');
         } else if (data.formation){
             const mixedLineupsData = await postAxiosQuery(endpoints[1].url, {game_id: data.game});
@@ -254,28 +250,68 @@ const actions = {
         return [homeLineup, awayLineup];
     },
 
-    separateEvents: data => {
+    separateEvents: (data, homeId, awayId) => {
+        const homeIdNu = Number(homeId);
+        const awayIdNu = Number(awayId);
+
         // Check if data is an array
         if (!Array.isArray(data)) {
             console.error("Invalid data format, expected an array");
-            return [[], []];
+            return ["", ""];
         }
 
-        // Initialize two arrays to hold the separated events
-        const firstHalfEvents = [];
-        const secondHalfEvents = [];
+        // Initialize strings to hold the separated events
+        let firstHalfEvents = "";
+        let secondHalfEvents = "";
+
+        // Function to generate HTML content
+        const generateHtmlContent = (data) => {
+            const assistName = data.assist_name === 'NaN' ? '' : ` (${actions.formatNames(data.assist_name)})`;
+            if (data.club_id === homeIdNu) {
+                return `<div class="row border-bottom-grey py-2">
+                            <div class="col-6 text-start">
+                                <p class="text-grey mb-0">${data.minute}' ${data.type} ${actions.formatPlayerNames(data.player_name)} ${assistName}</p>
+                            </div>
+                            <div class="col-6 text-end">
+                                <p class="text-grey mb-0">-</p>
+                            </div>
+                        </div>`;
+            } else if (data.club_id === awayIdNu) {
+                return `<div class="row border-bottom-grey py-2">
+                            <div class="col-6 text-start">
+                                <p class="text-grey mb-0">-</p>
+                            </div>
+                            <div class="col-6 text-end">
+                                <p class="text-grey mb-0">${assistName} ${actions.formatPlayerNames(data.player_name)} ${data.type} ${data.minute}'</p>
+                            </div>
+                        </div>`;
+            } else {
+                return `<div class="row border-bottom-grey py-2">
+                            <div class="col-6 text-start">
+                                <p class="text-grey mb-0">-</p>
+                            </div>
+                            <div class="col-6 text-end">
+                                <p class="text-grey mb-0">-</p>
+                            </div>
+                        </div>`;
+            }
+        };
 
         // Loop through the events and separate them based on the minute
         data.forEach(event => {
+            const htmlContent = generateHtmlContent(event);
             if (event.minute <= 45) {
-                firstHalfEvents.push(event);
+                firstHalfEvents += htmlContent;
             } else {
-                secondHalfEvents.push(event);
+                secondHalfEvents += htmlContent;
             }
         });
 
         return [firstHalfEvents, secondHalfEvents];
     },
+
+
+
 
     formatPlayerNames: data => {
         if (typeof data !== 'string') return '';
