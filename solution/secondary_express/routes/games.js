@@ -12,5 +12,7 @@ router.post('/games_by_competitionNseason', gamesController.getGamesByCompetitio
 router.post('/seasons_by_competition', gamesController.getSeasonsByCompetitionId);
 
 router.post('/getgame-by-id', gamesController.getGameByGameId);
+
+router.post('/getbyclubnseason', gamesController.getGameByClubIdAndSeason);
 module.exports = router;
 

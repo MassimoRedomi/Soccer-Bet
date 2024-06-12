@@ -801,3 +801,24 @@ router.post('/api/clubbyid', async (req, res) => {
 });
 module.exports = router;
 
+
+router.post('/api/getgamesbyclubnseason', async (req, res) => {
+  const { club_id, season } = req.body;
+  try {
+    const response = await fetch('http://localhost:3002/games/getbyclubnseason', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ club_id: club_id, season: season })
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch games from the competition service');
+    }
+
+    const data = await response.json();
+    res.status(200).json(data);
+  } catch (error) {
+    console.error('Error forwarding request:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});

@@ -1,5 +1,13 @@
 const actions = {
 
+
+    /**
+     * Fetches data from multiple endpoints, updates HTML elements, and initializes visibility handlers.
+     * Then it fetches and updates nation-specific data.
+     * @async
+     * @function actMain
+     * @returns {Promise<void>}
+     */
     async actMain() {
         const endpoints = [
             /*00*/{ url: '/api/clubs-names',                elementId: 'clubs',                 contentFn: content.createClubsContent               },
@@ -24,6 +32,13 @@ const actions = {
     },
 
 
+    /**
+     * Fetches and updates nation-specific data, updates the dropdown, and fetches champion data.
+     * @async
+     * @function actNation
+     * @param {Object} data - Contains nation information.
+     * @returns {Promise<void>}
+     */
     async actNation(data) {
         try {
             chargeBreadCrumbs(data);
@@ -40,6 +55,13 @@ const actions = {
     },
 
 
+    /**
+     * Fetches and updates champion data for a specific nation.
+     * @async
+     * @function actNatDrop
+     * @param {Object} data - Contains nation information.
+     * @returns {Promise<void>}
+     */
     async actNatDrop(data){
         try{
             chargeBreadCrumbs(data);
@@ -56,6 +78,13 @@ const actions = {
     },
 
 
+    /**
+     * Fetches and updates seasons data for a specific champion.
+     * @async
+     * @function actChampion
+     * @param {Object} data - Contains champion information.
+     * @returns {Promise<void>}
+     */
     async actChampion(data){
         try{
             activateSection('stats');
@@ -72,9 +101,17 @@ const actions = {
     },
 
 
+    /**
+     * Fetches and updates games data for a specific season and competition.
+     * @async
+     * @function actSeason
+     * @param {Object} data - Contains competition and season information.
+     * @returns {Promise<void>}
+     */
     async actSeason(data){
         try{
             chargeBreadCrumbs(data);
+            autoSelectionClass({season: data.season});
             const gamesData = await fetchAndUpdate(
                 '/api/games_by_championNseason',
                 'gamesxchampion',content.createGamesContent,
@@ -88,9 +125,17 @@ const actions = {
     },
 
 
+    /**
+     * Fetches and updates game data for a specific game.
+     * @async
+     * @function actGamesChamp
+     * @param {Object} data - Contains game and club name information.
+     * @returns {Promise<void>}
+     */
     async actGamesChamp(data){
         try{
             chargeBreadCrumbs(data);
+            autoSelectionClass({game: data.game});
             const gameData= await fetchAndUpdate(
                 '/api/gamebyid',
                 'dataDisplay',
@@ -104,6 +149,13 @@ const actions = {
     },
 
 
+    /**
+     * Fetches and updates club players for a specific game.
+     * @async
+     * @function actDispGame
+     * @param {Object} data - Contains club and game information.
+     * @returns {Promise<void>}
+     */
     async actDispGame(data){
         try{
             await fetchAndUpdate(
@@ -112,14 +164,23 @@ const actions = {
                 content.createClubPlayersContent,
                 {clubId: data.club}
             );
-            await actions.actDispGameSum({game: data.game});
+            await actions.actDispGameSum({game: data.game, type: 'summary'});
         }catch (error){
             console.error('Error processing actDispGame data:', error);
         }
     },
 
+
+    /**
+     * Fetches and updates detailed game summary data for a specific game.
+     * @async
+     * @function actDispGameSum
+     * @param {Object} data - Contains game information.
+     * @returns {Promise<void>}
+     */
     async actDispGameSum(data){
         try{
+            autoSelectionClass({type: data.type});
             const gameData= await fetchAndUpdate(
                 '/api/gamebyid',
                 'dataDisplay2',
@@ -131,8 +192,17 @@ const actions = {
         }
     },
 
+
+    /**
+     * Fetches and updates lineup data for a specific game.
+     * @async
+     * @function actDispGameForm
+     * @param {Object} data - Contains game, homeclub, and awayclub information.
+     * @returns {Promise<void>}
+     */
     async actDispGameForm(data){
         try{
+            autoSelectionClass({type: data.type});
             const mixedLineupsData = await postAxiosQuery('api/lineupsbyid', {game_id: data.game});
             const separatedLineupsData = separateLineups(mixedLineupsData, data.homeclub, data.awayclub);
             const htmlContentHome = renderDataAsHtml(separatedLineupsData[0], content.createLineupContent);
@@ -145,8 +215,16 @@ const actions = {
     },
 
 
+    /**
+     * Fetches and updates event data for a specific game.
+     * @async
+     * @function actDispGameEvents
+     * @param {Object} data - Contains game, homeclub, and awayclub information.
+     * @returns {Promise<void>}
+     */
     async actDispGameEvents(data){
         try{
+            autoSelectionClass({type: data.type});
             const events = await postAxiosQuery('api/eventsbygameid', {game_id: data.game});
             const timeEvents = separateEvents(events, data.homeclub, data.awayclub);
             const eventDisplayContent = content.createEventDisplay2Content(timeEvents[0], timeEvents[1]);
@@ -156,22 +234,47 @@ const actions = {
         }
     },
 
+
+    /**
+     * Fetches and updates club information.
+     * @async
+     * @function actDispClub
+     * @param {Object} data - Contains club information.
+     * @returns {Promise<void>}
+     */
     async actDispClub(data){
         try{
+            chargeBreadCrumbs(data);
             await fetchAndUpdate(
                 '/api/clubbyid',
                 'dataDisplay',
                 content.createClubDisplayContent,
                 {clubId: data.club}
             );
-            await actions.actDispClubSum({club: data.club});
+            await fetchAndUpdate(
+                '/api/clubplayers',
+                'clubPlayers',
+                content.createClubPlayersContent,
+                {clubId: data.club}
+            );
+            await actions.actDispClubSum({club: data.club, type: 'summary'});
         }catch (error){
             console.error('Error processing actDispClub data:', error);
         }
     },
 
+
+    /**
+     * Fetches and updates additional club summary data for a specific club.
+     * @async
+     * @function actDispClubSum
+     * @param {Object} data - Contains club information.
+     * @param {number} data.club - The ID of the club.
+     * @returns {Promise<void>}
+     */
     async actDispClubSum(data){
         try{
+            autoSelectionClass({type: data.type});
             await fetchAndUpdate(
                 '/api/clubbyid',
                 'dataDisplay2',
@@ -183,6 +286,26 @@ const actions = {
         }
     },
 
+    async actDispClubRes(data){
+        try{
+            autoSelectionClass({type: data.type});
+            let season=selectedlist.find(item => item.key === "season").value;
+            const games = await postAxiosQuery('api/getgamesbyclubnseason', {club_id: data.club, season: season});
+            const contentHtml = renderDataAsHtml(games, content.createClubResultsContent);
+            const contentHtml2 = content.createClubResDisplay2Content(contentHtml);
+            updateElementHtml('dataDisplay2', contentHtml2, 'replace');
+        }catch (error){
+            console.error('Error processing actDispClubRes data:', error);
+        }
+    },
+
+
+    /**
+     * Updates the chat section with the selected language information.
+     * @function actLangChat
+     * @param {Object} data - Contains language information.
+     * @param {string} data.language - The name of the selected language.
+     */
     async actLangChat(data){
         const languageNameElement = document.getElementById('languageName');
         const languageContainer= document.getElementById('languageChampionContainer');
@@ -199,6 +322,10 @@ const actions = {
     },
 
 
+    /**
+     * Displays the login modal and hides the signup modal.
+     * @function actLoginModal
+     */
     actLoginModal: () => {
         const modaLogin = document.getElementById('loginModal');
         const modalSign = document.getElementById('signinModal');
@@ -206,6 +333,11 @@ const actions = {
         modalSign.style.display = 'none';
     },
 
+
+    /**
+     * Displays the signup modal and hides the login modal.
+     * @function actSignModal
+     */
     actSignModal: () => {
         const modaLogin = document.getElementById('loginModal');
         const modalSign = document.getElementById('signinModal');
@@ -213,6 +345,10 @@ const actions = {
         modalSign.style.display = 'block';
     },
 
+    /**
+     * Hides both the login and signup modals.
+     * @function actCloseModal
+     */
     actCloseModal: () => {
         const modaLogin = document.getElementById('loginModal');
         const modaSign = document.getElementById('signinModal');
@@ -221,7 +357,10 @@ const actions = {
     },
 
 
-
+    /**
+     * Sends a login request to the server and handles the response.
+     * @function actLoginReq
+     */
     actLoginReq: () => {
         const form = document.getElementById('loginForm');
         const data = extractDataFromElement(form);
@@ -246,8 +385,8 @@ const actions = {
     },
 
     /**
-     * Sends a signup request to the server.
-     * @function
+     * Sends a signup request to the server and handles the response.
+     * @function actSignRequest
      */
     actSignRequest: () => {
         const form = document.getElementById('signForm');
@@ -265,7 +404,10 @@ const actions = {
     },
 
 
-
+    /**
+     * Logs the user out by calling the server's logout endpoint and checking login status.
+     * @function actUsrLogout
+     */
     actUsrLogout: () => {
         fetch('/api/logout')
             .then(response => {
@@ -280,6 +422,12 @@ const actions = {
     },
 
 
+    /**
+     * Updates the chat section with the selected champion information.
+     * @function actChampChat
+     * @param {Object} data - Contains champion information.
+     * @param {string} data.champion - The name of the champion.
+     */
     actChampChat: data => {
         const championLanguageElement = document.getElementById('championLanguageName');
         const championLanguageInfo= document.getElementById('championLanguageInfo');
@@ -297,7 +445,13 @@ const actions = {
         startChatButton.setAttribute('data-champion', data.champion);
     },
 
-
+    /**
+     * Initiates the chat connection to the specified room.
+     * @function actStartChat
+     * @param {Object} data - Contains chat information.
+     * @param {string} data.champion - The name of the champion.
+     * @param {string} data.username - The username of the participant.
+     */
     actStartChat: data => {
         connectToRoom(data.champion, data.username);
     }

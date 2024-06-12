@@ -45,8 +45,8 @@ const content = {
                                                 </div>
                                              </div>`,
     createGamesContent:             data => `<div class="item my-2">
-                                                <div class="container-fluid p-0 m-0 selected-gamef">
-                                                <a href="#" class="interactable bg-links" data-action="actGamesChamp" data-gamef="${data.game_id}" data-game="${data.game_id}" data-clubname="${data.home_club_name} vs ${data.away_club_name}">
+                                                <div class="container-fluid p-0 m-0 selected-game">
+                                                <a href="#" class="interactable bg-links" data-action="actGamesChamp" data-game="${data.game_id}" data-clubname="${data.home_club_name} vs ${data.away_club_name}">
                                                     <div class="row border-bottom-grey">
                                                         <div class="col-4 d-flex flex-column align-items-start">
                                                                 <p class="tooltip-container mb-0">${setDimNames(data.home_club_name)} <span class="tooltip-text">${data.home_club_id}</span></p>
@@ -128,12 +128,12 @@ const content = {
                                                             </a>
                                                         </div>
                                                         <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center selected-type">
-                                                            <a href="#" class="interactable links" data-action="actDispGameForm" data-game="${data.game_id}" data-homeclub="${data.home_club_id}" data-awayclub="${data.away_club_id}" data-formation="True" data-type="formation">
+                                                            <a href="#" class="interactable links" data-action="actDispGameForm" data-game="${data.game_id}" data-homeclub="${data.home_club_id}" data-awayclub="${data.away_club_id}" data-type="formation">
                                                                 <p class="text-grey">FORMATION</p>
                                                             </a>
                                                         </div>
                                                         <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center selected-type">
-                                                            <a href="#" class="interactable links" data-action="actDispGameEvents" data-type="events" data-game="${data.game_id}" data-homeclub="${data.home_club_id}" data-awayclub="${data.away_club_id}" data-events="True">
+                                                            <a href="#" class="interactable links" data-action="actDispGameEvents" data-type="events" data-game="${data.game_id}" data-homeclub="${data.home_club_id}" data-awayclub="${data.away_club_id}">
                                                                 <p class="text-grey">EVENTS</p>
                                                             </a>
                                                         </div>
@@ -302,22 +302,22 @@ const content = {
                                                     </a>
                                                     <div class="row border-top-green mt-2 py-2">
                                                         <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center rounded-3 selected-type">
-                                                            <a href="#" class="interactable links" data-action="controllerGameData" data-club="${data.clubId}" data-type="summary">
+                                                            <a href="#" class="interactable links" data-action="actDispClubSum" data-club="${data.clubId}" data-type="summary">
                                                                 <p class="text-grey">SUMMARY</p>
                                                             </a>
                                                         </div>
                                                         <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center selected-type">
-                                                            <a href="#" class="interactable links" data-action="controllerGameData" data-game="${data.game_id}" data-homeclub="${data.home_club_id}" data-awayclub="${data.away_club_id}" data-results="True" data-type="results">
+                                                            <a href="#" class="interactable links" data-action="actDispClubRes" data-club="${data.clubId}" data-type="results">
                                                                 <p class="text-grey">RESULTS</p>
                                                             </a>
                                                         </div>
                                                         <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center selected-type">
-                                                            <a href="#" class="interactable links" data-action="controllerGameData" data-type="charts" data-game="${data.game_id}" data-homeclub="${data.home_club_id}" data-awayclub="${data.away_club_id}" data-events="True">
+                                                            <a href="#" class="interactable links" data-action="actDispClubChar" data-type="charts" data-game="${data.game_id}" data-homeclub="${data.home_club_id}" data-awayclub="${data.away_club_id}" >
                                                                 <p class="text-grey">CHARTS</p>
                                                             </a>
                                                         </div>
                                                         <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center selected-type">
-                                                            <a href="#" class="interactable links" data-action="controllerGameData" data-type="lineups">
+                                                            <a href="#" class="interactable links" data-action="actDispClubLines" data-type="lineups">
                                                                 <p class="text-grey">LINEUPS</p>
                                                             </a>
                                                         </div>
@@ -331,16 +331,16 @@ const content = {
                                                     </div>
                                                     <div class="row border-bottom-grey">
                                                         <div class="col-6 d-flex flex-row align-items-start">
-                                                           <img src="images/whistle.png" alt="Offers" class="svg-container me-2">
-                                                           <p class="text-white">MARKET VALUE:</p>
+                                                            <img src="images/growth.png" alt="Offers" class="svg-container me-2">
+                                                            <p class="text-white">NET TRANSFER RECORD:</p>
                                                         </div>
                                                         <div class="col-6 d-flex flex-column align-items-end">
-                                                            <p class="text-white">${data.totalMarketValue}</p>
+                                                           <p class="text-white">${formatValue(data.netTransferRecord)}</p>
                                                         </div>
                                                     </div>
                                                     <div class="row border-bottom-grey">
                                                         <div class="col-6 d-flex flex-row align-items-start">
-                                                            <img src="images/football-field.png" alt="Offers" class="svg-container me-2">
+                                                            <img src="images/full-size.png" alt="Offers" class="svg-container me-2">
                                                             <p class="text-white">SQUAD SIZE:</p>
                                                         </div>
                                                         <div class="col-6 d-flex flex-column align-items-end">
@@ -349,7 +349,25 @@ const content = {
                                                     </div>
                                                     <div class="row border-bottom-grey">
                                                         <div class="col-6 d-flex flex-row align-items-start">
-                                                            <img src="images/football-field.png" alt="Offers" class="svg-container me-2">
+                                                            <img src="images/customer.png" alt="Offers" class="svg-container me-2">
+                                                            <p class="text-white">FOREIGNERS PLAYERS:</p>
+                                                        </div>
+                                                        <div class="col-6 d-flex flex-column align-items-end">
+                                                           <p class="text-white">(${data.foreignersPercentage}%) ${data.foreignersNumber}/${data.squadSize}</p>
+                                                        </div>
+                                                    </div>
+                                                     <div class="row border-bottom-grey">
+                                                        <div class="col-6 d-flex flex-row align-items-start">
+                                                            <img src="images/customer.png" alt="Offers" class="svg-container me-2">
+                                                            <p class="text-white">NATIONAL PLAYERS:</p>
+                                                        </div>
+                                                        <div class="col-6 d-flex flex-column align-items-end">
+                                                           <p class="text-white">${data.nationalTeamPlayers}/${data.squadSize}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row border-bottom-grey">
+                                                        <div class="col-6 d-flex flex-row align-items-start">
+                                                            <img src="images/age.png" alt="Offers" class="svg-container me-2">
                                                             <p class="text-white">AVARAGE AGE:</p>
                                                         </div>
                                                         <div class="col-6 d-flex flex-column align-items-end">
@@ -358,34 +376,7 @@ const content = {
                                                     </div>
                                                     <div class="row border-bottom-grey">
                                                         <div class="col-6 d-flex flex-row align-items-start">
-                                                            <img src="images/customer.png" alt="Offers" class="svg-container me-2">
-                                                            <p class="text-white">FOREIGNERS PLAYERS:</p>
-                                                        </div>
-                                                        <div class="col-6 d-flex flex-column align-items-end">
-                                                           <p class="text-white">${data.foreignersNumber}/${data.squadSize} (${data.foreignersPercentage})</p>
-                                                        </div>
-                                                    </div>
-                                                     <div class="row border-bottom-grey">
-                                                        <div class="col-6 d-flex flex-row align-items-start">
-                                                            <img src="images/calendar.png" alt="Offers" class="svg-container me-2">
-                                                            <p class="text-white">NATIONAL PLAYERS:</p>
-                                                        </div>
-                                                        <div class="col-6 d-flex flex-column align-items-end">
-                                                           <p class="text-white">${data.nationalTeamPlayers}</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row border-bottom-grey">
-                                                        <div class="col-6 d-flex flex-row align-items-start">
-                                                            <img src="images/calendar.png" alt="Offers" class="svg-container me-2">
-                                                            <p class="text-white">NET TRANSFER RECORD:</p>
-                                                        </div>
-                                                        <div class="col-6 d-flex flex-column align-items-end">
-                                                           <p class="text-white">${data.netTransferRecord}</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row border-bottom-grey">
-                                                        <div class="col-6 d-flex flex-row align-items-start">
-                                                            <img src="images/calendar.png" alt="Offers" class="svg-container me-2">
+                                                            <img src="images/whistle.png" alt="Offers" class="svg-container me-2">
                                                             <p class="text-white">COACH:</p>
                                                         </div>
                                                         <div class="col-6 d-flex flex-column align-items-end">
@@ -403,7 +394,41 @@ const content = {
                                                     </div>
                                                 </div>
                                                 
-                                              </div>`
+                                              </div>`,
+    createClubResultsContent:       data =>  `<div class="row border-bottom-grey">
+                                                        <div class="col-3">
+                                                            <p class="text-grey mb-0">${formatDate(data.date)}</p>
+                                                            <p class="text-grey mb-0">${toUpperCase(data.competition_id)}</p>
+                                                        </div>
+                                                        <div class="col-4 d-flex flex-column align-items-start">
+                                                                <p class="tooltip-container mb-0 text-grey">${data.home_club_name} <span class="tooltip-text">${data.home_club_id}</span></p>
+                                                        </div>
+                                                        <div class="col-1 d-flex flex-column align-items-center">
+                                                           ${setColorNumbers(data.home_club_goals, data.away_club_goals)}
+                                                        </div>
+                                                        <div class="col-4 d-flex flex-column align-items-end">
+                                                                <p class="mb-0 text-grey">${data.away_club_name}</p>
+                                                        </div>
+                                               </div>`,
+    createClubResDisplay2Content: data =>`<div class="item my-2">
+                                                <div class="container-fluid bg-black rounded-3 my-4 py-4">
+                                                    <div class="row rounded-3" style="background-color: rgba(5,168,64,0.21);">
+                                                        <div class="col-3">
+                                                            <p class="text-grey mb-0">DATE</p>
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <p class="text-grey mb-0">HOME</p>
+                                                        </div>
+                                                        <div class="col-1">
+                                                            <p class="text-grey mb-0">GOALS</p>
+                                                        </div>
+                                                        <div class="col-4 text-end">
+                                                            <p class="text-grey mb-0">AWAY</p>
+                                                        </div>
+                                                    </div>
+                                                    ${data}
+                                                </div>
+                                           </div>`
 };
 
 //                                              <p class="text-white">${data.url}</p>

@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7db3944f-ef5d-4e5c-86c2-da811f428709" name="Changes" comment="" />
+    <list default="true" id="7db3944f-ef5d-4e5c-86c2-da811f428709" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../main_express/public/js/actions.js" beforeDir="false" afterPath="$PROJECT_DIR$/../main_express/public/js/actions.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../main_express/public/js/content.js" beforeDir="false" afterPath="$PROJECT_DIR$/../main_express/public/js/content.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../main_express/public/js/utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/../main_express/public/js/utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -73,15 +78,6 @@
       <ReportDescription localRun="true" path="/private/var/folders/b9/v6z0d4gn51d71t8957lk5phw0000gn/T/qodana_output/qodana.sarif.json" reportGuid="525b79d0-d2b8-4275-b191-29917e7adc5d" reportId="spring_server/qodana/2024-06-05" />
     </option>
   </component>
-  <component name="RunManager">
-    <configuration name="SpringServerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-      <module name="spring_server.main" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="com.iumtweb.spring_server.SpringServerApplication" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -108,7 +104,7 @@
       <workItem from="1715768826877" duration="96000" />
       <workItem from="1717421306931" duration="15913000" />
       <workItem from="1717662576763" duration="24990000" />
-      <workItem from="1717940729265" duration="28851000" />
+      <workItem from="1717940729265" duration="30723000" />
     </task>
     <servers />
   </component>

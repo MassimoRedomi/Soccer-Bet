@@ -27,7 +27,7 @@ async function fetchAndUpdate(url, elementId, contentFn, data = null) {
 
 
 function autoSelectionClass(data) {
-    const keys = ['season', 'type', 'nationlist', 'gamef', 'nation'];
+    const keys = ['season', 'type', 'nationlist', 'game', 'nation'];
 
     keys.forEach(key => {
         if (data[key]) {
@@ -40,16 +40,16 @@ function autoSelectionClass(data) {
     selectedlist = selectedlist.filter(crumb => keys.includes(crumb.key));
     keys.forEach(key => {
         if (data[key]) {
-            const existingCrumb = selectpath.find(crumb => crumb.key === key);
+            const existingCrumb = selectedlist.find(crumb => crumb.key === key);
             if (existingCrumb) {
                 existingCrumb.value = data[key];
             } else {
-                selectpath.push({ key: key, value: data[key] });
+                selectedlist.push({ key: key, value: data[key] });
             }
         }
     });
 
-    selectpath.forEach(crumb => {
+    selectedlist.forEach(crumb => {
         if (data[crumb.key]) {
             const selector = `[data-${crumb.key}="${crumb.value}"]`;
             const selectedContainer = document.querySelector(selector)?.closest(`.selected-${crumb.key}`);
@@ -194,7 +194,7 @@ function separateEvents(data, homeId, awayId){
         if (data.club_id === homeIdNu) {
             return `<div class="row border-bottom-grey py-2">
                             <div class="col-6 text-start">
-                                <p class="text-grey mb-0">${data.minute}' ${data.type} ${actions.formatPlayerNames(data.player_name)} ${assistName}</p>
+                                <p class="text-grey mb-0">${data.minute}' ${data.type} ${formatPlayerNames(data.player_name)} ${assistName}</p>
                             </div>
                             <div class="col-6 text-end">
                                 <p class="text-grey mb-0">-</p>
@@ -206,7 +206,7 @@ function separateEvents(data, homeId, awayId){
                                 <p class="text-grey mb-0">-</p>
                             </div>
                             <div class="col-6 text-end">
-                                <p class="text-grey mb-0">${assistName} ${actions.formatPlayerNames(data.player_name)} ${data.type} ${data.minute}'</p>
+                                <p class="text-grey mb-0">${assistName} ${formatPlayerNames(data.player_name)} ${data.type} ${data.minute}'</p>
                             </div>
                         </div>`;
         } else {
@@ -395,4 +395,22 @@ function formatNames(inputString){
         return '';
     });
     return capitalizedNames.join(' ');
+}
+
+function formatValue(value) {
+    // Check if the value starts with '+' or '-' to determine the text color
+    let textColorClass = 'text-red';
+    if (value.startsWith('+')) {
+        textColorClass = 'text-green';
+    }
+
+    // Remove the '+' or '-' from the value
+    let formattedValue = value.replace(/[+-]/g, '').trim();
+
+    // Ensure the formatted value starts with '€'
+    if (!formattedValue.startsWith('€')) {
+        formattedValue = '€' + formattedValue;
+    }
+
+    return `<p class="${textColorClass} mb-0">${formattedValue}</p>`;
 }
