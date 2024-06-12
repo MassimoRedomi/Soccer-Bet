@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    actions.objMain();
+    actions.actMain();
     setupEventListeners();
     checkLoginStatus();
     loadLastActiveSection();
@@ -32,7 +32,7 @@ function activateSection(sectionKey) {
     const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
     if (!isLoggedIn && (sectionKey === 'stats' || sectionKey === 'chats')) {
         updateElementHtml('congrats', '<h3>Please log in to continue</h3>', 'replace');
-        actions.openLoginModal();
+        actions.actLoginModal();
         return;
     }
 
@@ -71,11 +71,11 @@ async function checkLoginStatus() {
         console.log(data.isLoggedIn);
         localStorage.setItem('isLoggedIn', data.isLoggedIn);
         if (data.isLoggedIn) {
-            actions.updateLoginUI('LOGOUT', 'userLogout');
-            actions.setUserName();
+            updateLoginUI('LOGOUT', 'actUsrLogout');
+            setUserName();
             initChat();
         } else {
-            actions.updateLoginUI('LOGIN', 'openLoginModal');
+            updateLoginUI('LOGIN', 'actLoginModal');
             links.stats.classList.add('disabled');
             links.chats.classList.add('disabled');
             activateSection('news');

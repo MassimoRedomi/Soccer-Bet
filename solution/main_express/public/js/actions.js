@@ -1,42 +1,30 @@
-
-
 const actions = {
 
-
-    /**
-     * Initiate fetching and updating data from multiple endpoints.
-     * Fetches data from the first five predefined endpoints, updates the corresponding HTML elements,
-     * and initializes visibility handlers. Handles any errors that may occur during the process.
-     */
-    async objMain() {
+    async actMain() {
         const endpoints = [
-            /*01*/{ url: '/api/clubs-names',      elementId: 'clubs',             contentFn: content.createClubsContent               },
-            /*02*/{ url: '/api/champions',        elementId: 'champions',         contentFn: content.createChampionsContent           },
-            /*03*/{ url: '/api/soccer-nations',   elementId: 'nations',           contentFn: content.createNationsListContent         },
-            /*04*/{ url: '/api/soccer-nations',   elementId: 'nation_dropdown',   contentFn: content.createNationsDropdownContent     },
-            /*05*/{ url: '/api/soccer-nations',   elementId: 'language',          contentFn: content.createLanguageContent            },
-            /*06*/{ url: '/api/champions',        elementId: 'championChat',      contentFn: content.createChampionChatContent        }
-        ];
+            /*00*/{ url: '/api/clubs-names',                elementId: 'clubs',                 contentFn: content.createClubsContent               },
+            /*01*/{ url: '/api/champions',                  elementId: 'champions',             contentFn: content.createChampionsContent           },
+            /*02*/{ url: '/api/soccer-nations',             elementId: 'nations',               contentFn: content.createNationsListContent         },
+            /*03*/{ url: '/api/soccer-nations',             elementId: 'nation_dropdown',       contentFn: content.createNationsDropdownContent     },
+            /*04*/{ url: '/api/soccer-nations',             elementId: 'language',              contentFn: content.createLanguageContent            },
+            /*05*/{ url: '/api/champions',                  elementId: 'championChat',          contentFn: content.createChampionChatContent        }
+            ];
         try {
-            await Promise.all(endpoints.slice(0, 6).map(endpoint =>
+            await Promise.all(endpoints.map(endpoint =>
                 fetchAndUpdate(endpoint.url, endpoint.elementId, endpoint.contentFn)
             ));
             [
                 { elementId: 'clubs', buttonId: 'toggleClubs', limit: 14 },
                 { elementId: 'champions', buttonId: 'toggleChampions', limit: 14 }
             ].forEach(config => initializeItemsVisibility(config.elementId, config.buttonId, config.limit));
-            await actions.objNation({nation: "Greece"});
+            await actions.actNation({nation: "Greece"});
         } catch (error) {
-            console.error('Error in objMain function:', error);
+            console.error('Error in actMain function:', error);
         }
     },
 
 
-    //nation: data.nation
-    async objNation(data) {
-        const endpoints = [
-            /*07*/{ url: '/api/send-country', elementId: 'champions_nation_list', contentFn: content.createChampionsContent }
-        ];
+    async actNation(data) {
         try {
             chargeBreadCrumbs(data);
             activateSection('stats');
@@ -44,325 +32,158 @@ const actions = {
             selectElement.innerHTML = Array.from(selectElement.options).map(option =>
                 `<option value="${option.value}"${option.value === data.nation ? ' selected' : ''}>${option.value}</option>`
             ).join('');
-            const championsData = await fetchAndUpdate(endpoints[0].url, endpoints[0].elementId, endpoints[0].contentFn, {nation: data.nation});
-            await actions.objChampion( { champion: championsData[0].competitionId });
+            const championsData = await fetchAndUpdate('/api/send-country','champions_nation_list', content.createChampionsContent, {nation: data.nation});
+            await actions.actChampion( { champion: championsData[0].competitionId });
         } catch (error) {
-            console.error('Error processing objNation data:', error);
+            console.error('Error processing actNation data:', error);
         }
     },
 
 
-    //nation: data.nation
-    async objNatDrop(data){
-        const endpoints = [
-            /*07*/{ url: '/api/send-country', elementId: 'champions_nation_list', contentFn: content.createChampionsContent }
-        ];
+    async actNatDrop(data){
         try{
             chargeBreadCrumbs(data);
-            const championsData = await fetchAndUpdate(endpoints[0].url, endpoints[0].elementId, endpoints[0].contentFn, {nation: data.nation});
-            await actions.objChampion({champion: championsData[0].competitionId});
+            const championsData = await fetchAndUpdate(
+                '/api/send-country',
+                'champions_nation_list',
+                content.createChampionsContent,
+                {nation: data.nation}
+            );
+            await actions.actChampion({champion: championsData[0].competitionId});
         }catch (error){
-            console.error('Error processing  objNatDrop data:', error);
+            console.error('Error processing  actNatDrop data:', error);
         }
     },
 
 
-    //champion: data.champion
-    async objChampion(data){
-        const endpoints = [
-            /*08*/{ url: '/api/seasons_by_champion', elementId: 'champions_years', contentFn: content.createSeasonsContent }
-        ];
+    async actChampion(data){
         try{
             activateSection('stats');
-            const seasonsData = await fetchAndUpdate( endpoints[0].url, endpoints[0].elementId, endpoints[0].contentFn, {competitionId: data.champion});
-            console.log(seasonsData[0]);
-            await actions.objSeason({competition: seasonsData[0].competition_id, season: seasonsData[0].season, name: seasonsData[0].competition_name});
+            const seasonsData = await fetchAndUpdate(
+                '/api/seasons_by_champion',
+                'champions_years',
+                content.createSeasonsContent,
+                {competitionId: data.champion}
+            );
+            await actions.actSeason({competition: seasonsData[0].competition_id, season: seasonsData[0].season, name: seasonsData[0].competition_name});
         } catch (error){
-            console.error('Error processing objChampion data:', error);
+            console.error('Error processing actChampion data:', error);
         }
     },
 
 
-    //champion: data.competition, season: data.season, name: data.competitionName
-    async objSeason(data){
-        const endpoints = [
-            /*09*/{ url: '/api/games_by_championNseason', elementId: 'gamesxchampion', contentFn:content.createGamesContent }
-        ];
+    async actSeason(data){
         try{
             chargeBreadCrumbs(data);
-            const gamesData = await fetchAndUpdate(endpoints[0].url, endpoints[0].elementId, endpoints[0].contentFn, {competition_id: data.competition, season: data.season});
-            updateElementHtml('championName', `<h4 class="text-white bold">${actions.toUpperCase(data.name)}</h4>`, 'replace');
-            await actions.objGamesChamp({game: gamesData[0].game_id, clubname:`${gamesData[0].home_club_name} vs ${gamesData[0].away_club_name}` });
+            const gamesData = await fetchAndUpdate(
+                '/api/games_by_championNseason',
+                'gamesxchampion',content.createGamesContent,
+                {competition_id: data.competition, season: data.season}
+            );
+            updateElementHtml('championName', `<h4 class="text-white bold">${toUpperCase(data.name)}</h4>`, 'replace');
+            await actions.actGamesChamp({game: gamesData[0].game_id, clubname:`${gamesData[0].home_club_name} vs ${gamesData[0].away_club_name}` });
         }catch (error){
-            console.error('Error processing objSeason data:', error);
+            console.error('Error processing actSeason data:', error);
         }
     },
 
 
-    //gameId: data.game, clubname:
-    async objGamesChamp(data){
-        const endpoints = [
-            /*10*/ { url: '/api/gamebyid', elementId: 'dataDisplay', contentFn: content.createGameDisplayContent}
-        ];
+    async actGamesChamp(data){
         try{
             chargeBreadCrumbs(data);
-            const gameData= await fetchAndUpdate(endpoints[0].url, endpoints[0].elementId, endpoints[0].contentFn, {game_id: data.game});
-
+            const gameData= await fetchAndUpdate(
+                '/api/gamebyid',
+                'dataDisplay',
+                content.createGameDisplayContent  ,
+                {game_id: data.game}
+            );
+            await actions.actDispGame({club: gameData.home_club_id, game: gameData.game_id});
         }catch (error){
-            console.error('Error processing objClubPlayers data:', error);
+            console.error('Error processing actClubPlayers data:', error);
         }
     },
 
 
-
-
-
-//await actions.charge({clubId: data.club}, endpoints[3].url, endpoints[3].elementId, endpoints[3].contentFn);
-
-
-
-
-    async controllerGameData(data){
-        const endpoints = [
-            { url: '/api/gamebyid', elementId: 'dataDisplay2', contentFn: content.createGameDisplay2Content},
-            { url: 'api/lineupsbyid', elementId: "dataDisplay2", contentFn: content.createLineupContent, contentFn2: content.createLineupDisplay2Content},
-            { url: 'api/eventsbygameid', elementId: "dataDisplay2", contentFn: content.createEventDisplay2Content}
-        ];
-
-        if(data.events){
-            const events = await postAxiosQuery(endpoints[2].url, {game_id: data.game});
-            const timeEvents = actions.separateEvents(events, data.homeclub, data.awayclub);
-            const eventDisplayContent = endpoints[2].contentFn(timeEvents[0], timeEvents[1]);
-            updateElementHtml(endpoints[2].elementId, eventDisplayContent, 'replace');
-        } else if (data.formation){
-            const mixedLineupsData = await postAxiosQuery(endpoints[1].url, {game_id: data.game});
-            const separatedLineupsData = actions.separateLineups(mixedLineupsData, data.homeclub, data.awayclub);
-            const htmlContentHome = renderDataAsHtml(separatedLineupsData[0], endpoints[1].contentFn);
-            const htmlContentAway = renderDataAsHtml(separatedLineupsData[1], endpoints[1].contentFn);
-            const lineupDisplayContent = endpoints[1].contentFn2(htmlContentHome, htmlContentAway);
-            updateElementHtml(endpoints[1].elementId, lineupDisplayContent, 'replace');
-        } else if(data.game){
-            const gameData= await actions.charge({game_id: data.game}, endpoints[0].url, endpoints[0].elementId, endpoints[0].contentFn);
-        }
-
-    },
-
-    async controllerClubData(data) {
-        endpoints=[
-            {url: '/api/clubbyid', elementId: 'dataDisplay', contentFn: content.createClubDisplayContent},
-            {url: '/api/clubbyid', elementId: 'dataDisplay2', contentFn: content.createClubDisplay2Content}
-        ];
-        if(data.type && data.club){
-            await actions.charge({clubId: data.club}, endpoints[1].url, endpoints[1].elementId, endpoints[1].contentFn);
-        } else if(data.club){
-            await actions.charge({clubId: data.club}, endpoints[0].url, endpoints[0].elementId, endpoints[0].contentFn);
-            actions.controllerClubData({type:'summary', club: data.club});
+    async actDispGame(data){
+        try{
+            await fetchAndUpdate(
+                '/api/clubplayers',
+                'clubPlayers',
+                content.createClubPlayersContent,
+                {clubId: data.club}
+            );
+            await actions.actDispGameSum({game: data.game});
+        }catch (error){
+            console.error('Error processing actDispGame data:', error);
         }
     },
 
-    charge: async (data, url, htmlElementId, contentFunction) => {
-        try {
-            const responseData = await postAxiosQuery(url, data);
-            const htmlContent = renderDataAsHtml(Array.isArray(responseData) ? responseData : [responseData], contentFunction);
-            updateElementHtml(htmlElementId, htmlContent, 'replace');
-            return responseData;
-        } catch (error) {
-            console.error(`Error in charge function for URL ${url}:`, error);
-            return null;
+    async actDispGameSum(data){
+        try{
+            const gameData= await fetchAndUpdate(
+                '/api/gamebyid',
+                'dataDisplay2',
+                content.createGameDisplay2Content,
+                {game_id: data.game}
+            );
+        }catch (error){
+            console.error('Error processing actDispGame data:', error);
+        }
+    },
+
+    async actDispGameForm(data){
+        try{
+            const mixedLineupsData = await postAxiosQuery('api/lineupsbyid', {game_id: data.game});
+            const separatedLineupsData = separateLineups(mixedLineupsData, data.homeclub, data.awayclub);
+            const htmlContentHome = renderDataAsHtml(separatedLineupsData[0], content.createLineupContent);
+            const htmlContentAway = renderDataAsHtml(separatedLineupsData[1], content.createLineupContent);
+            const lineupDisplayContent = content.createLineupDisplay2Content(htmlContentHome, htmlContentAway);
+            updateElementHtml('dataDisplay2', lineupDisplayContent, 'replace');
+        }catch (error){
+            console.error('Error processing actDispGameForm data:', error);
         }
     },
 
 
-    setColorNumbers: (num1, num2) => {
-    let result = '';
-
-    if (num1 > num2) {
-        result = `<p><span class="text-green">${num1}</span> : <span class="text-red">${num2}</span></p>`;
-    } else if (num1 < num2) {
-        result = `<p><span class="text-red">${num1}</span> : <span class="text-green">${num2}</span></p>`;
-    } else {
-        result = `<p><span class="text-red">${num1}</span> : <span class="text-red">${num2}</span></p>`;
-    }
-
-    return result;
-    },
-
-    setDimNames: data => {
-        if (data.length > 10) {
-            const words = data.split(' ');
-            if (words.length > 1) {
-                return words[1];
-            } else {
-                return data.substring(0, 8);
-            }
-        }
-        return data;
-    },
-
-    toUpperCase: data => {
-        if (typeof data !== 'string') {
-            return data;
-        }
-        return data.replace(/-/g, ' ').toUpperCase();
-    },
-
-    formatDate: data => {
-        const date = new Date(data);
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
-        const year = date.getFullYear();
-
-        const hours = date.getUTCHours();
-        const minutes = date.getUTCMinutes();
-
-        if (hours === 0 && minutes === 0) {
-            return `${day}.${month}.${year}`;
-        } else {
-            const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
-            return `${day}.${month}.${year} ${formattedTime}`;
+    async actDispGameEvents(data){
+        try{
+            const events = await postAxiosQuery('api/eventsbygameid', {game_id: data.game});
+            const timeEvents = separateEvents(events, data.homeclub, data.awayclub);
+            const eventDisplayContent = content.createEventDisplay2Content(timeEvents[0], timeEvents[1]);
+            updateElementHtml('dataDisplay2', eventDisplayContent, 'replace');
+        }catch (error){
+            console.error('Error processing actDispGameEvents data:', error);
         }
     },
 
-    separateLineups: (mixedLineupsData, homeId, awayId) => {
-        if (!Array.isArray(mixedLineupsData)) {
-            console.error("Invalid data format, expected an array");
-            return [[], []];
+    async actDispClub(data){
+        try{
+            await fetchAndUpdate(
+                '/api/clubbyid',
+                'dataDisplay',
+                content.createClubDisplayContent,
+                {clubId: data.club}
+            );
+            await actions.actDispClubSum({club: data.club});
+        }catch (error){
+            console.error('Error processing actDispClub data:', error);
         }
+    },
 
-        // Convert homeId and awayId to strings
-        const homeIdStr = String(homeId);
-        const awayIdStr = String(awayId);
-
-        const homeLineup = [];
-        const awayLineup = [];
-
-        mixedLineupsData.forEach(lineup => {
-            // Convert lineup.club_id to string for comparison
-            const clubIdStr = String(lineup.club_id);
-
-            if (clubIdStr === homeIdStr) {
-                homeLineup.push(lineup);
-            } else if (clubIdStr === awayIdStr) {
-                awayLineup.push(lineup);
-            } else {
-                console.warn("Unexpected club_id found in the data");
-            }
-        });
-
-        if (homeLineup.length === 0 || awayLineup.length === 0) {
-            console.warn("Expected lineups for both home and away clubs");
+    async actDispClubSum(data){
+        try{
+            await fetchAndUpdate(
+                '/api/clubbyid',
+                'dataDisplay2',
+                content.createClubDisplay2Content,
+                {clubId: data.club}
+            );
+        }catch (error){
+            console.error('Error processing actDispClubSum data:', error);
         }
-
-        return [homeLineup, awayLineup];
     },
 
-    separateEvents: (data, homeId, awayId) => {
-        const homeIdNu = Number(homeId);
-        const awayIdNu = Number(awayId);
-
-        // Check if data is an array
-        if (!Array.isArray(data)) {
-            console.error("Invalid data format, expected an array");
-            return ["", ""];
-        }
-
-        // Initialize strings to hold the separated events
-        let firstHalfEvents = "";
-        let secondHalfEvents = "";
-
-        // Function to generate HTML content
-        const generateHtmlContent = (data) => {
-            const assistName = data.assist_name === 'NaN' ? '' : ` (${actions.formatNames(data.assist_name)})`;
-            if (data.club_id === homeIdNu) {
-                return `<div class="row border-bottom-grey py-2">
-                            <div class="col-6 text-start">
-                                <p class="text-grey mb-0">${data.minute}' ${data.type} ${actions.formatPlayerNames(data.player_name)} ${assistName}</p>
-                            </div>
-                            <div class="col-6 text-end">
-                                <p class="text-grey mb-0">-</p>
-                            </div>
-                        </div>`;
-            } else if (data.club_id === awayIdNu) {
-                return `<div class="row border-bottom-grey py-2">
-                            <div class="col-6 text-start">
-                                <p class="text-grey mb-0">-</p>
-                            </div>
-                            <div class="col-6 text-end">
-                                <p class="text-grey mb-0">${assistName} ${actions.formatPlayerNames(data.player_name)} ${data.type} ${data.minute}'</p>
-                            </div>
-                        </div>`;
-            } else {
-                return `<div class="row border-bottom-grey py-2">
-                            <div class="col-6 text-start">
-                                <p class="text-grey mb-0">-</p>
-                            </div>
-                            <div class="col-6 text-end">
-                                <p class="text-grey mb-0">-</p>
-                            </div>
-                        </div>`;
-            }
-        };
-
-        // Loop through the events and separate them based on the minute
-        data.forEach(event => {
-            const htmlContent = generateHtmlContent(event);
-            if (event.minute <= 45) {
-                firstHalfEvents += htmlContent;
-            } else {
-                secondHalfEvents += htmlContent;
-            }
-        });
-
-        return [firstHalfEvents, secondHalfEvents];
-    },
-
-
-
-
-    formatPlayerNames: data => {
-        if (typeof data !== 'string') return '';
-
-        const names = data.trim().split(' ');
-        if (names.length < 2) return data;
-
-        const surname = names[names.length - 1];
-        const initial = names[0].charAt(0).toUpperCase() + '.';
-
-        return `${surname} ${initial}`;
-    },
-    /**
-     * Toggles the visibility of items in the "champions" section.
-     * @function
-     */
-    loadMoreLessChampions: () => toggleItemVisibility('champions', 'toggleChampions', 14),
-
-    /**
-     * Toggles the visibility of items in the "clubs" section.
-     * @function
-     */
-    loadMoreLessClubs: () => toggleItemVisibility('clubs', 'toggleClubs', 14),
-
-    /**
-     * Initializes visibility handlers for multiple elements.
-     * @function
-     */
-    initVisibilityHandlers: () => {
-        const configurations = [
-            { elementId: 'clubs', buttonId: 'toggleClubs', limit: 14 },
-            { elementId: 'champions', buttonId: 'toggleChampions', limit: 14 }
-        ];
-
-        configurations.forEach(config => {
-            initializeItemsVisibility(config.elementId, config.buttonId, config.limit);
-        });
-    },
-
-    /**
-     * Loads chat information for champions based on the selected language.
-     * @function
-     * @param {Object} data - The data containing language information.
-     */
-    loadChampionsChats: data => {
+    async actLangChat(data){
         const languageNameElement = document.getElementById('languageName');
         const languageContainer= document.getElementById('languageChampionContainer');
         const startChatButton = document.getElementById('startChatButton');
@@ -377,51 +198,38 @@ const actions = {
         startChatButton.setAttribute('data-language', data.language);
     },
 
-    /**
-     * Opens the login modal.
-     * @function
-     */
-    openLoginModal: () => {
+
+    actLoginModal: () => {
         const modaLogin = document.getElementById('loginModal');
         const modalSign = document.getElementById('signinModal');
         modaLogin.style.display = 'block';
         modalSign.style.display = 'none';
     },
 
-    /**
-     * Closes both login and signup modals.
-     * @function
-     */
-    closeModal: () => {
-        const modaLogin = document.getElementById('loginModal');
-        const modaSign = document.getElementById('signinModal');
-        modaLogin.style.display = 'none';
-        modaSign.style.display = 'none';
-    },
-
-    /**
-     * Opens the signup modal.
-     * @function
-     */
-    openSignModal: () => {
+    actSignModal: () => {
         const modaLogin = document.getElementById('loginModal');
         const modalSign = document.getElementById('signinModal');
         modaLogin.style.display = 'none';
         modalSign.style.display = 'block';
     },
 
-    /**
-     * Sends a login request to the server.
-     * @function
-     */
-    sendLoginRequest: () => {
+    actCloseModal: () => {
+        const modaLogin = document.getElementById('loginModal');
+        const modaSign = document.getElementById('signinModal');
+        modaLogin.style.display = 'none';
+        modaSign.style.display = 'none';
+    },
+
+
+
+    actLoginReq: () => {
         const form = document.getElementById('loginForm');
         const data = extractDataFromElement(form);
-        if (actions.validateLoginData(data, 'loginErrors')) {
+        if (validateLoginData(data, 'loginErrors')) {
             postAxiosQuery('/api/login', data)
                 .then(response => {
                     if (response.message === 'OK') {
-                        actions.closeModal();
+                        actions.actCloseModal();
                         checkLoginStatus();
                     } else {
                         updateElementHtml('loginErrors', `<p class="text-red">${response.message}</p>`, 'replace');
@@ -441,12 +249,12 @@ const actions = {
      * Sends a signup request to the server.
      * @function
      */
-    sendSignRequest: () => {
+    actSignRequest: () => {
         const form = document.getElementById('signForm');
         const data = extractDataFromElement(form);
-        if (actions.validateSigninData(data, 'passwordErrors')) {
+        if (validateSigninData(data, 'passwordErrors')) {
             postAxiosQuery('/api/signup', data)
-                .then(data => actions.moveToLogin(data))
+                .then(data => moveToLogin(data))
                 .catch(error => {
                     console.error(`Failed to load data from /api/signup:`, error);
                     updateElementHtml('congrats', `<h3 class="text-white">We are sorry! Your account wasn't created</h3>`, 'replace');
@@ -456,113 +264,9 @@ const actions = {
         }
     },
 
-    /**
-     * Validates the signup data.
-     * @function
-     * @param {Object} data - The signup data.
-     * @param {string} elementId - The element ID to display validation errors.
-     * @returns {boolean} - Returns true if data is valid, otherwise false.
-     */
-    validateSigninData: (data, elementId) => {
-        const mail = data.email;
-        const password1 = data.password1;
-        const password2 = data.password2;
 
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        if (!emailRegex.test(mail)) {
-            updateElementHtml(elementId, '<p class="text-red">Invalid email format.</p>', 'replace');
-            return false;
-        }
-
-        if (password1 !== password2) {
-            updateElementHtml(elementId, '<p class="text-red">Passwords do not match.</p>', 'replace');
-            return false;
-        }
-
-        if (password1.length < 8 || password1.length > 72) {
-            updateElementHtml(elementId, '<p class="text-red">Password must be between 8 and 72 characters.</p>', 'replace');
-            return false;
-        }
-
-        const hasUppercase = /[A-Z]/.test(password1);
-        const hasSymbol = /[!@#$%^&*(),.?":{}|<>]/.test(password1);
-
-        if (!hasUppercase || !hasSymbol) {
-            updateElementHtml(elementId, '<p class="text-red">Password must contain at least one uppercase letter and one symbol.</p>', 'replace');
-            return false;
-        }
-
-        return true;
-    },
-
-    /**
-     * Validates the login data.
-     * @function
-     * @param {Object} data - The login data.
-     * @param {string} elementId - The element ID to display validation errors.
-     * @returns {boolean} - Returns true if data is valid, otherwise false.
-     */
-    validateLoginData: (data, elementId) => {
-        const email = data.email;
-        const password = data.password;
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Regular expression for validating email
-
-        if (!emailRegex.test(email)) {
-            updateElementHtml(elementId, '<p class="text-red">Invalid email format.</p>', 'replace');
-            return false;
-        }
-
-        if (password.length < 8 || password.length > 72) {
-            updateElementHtml(elementId, '<p class="text-red">Password must be between 8 and 72 characters.</p>', 'replace');
-            return false;
-        }
-
-        return true;
-    },
-
-    /**
-     * Moves the user to the login modal after successful signup.
-     * @function
-     * @param {Object} data - The data returned from the signup request.
-     */
-    moveToLogin: data => {
-        const modaLogin = document.getElementById('loginModal');
-        const modalSign = document.getElementById('signinModal');
-        updateElementHtml('congrats', '<h3>Congratulations! Your account is created</h3>', 'replace');
-        updateElementHtml('congrats2', '<p>Welcome, do your first login</p>', 'replace');
-        modaLogin.style.display = 'block';
-        modalSign.style.display = 'none';
-    },
-
-    /**
-     * Updates select options based on provided data.
-     * @function
-     * @param {string} selectId - The ID of the select element to update.
-     * @param {Object} defaultValue - The default value to set in the select options.
-     */
-    updateSelectOptions: (selectId, defaultValue) => {
-        const selectElement = document.getElementById(selectId);
-        if (!selectElement) {
-            console.error('Select element not found:', selectId);
-            return;
-        }
-
-        const options = Array.from(selectElement.options).map(option => ({ name: option.value }));
-
-        const optionsHtml = options.map(option => {
-            const isSelected = option.name === defaultValue.nation ? ' selected' : '';
-            return `<option value="${option.name}"${isSelected}>${option.name}</option>`;
-        }).join('');
-
-        selectElement.innerHTML = optionsHtml;
-    },
-
-    /**
-     * Logs the user out by sending a request to the server.
-     * @function
-     */
-    userLogout: () => {
+    actUsrLogout: () => {
         fetch('/api/logout')
             .then(response => {
                 if (response.ok) {
@@ -575,77 +279,8 @@ const actions = {
             });
     },
 
-    /**
-     * Updates the login UI with provided text and action.
-     * @function
-     * @param {string} text - The text to display.
-     * @param {string} action - The action to set.
-     */
-    updateLoginUI: (text, action) => {
-        const loginLink = document.getElementById('nav-login');
-        loginLink.innerHTML = `<h6>${text}</h6>`;
-        loginLink.setAttribute('data-action', action);
-    },
 
-    /**
-     * Sets the username in the UI after fetching user information.
-     * @async
-     * @function
-     */
-    setUserName: async () => {
-        const userNameElement = document.getElementById('userName');
-        const startChatButton = document.getElementById('startChatButton');
-
-        if (!userNameElement) {
-            console.error("The userName element does not exist in the DOM.");
-            return;
-        }
-
-        try {
-            const response = await fetch('/api/userinfo');
-            if (!response.ok) {
-                throw new Error('Failed to fetch user information from the server');
-            }
-
-            const data = await response.json();
-            if (data) {
-                userNameElement.innerHTML = `Welcome, ${data}!`;
-                startChatButton.setAttribute('data-userName', data);
-                localStorage.setItem('userEmail', data);
-            } else {
-                userNameElement.innerHTML = `<h4>Guest</h4>`;
-                console.log("No email address available for the user.");
-            }
-        } catch (error) {
-            console.error('Error retrieving user information:', error);
-            userNameElement.innerHTML = `<h4>Error loading user data</h4>`;
-            activateSection('news');
-        }
-    },
-
-    /**
-     * Formats names by capitalizing the first letter of each name part.
-     * @function
-     * @param {string} inputString - The input string to format.
-     * @returns {string} - The formatted name string.
-     */
-    formatNames: inputString => {
-        const names = inputString.split('-');
-        const capitalizedNames = names.map(name => {
-            if (name) {
-                return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
-            }
-            return '';
-        });
-        return capitalizedNames.join(' ');
-    },
-
-    /**
-     * Loads chat information for a selected champion.
-     * @function
-     * @param {Object} data - The data containing champion information.
-     */
-    loadChampionChat: data => {
+    actChampChat: data => {
         const championLanguageElement = document.getElementById('championLanguageName');
         const championLanguageInfo= document.getElementById('championLanguageInfo');
         const startChatButton = document.getElementById('startChatButton');
@@ -655,19 +290,16 @@ const actions = {
             return;
         }
 
-        championLanguageElement.innerHTML = `Champion chat selected: ${actions.formatNames(data.champion)}`;
+        championLanguageElement.innerHTML = `Champion chat selected: ${formatNames(data.champion)}`;
         championLanguageInfo.innerHTML = `Start your conversation by pressing the button above`;
         championLanguageInfo.style.display = 'block';
         startChatButton.style.display = 'block';
         startChatButton.setAttribute('data-champion', data.champion);
     },
 
-    /**
-     * Starts a chat session by connecting to the chat room.
-     * @function
-     * @param {Object} data - The data containing champion and username information.
-     */
-    startChat: data => {
+
+    actStartChat: data => {
         connectToRoom(data.champion, data.username);
     }
 };
+
