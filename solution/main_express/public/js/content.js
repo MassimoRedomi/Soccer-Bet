@@ -46,23 +46,23 @@ const content = {
                                              </div>`,
     createGamesContent:             data => `<div class="item my-2">
                                                 <div class="container-fluid p-0 m-0 selected-game">
-                                                <a href="#" class="interactable bg-links" data-action="actGamesChamp" data-game="${data.game_id}" data-clubname="${data.home_club_name} vs ${data.away_club_name}">
-                                                    <div class="row border-bottom-grey">
-                                                        <div class="col-4 d-flex flex-column align-items-start">
+                                                    <a href="#" class="interactable bg-links" data-action="actGamesChamp" data-game="${data.game_id}" data-clubname="${data.home_club_name} vs ${data.away_club_name}">
+                                                        <div class="row border-bottom-grey">
+                                                            <div class="col-4 d-flex flex-column align-items-start">
                                                                 <p class="tooltip-container mb-0">${setDimNames(data.home_club_name)} <span class="tooltip-text">${data.home_club_id}</span></p>
-                                                        </div>
-                                                        <div class="col-4 d-flex flex-column align-items-center">
-                                                           ${setColorNumbers(data.home_club_goals, data.away_club_goals)}
-                                                        </div>
-                                                        <div class="col-4 d-flex flex-column align-items-end">
+                                                            </div>
+                                                            <div class="col-4 d-flex flex-column align-items-center">
+                                                                ${setColorNumbers(data.home_club_goals, data.away_club_goals)}
+                                                            </div>
+                                                            <div class="col-4 d-flex flex-column align-items-end">
                                                                 <p class="mb-0">${setDimNames(data.away_club_name)}</p>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </a>
+                                                    </a>
                                                 </div>
                                             </div>`,
     createClubPlayersContent:       data => `<div class="item my-2">
-                                                 <a href="#" class="interactable bg-links" data-action="" data-playerId="${data.playerId}">
+                                                 <a href="#" class="interactable bg-links" data-action="actDispPlayer" data-player="${data.playerId}" data-clubname="${toUpperCase(data.currentClub.clubCode)} > ${toUpperCase(data.name)}">
                                                     <div class="row border-bottom-grey">
                                                         <div class="col-4 d-flex align-items-start">
                                                             <p class="text-white bold mb-0">${data.name}</p>
@@ -316,11 +316,6 @@ const content = {
                                                                 <p class="text-grey">CHARTS</p>
                                                             </a>
                                                         </div>
-                                                        <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center selected-type">
-                                                            <a href="#" class="interactable links" data-action="actDispClubLines" data-type="lineups">
-                                                                <p class="text-grey">LINEUPS</p>
-                                                            </a>
-                                                        </div>
                                                     </div>
                                                 </div>
                                               </div>`,
@@ -395,24 +390,9 @@ const content = {
                                                 </div>
                                                 
                                               </div>`,
-    createClubResultsContent:       data =>  `<div class="row border-bottom-grey">
-                                                        <div class="col-3">
-                                                            <p class="text-grey mb-0">${formatDate(data.date)}</p>
-                                                            <p class="text-grey mb-0">${toUpperCase(data.competition_id)}</p>
-                                                        </div>
-                                                        <div class="col-4 d-flex flex-column align-items-start">
-                                                                <p class="tooltip-container mb-0 text-grey">${data.home_club_name} <span class="tooltip-text">${data.home_club_id}</span></p>
-                                                        </div>
-                                                        <div class="col-1 d-flex flex-column align-items-center">
-                                                           ${setColorNumbers(data.home_club_goals, data.away_club_goals)}
-                                                        </div>
-                                                        <div class="col-4 d-flex flex-column align-items-end">
-                                                                <p class="mb-0 text-grey">${data.away_club_name}</p>
-                                                        </div>
-                                               </div>`,
     createClubResDisplay2Content: data =>`<div class="item my-2">
-                                                <div class="container-fluid bg-black rounded-3 my-4 py-4">
-                                                    <div class="row rounded-3" style="background-color: rgba(5,168,64,0.21);">
+                                                <div class="container-fluid bg-black rounded-3 my-4">
+                                                    <div class="row rounded-3 bg-black">
                                                         <div class="col-3">
                                                             <p class="text-grey mb-0">DATE</p>
                                                         </div>
@@ -428,7 +408,129 @@ const content = {
                                                     </div>
                                                     ${data}
                                                 </div>
-                                           </div>`
+                                           </div>`,
+    createPlayerDisplayContent: data =>`<div class="item my-2">
+                                                <div class="container-fluid bg-black rounded-3">
+                                                    <a href="${data.url}" class="bg-links" target="_blank">
+                                                    <div class="row py-3">
+                                                        <div class="col-3 d-flex flex-column justify-content-center align-items-end">
+                                                            <img src="images/user-white.png" alt="CLub" style="width: 100px;">
+                                                        </div>
+                                                        <div class="col-9 d-flex flex-column justify-content-center align-items-start">
+                                                            <h3 class="text-grey">${toUpperCase(data.name)}</h3>
+                                                            <p class="text-grey">Position: ${data.position}</p>
+                                                            <p class="text-grey">Birth: ${data.dateOfBirth}</p>
+                                                        </div>
+                                                    </div>
+                                                    </a>
+                                                    <div class="row border-top-green mt-2 py-2">
+                                                        <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center rounded-3 selected-type">
+                                                            <a href="#" class="interactable links" data-action="actDispPlayerSum" data-player="${data.playerId}" data-type="summary">
+                                                                <p class="text-grey">SUMMARY</p>
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center selected-type">
+                                                            <a href="#" class="interactable links" data-action="actDispPlayerRes" data-club="${data.clubId}" data-type="results">
+                                                                <p class="text-grey">LAST RESULTS</p>
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center selected-type">
+                                                            <a href="#" class="interactable links" data-action="actDispPlayerCar" data-type="charts" data-game="${data.game_id}" data-homeclub="${data.home_club_id}" data-awayclub="${data.away_club_id}" >
+                                                                <p class="text-grey">CAREER</p>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                              </div>`,
+    createPlayerDisplay2Content: data =>`<div class="item my-2">
+                                                <div class="container-fluid bg-black rounded-3 my-4 py-4">
+                                                    <div class="row my-2 rounded-3" style="background-color: rgba(5,168,64,0.21);">
+                                                        <h4 class="text-white mb-0">INFORMATION</h4>
+                                                    </div>
+                                                    <div class="row border-bottom-grey">
+                                                        <div class="col-6 d-flex flex-row align-items-start">
+                                                            <img src="images/flag.png" alt="Offers" class="svg-container me-2">
+                                                            <p class="text-white">COUNTRY OF BIRTH:</p>
+                                                        </div>
+                                                        <div class="col-6 d-flex flex-column align-items-end">
+                                                           <p class="text-white">${data.countryOfBirth}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row border-bottom-grey">
+                                                        <div class="col-6 d-flex flex-row align-items-start">
+                                                            <img src="images/city.png" alt="Offers" class="svg-container me-2">
+                                                            <p class="text-white">CITY OF BIRTH:</p>
+                                                        </div>
+                                                        <div class="col-6 d-flex flex-column align-items-end">
+                                                           <p class="text-white">${data.cityOfBirth}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row border-bottom-grey">
+                                                        <div class="col-6 d-flex flex-row align-items-start">
+                                                            <img src="images/calendar.png" class="svg-container me-2">
+                                                            <p class="text-white">DATE OF BIRTH:</p>
+                                                        </div>
+                                                        <div class="col-6 d-flex flex-column align-items-end">
+                                                           <p class="text-white">${data.dateOfBirth}</p>
+                                                        </div>
+                                                    </div>
+                                                     <div class="row border-bottom-grey">
+                                                        <div class="col-6 d-flex flex-row align-items-start">
+                                                            <img src="images/football-club.png" class="svg-container me-2">
+                                                            <p class="text-white">CURRENT CLUB:</p>
+                                                        </div>
+                                                        <div class="col-6 d-flex flex-column align-items-end">
+                                                           <p class="text-white">${data.currentClubName}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row border-bottom-grey">
+                                                        <div class="col-6 d-flex flex-row align-items-start">
+                                                            <img src="images/footprint.png"  class="svg-container me-2">
+                                                            <p class="text-white">FOOT:</p>
+                                                        </div>
+                                                        <div class="col-6 d-flex flex-column align-items-end">
+                                                           <p class="text-white">${data.foot}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row border-bottom-grey">
+                                                        <div class="col-6 d-flex flex-row align-items-start">
+                                                            <img src="images/height.png" class="svg-container me-2">
+                                                            <p class="text-white">HEIGHT:</p>
+                                                        </div>
+                                                        <div class="col-6 d-flex flex-column align-items-end">
+                                                           <p class="text-white">${data.heightInCm}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row border-bottom-grey">
+                                                        <div class="col-6 d-flex flex-row align-items-start">
+                                                            <img src="images/growth.png" alt="Offers" class="svg-container me-2">
+                                                            <p class="text-white">MARKET VALUE:</p>
+                                                        </div>
+                                                        <div class="col-6 d-flex flex-column align-items-end">
+                                                           <p class="text-white">${data.marketValueInEur}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row border-bottom-grey">
+                                                        <div class="col-6 d-flex flex-row align-items-start">
+                                                            <img src="images/gps.png" alt="Offers" class="svg-container me-2">
+                                                            <p class="text-white">POSITION:</p>
+                                                        </div>
+                                                        <div class="col-6 d-flex flex-column align-items-end">
+                                                           <p class="text-white">${data.position}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row border-bottom-grey">
+                                                        <div class="col-6 d-flex flex-row align-items-start">
+                                                            <img src="images/gps.png" alt="Offers" class="svg-container me-2">
+                                                            <p class="text-white">SUB-POSITION:</p>
+                                                        </div>
+                                                        <div class="col-6 d-flex flex-column align-items-end">
+                                                           <p class="text-white">${data.subPosition}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                              </div>`
 };
 
 //                                              <p class="text-white">${data.url}</p>

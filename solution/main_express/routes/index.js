@@ -799,7 +799,6 @@ router.post('/api/clubbyid', async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
-module.exports = router;
 
 
 router.post('/api/getgamesbyclubnseason', async (req, res) => {
@@ -822,3 +821,26 @@ router.post('/api/getgamesbyclubnseason', async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+
+
+router.post('/api/playerbyid', async (req, res) => {
+  const { player } = req.body;
+  try {
+    const response = await fetch('http://localhost:8082/playerbyid', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ playerId: player })
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch seasons from the competition service');
+    }
+
+    const data = await response.json();
+    res.status(200).json(data);
+  } catch (error) {
+    console.error('Error forwarding request:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+module.exports = router;

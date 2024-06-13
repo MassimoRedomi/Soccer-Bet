@@ -4,15 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5964250f-1c18-4d30-bc11-da96082dbb3e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../main_express/public/js/actions.js" beforeDir="false" afterPath="$PROJECT_DIR$/../main_express/public/js/actions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../main_express/public/js/content.js" beforeDir="false" afterPath="$PROJECT_DIR$/../main_express/public/js/content.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../main_express/public/js/utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/../main_express/public/js/utils.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../main_express/routes/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../main_express/routes/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controllers/gamesController.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/gamesController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/games.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/games.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../spring_server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../spring_server/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="5964250f-1c18-4d30-bc11-da96082dbb3e" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -66,6 +58,7 @@
       <workItem from="1717941199531" duration="13956000" />
       <workItem from="1718132022790" duration="6068000" />
       <workItem from="1718210223407" duration="38000" />
+      <workItem from="1718210286757" duration="98000" />
     </task>
     <servers />
   </component>

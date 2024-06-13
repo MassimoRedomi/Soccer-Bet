@@ -124,17 +124,13 @@ function formatDate(data) {
     const date = new Date(data);
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
-    const year = date.getFullYear();
 
     const hours = date.getUTCHours();
     const minutes = date.getUTCMinutes();
 
-    if (hours === 0 && minutes === 0) {
-        return `${day}.${month}.${year}`;
-    } else {
-        const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
-        return `${day}.${month}.${year} ${formattedTime}`;
-    }
+    const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+
+    return `${day}.${month} ${formattedTime}`;
 }
 
 
@@ -194,7 +190,7 @@ function separateEvents(data, homeId, awayId){
         if (data.club_id === homeIdNu) {
             return `<div class="row border-bottom-grey py-2">
                             <div class="col-6 text-start">
-                                <p class="text-grey mb-0">${data.minute}' ${data.type} ${formatPlayerNames(data.player_name)} ${assistName}</p>
+                                <p class="tooltip-container text-grey mb-0">${data.minute}' ${data.type} ${formatPlayerNames(data.player_name)} ${assistName}<span class="tooltip-text">${data.description}</span></p>
                             </div>
                             <div class="col-6 text-end">
                                 <p class="text-grey mb-0">-</p>
@@ -206,7 +202,7 @@ function separateEvents(data, homeId, awayId){
                                 <p class="text-grey mb-0">-</p>
                             </div>
                             <div class="col-6 text-end">
-                                <p class="text-grey mb-0">${assistName} ${formatPlayerNames(data.player_name)} ${data.type} ${data.minute}'</p>
+                                <p class="tooltip-container text-grey mb-0">${assistName} ${formatPlayerNames(data.player_name)} ${data.type} ${data.minute}'<span class="tooltip-text">${data.description}</span></p>
                             </div>
                         </div>`;
         } else {
@@ -413,4 +409,50 @@ function formatValue(value) {
     }
 
     return `<p class="${textColorClass} mb-0">${formattedValue}</p>`;
+}
+
+
+function divideGamesxChampion(games) {
+    const groupedGames = games.reduce((acc, game) => {
+        const competition = game.competition_name;
+        if (!acc[competition]) {
+            acc[competition] = [];
+        }
+        acc[competition].push(game);
+        return acc;
+    }, {});
+
+    let contentHtml = '';
+
+    for (const competition in groupedGames) {
+        if (groupedGames.hasOwnProperty(competition)) {
+            contentHtml += `
+                <div class="row my-2 rounded-3" style="background-color: rgba(5,168,64,0.21);">
+                    <h4 class="text-white mb-0">${toUpperCase(competition)}</h4>
+                </div>
+            `;
+            groupedGames[competition].forEach(game => {
+                contentHtml += `
+                    <a href="#" class="interactable bg-links" data-action="actGamesChamp" data-game="${game.game_id}" data-clubname="${game.home_club_name} vs ${game.away_club_name}">
+                        <div class="row border-bottom-grey">
+                            <div class="col-3">
+                                <p class="text-grey mb-0">${formatDate(game.date)}</p>
+                            </div>
+                            <div class="col-4 d-flex flex-column align-items-start">
+                                <p class="tooltip-container mb-0 text-grey">${game.home_club_name} <span class="tooltip-text">${game.home_club_id}</span></p>
+                            </div>
+                            <div class="col-1 d-flex flex-column align-items-center">
+                                ${setColorNumbers(game.home_club_goals, game.away_club_goals)}
+                            </div>
+                            <div class="col-4 d-flex flex-column align-items-end">
+                                <p class="mb-0 text-grey">${game.away_club_name}</p>
+                            </div>
+                        </div>
+                    </a>
+                `;
+            });
+        }
+    }
+
+    return contentHtml;
 }

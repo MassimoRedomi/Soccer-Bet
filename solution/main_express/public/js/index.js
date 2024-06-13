@@ -68,7 +68,6 @@ async function checkLoginStatus() {
     try {
         const response = await fetch('/api/check-login');
         const data = await response.json();
-        console.log(data.isLoggedIn);
         localStorage.setItem('isLoggedIn', data.isLoggedIn);
         if (data.isLoggedIn) {
             updateLoginUI('LOGOUT', 'actUsrLogout');

@@ -734,14 +734,14 @@ footer ul.list-unstyled li:hover p {
 .tooltip-container .tooltip-text {
   visibility: hidden;
   width: 120px;
-  background-color: rgba(0, 0, 0, 0.42);
+  background-color: rgba(0, 0, 0, 0.77);
   color: #fff;
   text-align: center;
   border-radius: 5px;
   padding: 5px;
   position: absolute;
-  z-index: 1;
-  bottom: 125%; /* Position above the element */
+  z-index: 9999;
+  top: 125%; /* Position below the element */
   left: 50%;
   transform: translateX(-50%);
   opacity: 0;

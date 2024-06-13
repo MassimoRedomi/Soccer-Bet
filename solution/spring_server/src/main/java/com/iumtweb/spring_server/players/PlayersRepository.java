@@ -10,4 +10,5 @@ import java.util.List;
 public interface PlayersRepository extends JpaRepository<Players, Integer> {
     List<Players> findTop10ByOrderByPlayerIdAsc();
     List<Players> findByCurrentClubId(Clubs currentClubId);
+    List<Players> findByPlayerId(Integer playerId);
 }

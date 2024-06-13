@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class PlayersController {
@@ -27,5 +28,11 @@ public class PlayersController {
     @PostMapping("/clubplayers")
     public List<Players> getPlayersByClubId(@RequestBody Clubs currentClubId) {
         return playersService.getPlayersByClubId(currentClubId);
+    }
+
+    @PostMapping("/playerbyid")
+    public List<Players> getPlayerById(@RequestBody Map<String, Integer> request) {
+        Integer playerId = request.get("playerId");
+        return playersService.getPlayerById(playerId);
     }
 }

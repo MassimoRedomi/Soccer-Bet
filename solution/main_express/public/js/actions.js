@@ -87,6 +87,7 @@ const actions = {
      */
     async actChampion(data){
         try{
+            console.log(data);
             activateSection('stats');
             const seasonsData = await fetchAndUpdate(
                 '/api/seasons_by_champion',
@@ -94,7 +95,14 @@ const actions = {
                 content.createSeasonsContent,
                 {competitionId: data.champion}
             );
-            await actions.actSeason({competition: seasonsData[0].competition_id, season: seasonsData[0].season, name: seasonsData[0].competition_name});
+
+            let selectedSeason = selectedlist.find(item => item.key === "season")?.value;
+            let season = selectedSeason ? selectedSeason : seasonsData[0].season;
+            if (!seasonsData.some(seasonItem => seasonItem.season === season)) {
+                season = seasonsData[0].season;
+            }
+
+            await actions.actSeason({competition: seasonsData[0].competition_id, season: season, name: seasonsData[0].competition_name});
         } catch (error){
             console.error('Error processing actChampion data:', error);
         }
@@ -251,12 +259,13 @@ const actions = {
                 content.createClubDisplayContent,
                 {clubId: data.club}
             );
-            await fetchAndUpdate(
+            let players= await fetchAndUpdate(
                 '/api/clubplayers',
                 'clubPlayers',
                 content.createClubPlayersContent,
                 {clubId: data.club}
             );
+            console.log(players);
             await actions.actDispClubSum({club: data.club, type: 'summary'});
         }catch (error){
             console.error('Error processing actDispClub data:', error);
@@ -291,7 +300,7 @@ const actions = {
             autoSelectionClass({type: data.type});
             let season=selectedlist.find(item => item.key === "season").value;
             const games = await postAxiosQuery('api/getgamesbyclubnseason', {club_id: data.club, season: season});
-            const contentHtml = renderDataAsHtml(games, content.createClubResultsContent);
+            const contentHtml = divideGamesxChampion(games);
             const contentHtml2 = content.createClubResDisplay2Content(contentHtml);
             updateElementHtml('dataDisplay2', contentHtml2, 'replace');
         }catch (error){
@@ -299,6 +308,34 @@ const actions = {
         }
     },
 
+    async actDispPlayer(data){
+        try{
+            chargeBreadCrumbs(data);
+            await fetchAndUpdate(
+                '/api/playerbyid',
+                'dataDisplay',
+                content.createPlayerDisplayContent,
+                {player: data.player}
+            );
+            await actions.actDispPlayerSum({player: data.player, type: 'summary'});
+        }catch (error){
+            console.error('Error processing actDispPlayer data:', error);
+        }
+    },
+
+    async actDispPlayerSum(data){
+        try{
+            autoSelectionClass({type: data.type});
+            await fetchAndUpdate(
+                '/api/playerbyid',
+                'dataDisplay2',
+                content.createPlayerDisplay2Content,
+                {player: data.player}
+            );
+        } catch (error){
+            console.error('Error processing actDispPlayerSum data:', error);
+        }
+    },
 
     /**
      * Updates the chat section with the selected language information.

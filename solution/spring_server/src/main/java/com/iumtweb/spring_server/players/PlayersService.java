@@ -22,4 +22,8 @@ public class PlayersService {
     public List<Players> getPlayersByClubId(Clubs currentClubId) {
         return playersRepository.findByCurrentClubId(currentClubId);
     }
+
+    public List<Players> getPlayerById(Integer playerId) {
+        return playersRepository.findByPlayerId(playerId);
+    }
 }

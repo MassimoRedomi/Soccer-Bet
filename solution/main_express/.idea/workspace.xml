@@ -5,13 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="16bd983e-abfc-45a5-a300-d522b0fd36ea" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/public/js/actions.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/actions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/content.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/content.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/utils.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../secondary_express/controllers/gamesController.js" beforeDir="false" afterPath="$PROJECT_DIR$/../secondary_express/controllers/gamesController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../secondary_express/routes/games.js" beforeDir="false" afterPath="$PROJECT_DIR$/../secondary_express/routes/games.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../spring_server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../spring_server/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../secondary_express/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../secondary_express/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,6 +48,7 @@
       <updated>1718131982779</updated>
       <workItem from="1718131983800" duration="37764000" />
       <workItem from="1718210225854" duration="35000" />
+      <workItem from="1718210285540" duration="99000" />
     </task>
     <servers />
   </component>
