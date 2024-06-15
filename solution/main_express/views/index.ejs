@@ -306,11 +306,19 @@
 
       <div class="col-md-12">
         <div class="container search-container py-3 d-flex flex-row align-items-center justify-content-between">
-          <textarea class="form-control search-area" placeholder="Competition"></textarea>
-          <textarea class="form-control search-area" placeholder="Match"></textarea>
-          <textarea class="form-control search-area" placeholder="Club"></textarea>
-          <textarea class="form-control search-area" placeholder="Nation"></textarea>
-          <button class="btn search-button">
+          <div class="position-relative flex-grow-1">
+            <input type="text" class="form-control search-area" id="competition-input" placeholder="Competition" />
+            <div class="suggestions-container"></div>
+          </div>
+          <div class="position-relative flex-grow-1">
+            <input type="text" class="form-control search-area" id="club-input" placeholder="Club" />
+            <div class="suggestions-container"></div>
+          </div>
+          <div class="position-relative flex-grow-1">
+            <input type="text" class="form-control search-area" id="nation-input" placeholder="Nation" />
+            <div class="suggestions-container"></div>
+          </div>
+          <button class="btn search-button interactable" data-action="actSearch">
             <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
               <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.9-3.9a1.05 1.05 0 0 0-.066-.066zM13 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
             </svg>
@@ -323,6 +331,7 @@
           </div>
         </div>
       </div>
+
 
     </div>
     <div class="row">

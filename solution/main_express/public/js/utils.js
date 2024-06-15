@@ -1,6 +1,10 @@
 let breadcrumbs = [];
 let selectedlist= [];
-
+const suggestionsCache = {
+    'nation-input': [],
+    'competition-input': [],
+    'club-input': []
+};
 
 /**
  * Fetches data from the given URL (using POST if data is provided, otherwise GET), renders HTML content from the data using the provided content function, and updates the specified HTML element with the generated content.
@@ -455,4 +459,108 @@ function divideGamesxChampion(games) {
     }
 
     return contentHtml;
+}
+
+function toFirstLetterUpperCase(data){
+    if (typeof data !== 'string' || data.length === 0) {
+        return data;
+    }
+    return data.charAt(0).toUpperCase() + data.slice(1).toLowerCase();
+}
+
+async function prefetchAllSuggestions() {
+    suggestionsCache['nation-input'] = await fetchSuggestions('/api/soccer-nations');
+    suggestionsCache['competition-input'] = await fetchSuggestions('/api/champions');
+    suggestionsCache['club-input'] = await fetchSuggestions('/api/clubs-names');
+}
+
+function initSearchBar() {
+    const searchInputs = document.querySelectorAll('.search-area');
+
+    searchInputs.forEach(input => {
+        input.addEventListener('focus', () => showSuggestions(input, true));
+        input.addEventListener('blur', hideSuggestions);
+        input.addEventListener('input', () => showSuggestions(input));
+        input.addEventListener('keydown', handleKeyDown);
+    });
+}
+
+function showSuggestions(inputElement, isInitialFocus = false) {
+    const value = inputElement.value;
+    let suggestions = suggestionsCache[inputElement.id] || [];
+
+    if (!isInitialFocus && value) {
+        suggestions = filterSuggestions(suggestions, value);
+    }
+    renderSuggestions(suggestions, inputElement);
+}
+
+function filterSuggestions(suggestions, value) {
+    return suggestions.filter(item => item.name.toLowerCase().includes(value.toLowerCase()));
+}
+
+async function fetchSuggestions(apiEndpoint) {
+    try {
+        const response = await getAxiosQuery(apiEndpoint);
+
+        if (apiEndpoint.includes('soccer-nations')) {
+            return response.map(item => ({ name: item.name, id: item.name }));
+        } else if (apiEndpoint.includes('champions')) {
+            return response.map(item => ({ name: formatNames(item.name), id: item.competitionId, nation: item.countryName }));
+        } else if (apiEndpoint.includes('clubs-names')) {
+            return response.map(item => ({ name: item.name, id: item.clubId, clubName: item.name }));
+        } else {
+            console.warn(`Unknown API endpoint: ${apiEndpoint}`);
+            return [];
+        }
+    } catch (error) {
+        console.error('Error fetching suggestions:', error);
+        return [];
+    }
+}
+
+function hideSuggestions(event) {
+    setTimeout(() => {
+        const suggestionsContainer = event.target.nextElementSibling;
+        suggestionsContainer.style.display = 'none';
+    }, 200);
+}
+
+function handleKeyDown(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        document.querySelector('.search-button').click();
+    }
+}
+
+function renderSuggestions(suggestions, inputElement) {
+    const suggestionsContainer = inputElement.nextElementSibling;
+    if (suggestions.length === 0) {
+        suggestionsContainer.style.display = 'none';
+        return;
+    }
+
+    const suggestionItems = suggestions.map(item => `
+        <div class="suggestion-item" 
+             onclick="selectSuggestion('${item.name}', '${item.id}', '${inputElement.id}', '${item.clubName || ''}', '${item.nation || ''}')">
+             ${item.name}
+        </div>`).join('');
+
+    suggestionsContainer.innerHTML = suggestionItems;
+    suggestionsContainer.style.display = 'block';
+    suggestionsContainer.style.width = inputElement.offsetWidth + 'px';
+}
+
+function selectSuggestion(name, id, inputId, clubName = '', nation = '') {
+    const inputElement = document.getElementById(inputId);
+    inputElement.value = name;
+    inputElement.setAttribute('data-selected-id', id);
+    if (clubName) {
+        inputElement.setAttribute('data-clubname', clubName);
+    }
+    if (nation) {
+        inputElement.setAttribute('data-nation', nation);
+    }
+    const suggestionsContainer = inputElement.nextElementSibling;
+    suggestionsContainer.style.display = 'none';
 }

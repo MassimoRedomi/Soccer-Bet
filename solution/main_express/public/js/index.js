@@ -1,9 +1,12 @@
-document.addEventListener('DOMContentLoaded', function () {
-    actions.actMain();
+document.addEventListener('DOMContentLoaded', async () => {
+    await prefetchAllSuggestions();
+    await actions.actMain();
+    await checkLoginStatus();
     setupEventListeners();
-    checkLoginStatus();
+    initSearchBar();
     loadLastActiveSection();
 });
+
 
 const sections = {
     newsChats: document.getElementById('news-chats-container'),
@@ -71,7 +74,7 @@ async function checkLoginStatus() {
         localStorage.setItem('isLoggedIn', data.isLoggedIn);
         if (data.isLoggedIn) {
             updateLoginUI('LOGOUT', 'actUsrLogout');
-            setUserName();
+            await setUserName();
             initChat();
         } else {
             updateLoginUI('LOGIN', 'actLoginModal');

@@ -100,3 +100,22 @@ exports.getGameByClubIdAndSeason = async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
+
+exports.getGames = async (req, res) => {
+    try {
+        // Find all games and select only the necessary fields
+        const games = await Game.find({}, 'game_id home_club_name away_club_name');
+
+        // Map the results to the required format
+        const result = games.map(game => ({
+            game_id: game.game_id,
+            name: `${game.home_club_name} vs ${game.away_club_name}`
+        }));
+
+        // Send the result as the response
+        res.status(200).json(result);
+    } catch (error) {
+        console.error('Error fetching games:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};

@@ -1,6 +1,6 @@
 const content = {
     createClubsContent:             data => `<div class="item my-2">
-                                                <a href="#" class="interactable links d-flex align-items-center"  data-action="controllerSoccerData" data-club="${data.clubId}" data-clubName="${data.name}">
+                                                <a href="#" class="interactable links d-flex align-items-center"  data-action="actClub" data-club="${data.clubId}" data-clubname="${data.name}">
                                                     <img src="images/football-club.svg" alt="Offers" class="svg-container me-2">
                                                     <p class="mb-0">${data.name}</p>
                                                 </a>
@@ -16,7 +16,7 @@ const content = {
                                              </div>`,
     createChampionsContent:         data => `<div class="container rounded-3 my-2">
                                                 <div class="item my-2">
-                                                    <a href="#" class="interactable links d-flex align-items-center" data-action="actChampion"  data-champion="${data.competitionId}">
+                                                    <a href="#" class="interactable links d-flex align-items-center" data-action="actChampion"  data-champion="${data.competitionId}" data-nation="${data.countryName}">
                                                         <div class="svg-container me-2">${data.sig}</div>
                                                         <p class="mb-0">${formatNames(data.name)}</p>
                                                     </a>
@@ -101,7 +101,7 @@ const content = {
                                                 <div class="container-fluid bg-black rounded-3">
                                                     <div class="row">
                                                         <div class="col-4 d-flex flex-column justify-content-center align-items-center text-center">
-                                                            <a href="#" class="interactable bg-links" data-action="actDispClub" data-club="${data.home_club_id}" data-clubName="${data.home_club_name}">
+                                                            <a href="#" class="interactable bg-links" data-action="actDispClub" data-club="${data.home_club_id}" data-clubname="${data.home_club_name}">
                                                                 <p class="text-grey">HOME</p>
                                                                 <img src="images/football-club.png" alt="CLub" style="width: 100px;">
                                                                 <p class="text-grey">${data.home_club_name}</p>
@@ -114,7 +114,7 @@ const content = {
                                                             <p class="text-grey">${data.stadium}</p>
                                                         </div>
                                                         <div class="col-4 d-flex flex-column justify-content-center align-items-center text-center">
-                                                            <a href="#" class="interactable bg-links" data-action="actDispClub" data-club="${data.away_club_id}" data-clubName="${data.away_club_name}">
+                                                            <a href="#" class="interactable bg-links" data-action="actDispClub" data-club="${data.away_club_id}" data-clubname="${data.away_club_name}">
                                                                 <p class="text-grey">AWAY</p>
                                                                 <img src="images/football-club.png" alt="CLub" style="width: 100px;">
                                                                 <p class="text-grey">${data.away_club_name}</p>
@@ -220,7 +220,8 @@ const content = {
                                                     </div>
                                                 </div>
                                               </div>`,
-    createLineupContent:               data =>`<div class="row">
+    createLineupContent:               data =>`<a href="#" class="interactable bg-links" data-action="actDispPlayer" data-player="${data.player_id}" data-clubname="${toUpperCase(data.player_name)}">
+                                                <div class="row">
                                                     <div class="col-1">
                                                         <p class="text-white">${data.number}</p>
                                                     </div>
@@ -230,7 +231,8 @@ const content = {
                                                     <div class="col-6">
                                                         <p class="text-white">${data.position}</p>
                                                     </div>
-                                                </div>`,
+                                                </div>
+                                                </a>`,
     createLineupDisplay2Content:(home, away) =>`<div class="item my-2">
                                                             <div class="container-fluid bg-black rounded-3 my-4 py-4">
                                                                 <div class="container-fluid mb-4 rounded-3" style="background-color: rgba(5,168,64,0.21);">
@@ -430,7 +432,7 @@ const content = {
                                                             </a>
                                                         </div>
                                                         <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center selected-type">
-                                                            <a href="#" class="interactable links" data-action="actDispPlayerRes" data-club="${data.clubId}" data-type="results">
+                                                            <a href="#" class="interactable links" data-action="actDispClubRes" data-club="${data.currentClubId.clubId}" data-type="results">
                                                                 <p class="text-grey">LAST RESULTS</p>
                                                             </a>
                                                         </div>

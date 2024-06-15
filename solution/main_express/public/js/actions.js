@@ -48,7 +48,7 @@ const actions = {
                 `<option value="${option.value}"${option.value === data.nation ? ' selected' : ''}>${option.value}</option>`
             ).join('');
             const championsData = await fetchAndUpdate('/api/send-country','champions_nation_list', content.createChampionsContent, {nation: data.nation});
-            await actions.actChampion( { champion: championsData[0].competitionId });
+            await actions.actChampion( { champion: championsData[0].competitionId, nation: championsData[0].countryName });
         } catch (error) {
             console.error('Error processing actNation data:', error);
         }
@@ -77,6 +77,30 @@ const actions = {
         }
     },
 
+    async actClub(data){
+      try{
+          activateSection('stats');
+          const club= await fetchAndUpdate(
+              '/api/clubbyid',
+              'dataDisplay',
+              content.createClubDisplayContent,
+              {clubId: data.club}
+          );
+          await fetchAndUpdate(
+              '/api/clubplayers',
+              'clubPlayers',
+              content.createClubPlayersContent,
+              {clubId: data.club}
+          );
+          await actions.actNation({nation: club.domesticCompetition.countryName});
+          await actions.actChampion({champion: club.domesticCompetition.competitionId});
+          await actions.actDispClub({club: data.club, type: 'summary'});
+          chargeBreadCrumbs(data);
+      }catch (error){
+          console.error('Error processing  actClub data:', error);
+      }
+    },
+
 
     /**
      * Fetches and updates seasons data for a specific champion.
@@ -87,7 +111,6 @@ const actions = {
      */
     async actChampion(data){
         try{
-            console.log(data);
             activateSection('stats');
             const seasonsData = await fetchAndUpdate(
                 '/api/seasons_by_champion',
@@ -95,13 +118,22 @@ const actions = {
                 content.createSeasonsContent,
                 {competitionId: data.champion}
             );
-
-            let selectedSeason = selectedlist.find(item => item.key === "season")?.value;
-            let season = selectedSeason ? selectedSeason : seasonsData[0].season;
-            if (!seasonsData.some(seasonItem => seasonItem.season === season)) {
-                season = seasonsData[0].season;
+            if(data.nation){
+                chargeBreadCrumbs(data);
+                activateSection('stats');
+                const selectElement = document.getElementById('nation_dropdown');
+                selectElement.innerHTML = Array.from(selectElement.options).map(option =>
+                    `<option value="${option.value}"${option.value === data.nation ? ' selected' : ''}>${option.value}</option>`
+                ).join('');
+                const championsData = await fetchAndUpdate('/api/send-country','champions_nation_list', content.createChampionsContent, {nation: data.nation});
             }
+            let season = selectedlist.find(item => item.key === "season")?.value ?? seasonsData[0].season;
+            season = parseInt(season, 10);
+            const seasonExists = seasonsData.some(seasonItem => {
+                return seasonItem.season === season;
+            });
 
+            if (!seasonExists) {season = seasonsData[0].season;}
             await actions.actSeason({competition: seasonsData[0].competition_id, season: season, name: seasonsData[0].competition_name});
         } catch (error){
             console.error('Error processing actChampion data:', error);
@@ -265,7 +297,6 @@ const actions = {
                 content.createClubPlayersContent,
                 {clubId: data.club}
             );
-            console.log(players);
             await actions.actDispClubSum({club: data.club, type: 'summary'});
         }catch (error){
             console.error('Error processing actDispClub data:', error);
@@ -311,7 +342,7 @@ const actions = {
     async actDispPlayer(data){
         try{
             chargeBreadCrumbs(data);
-            await fetchAndUpdate(
+            let player = await fetchAndUpdate(
                 '/api/playerbyid',
                 'dataDisplay',
                 content.createPlayerDisplayContent,
@@ -356,6 +387,33 @@ const actions = {
         languageNameElement.innerHTML = `Nation selected: ${data.language}`;
         languageContainer.style.display = 'block';
         startChatButton.setAttribute('data-language', data.language);
+    },
+
+    async actSearch() {
+        try {
+            const competitionInput = document.getElementById('competition-input');
+            const clubInput = document.getElementById('club-input');
+            const nationInput = document.getElementById('nation-input');
+
+            const competitionId = competitionInput.dataset.selectedId;
+            const competitionNation = competitionInput.dataset.nation;
+            const clubId = clubInput.dataset.selectedId;
+            const clubName = clubInput.dataset.clubname;
+            const nationName = nationInput.value;
+
+
+            if (competitionId) {
+                await actions.actChampion({ champion: competitionId, nation: competitionNation});
+            }
+            if (clubId) {
+                await actions.actClub({ club: clubId, clubname: clubName});
+            }
+            if (nationName) {
+                await actions.actNation({ nation: nationName });
+            }
+        } catch (error) {
+            console.error('Error processing actSearch data:', error);
+        }
     },
 
 

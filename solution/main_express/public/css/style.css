@@ -723,14 +723,14 @@ footer ul.list-unstyled li:hover p {
 .selected h4{
   color: #05A840;
 }
-/* Tooltip container */
+
+/* TOOLTIP */
 .tooltip-container {
   position: relative;
   display: inline-block;
   cursor: pointer;
 }
 
-/* Tooltip text */
 .tooltip-container .tooltip-text {
   visibility: hidden;
   width: 120px;
@@ -741,15 +741,49 @@ footer ul.list-unstyled li:hover p {
   padding: 5px;
   position: absolute;
   z-index: 9999;
-  top: 125%; /* Position below the element */
+  top: 125%;
   left: 50%;
   transform: translateX(-50%);
   opacity: 0;
   transition: opacity 0.3s;
 }
 
-/* Show the tooltip text when hovering over the container */
+
 .tooltip-container:hover .tooltip-text {
   visibility: visible;
   opacity: 1;
 }
+/* END TOOLTIP */
+
+/* SUGGESTION SEARCH BAR */
+.suggestions-container {
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  width: calc(100% - 2px); /* Ensures the container is the same width as the input field */
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 9999;
+  top: 100%; /* Position below the input */
+  left: 0;
+}
+
+.suggestion-item {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.suggestion-item:hover {
+  background-color: #f0f0f0;
+}
+
+.search-container {
+  position: relative; /* Ensures the suggestions container is positioned correctly */
+}
+
+.form-control {
+  width: auto; /* Ensures the input fields do not shrink */
+  flex: 1; /* Makes sure input fields take available space */
+}
+
+/* END SUGGESTIONS SEARCH BAR*/

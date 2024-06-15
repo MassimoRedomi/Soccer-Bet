@@ -14,5 +14,7 @@ router.post('/seasons_by_competition', gamesController.getSeasonsByCompetitionId
 router.post('/getgame-by-id', gamesController.getGameByGameId);
 
 router.post('/getbyclubnseason', gamesController.getGameByClubIdAndSeason);
+
+router.get('/getgames', gamesController.getGames);
 module.exports = router;
 

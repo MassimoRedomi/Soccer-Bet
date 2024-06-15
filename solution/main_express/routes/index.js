@@ -843,4 +843,17 @@ router.post('/api/playerbyid', async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+
+
+router.get('/api/getgames', async (req, res, next) => {
+  try {
+    const response = await fetch('http://localhost:3002/games/getgames');
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    next(error);
+  }
+});
+
+
 module.exports = router;
