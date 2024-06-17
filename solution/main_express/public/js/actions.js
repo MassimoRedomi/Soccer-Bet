@@ -285,7 +285,7 @@ const actions = {
     async actDispClub(data){
         try{
             chargeBreadCrumbs(data);
-            await fetchAndUpdate(
+            let club = await fetchAndUpdate(
                 '/api/clubbyid',
                 'dataDisplay',
                 content.createClubDisplayContent,
@@ -367,6 +367,58 @@ const actions = {
             console.error('Error processing actDispPlayerSum data:', error);
         }
     },
+
+    async actDispPlayerCareer(data){
+        try{
+            autoSelectionClass({type: data.type});
+            const career= await postAxiosQuery('/api/careerbyplayerid', {player: data.player});
+            const careerHtml = renderDataAsHtml(career, content.createPlayerCareerContent);
+            const contentCareerHtml = content.createPlayerCareerContent2(careerHtml);
+            updateElementHtml('dataDisplay2', contentCareerHtml, 'replace');
+        }catch (error){
+            console.error('Error processing actDispPlayerCareer data:', error);
+        }
+    },
+
+    async actChart(data){
+      try{
+          autoSelectionClass({type: data.type});
+          const htmlContent = renderDataAsHtml([data], content.createChartContent);
+          updateElementHtml('dataDisplay2', htmlContent, 'replace');
+          await actions.actRankings({competition: data.competition, subtype: "rankings",  subsubtype:"total"});
+      }catch (error){
+          console.error('Error processing actChart data:', error);
+      }
+    },
+
+    async actRankings(data){
+        try{
+            autoSelectionClass({subtype: data.subtype});
+            const season = selectedlist.find(item => item.key === "season").value;
+            const rankingsData = await postAxiosQuery('/api/getranking', {competition_id: data.competition, season: season});
+            if(data.subsubtype === "total"){
+                const rankingHtml= renderDataAsHtml(rankingsData, content.createRankingTotalContent);
+                const rankingHtmlWrapped = content.createRankingContentWrap(rankingHtml);
+                updateElementHtml('dataDisplay3', rankingHtmlWrapped, 'replace');
+            }else if(data.subsubtype === "home"){
+                const rankingHtml= renderDataAsHtml(rankingsData, content.createRankingHomeContent);
+                const rankingHtmlWrapped = content.createRankingContentWrap(rankingHtml);
+                updateElementHtml('dataDisplay3', rankingHtmlWrapped, 'replace');
+            }else if(data.subsubtype === "away"){
+                const rankingHtml= renderDataAsHtml(rankingsData, content.createRankingAwayContent);
+                const rankingHtmlWrapped = content.createRankingContentWrap(rankingHtml);
+                updateElementHtml('dataDisplay3', rankingHtmlWrapped, 'replace');
+            }else{
+                console.error('Error processing actRankings subsubtype data:');
+            }
+            autoSelectionClass({subsubtype : data.subsubtype});
+        }catch (error){
+            console.error('Error processing actRankings data:', error)
+        }
+
+    },
+
+
 
     /**
      * Updates the chat section with the selected language information.

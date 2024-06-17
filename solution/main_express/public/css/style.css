@@ -248,6 +248,10 @@ html, body {
 .border-bottom-grey{
   border-bottom: 0.001rem solid #013244 !important;
 }
+
+.border-grey{
+  border: 0.001rem solid #013244 !important;
+}
 /* END BORDER COLORS */
 
 

@@ -127,19 +127,19 @@ const content = {
                                                                 <p class="text-grey">SUMMARY</p>
                                                             </a>
                                                         </div>
-                                                        <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center selected-type">
+                                                        <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center rounded-3 selected-type">
                                                             <a href="#" class="interactable links" data-action="actDispGameForm" data-game="${data.game_id}" data-homeclub="${data.home_club_id}" data-awayclub="${data.away_club_id}" data-type="formation">
                                                                 <p class="text-grey">FORMATION</p>
                                                             </a>
                                                         </div>
-                                                        <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center selected-type">
+                                                        <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center rounded-3 selected-type">
                                                             <a href="#" class="interactable links" data-action="actDispGameEvents" data-type="events" data-game="${data.game_id}" data-homeclub="${data.home_club_id}" data-awayclub="${data.away_club_id}">
                                                                 <p class="text-grey">EVENTS</p>
                                                             </a>
                                                         </div>
-                                                        <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center selected-type">
-                                                            <a href="#" class="interactable links" data-action="actDispGame" data-type="charts">
-                                                                <p class="text-grey">CHARTS</p>
+                                                        <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center rounded-3 selected-type">
+                                                            <a href="#" class="interactable links" data-action="actChart" data-type="chart" data-competition = "${data.competition_id}">
+                                                                <p class="text-grey">RANKINGS</p>
                                                             </a>
                                                         </div>
                                                     </div>
@@ -305,17 +305,17 @@ const content = {
                                                     <div class="row border-top-green mt-2 py-2">
                                                         <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center rounded-3 selected-type">
                                                             <a href="#" class="interactable links" data-action="actDispClubSum" data-club="${data.clubId}" data-type="summary">
-                                                                <p class="text-grey">SUMMARY</p>
+                                                                <p class="text-grey rounded-3">SUMMARY</p>
                                                             </a>
                                                         </div>
                                                         <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center selected-type">
                                                             <a href="#" class="interactable links" data-action="actDispClubRes" data-club="${data.clubId}" data-type="results">
-                                                                <p class="text-grey">RESULTS</p>
+                                                                <p class="text-grey rounded-3">RESULTS</p>
                                                             </a>
                                                         </div>
                                                         <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center selected-type">
-                                                            <a href="#" class="interactable links" data-action="actDispClubChar" data-type="charts" data-game="${data.game_id}" data-homeclub="${data.home_club_id}" data-awayclub="${data.away_club_id}" >
-                                                                <p class="text-grey">CHARTS</p>
+                                                            <a href="#" class="interactable links" data-action="actChart" data-type="charts" data-competition = "${data.domesticCompetition.competitionId}">
+                                                                <p class="text-grey rounded-3">RANKINGS</p>
                                                             </a>
                                                         </div>
                                                     </div>
@@ -431,13 +431,13 @@ const content = {
                                                                 <p class="text-grey">SUMMARY</p>
                                                             </a>
                                                         </div>
-                                                        <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center selected-type">
+                                                        <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center  rounded-3  selected-type">
                                                             <a href="#" class="interactable links" data-action="actDispClubRes" data-club="${data.currentClubId.clubId}" data-type="results">
                                                                 <p class="text-grey">LAST RESULTS</p>
                                                             </a>
                                                         </div>
-                                                        <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center selected-type">
-                                                            <a href="#" class="interactable links" data-action="actDispPlayerCar" data-type="charts" data-game="${data.game_id}" data-homeclub="${data.home_club_id}" data-awayclub="${data.away_club_id}" >
+                                                        <div class="col-3 d-flex flex-column justify-content-center align-items-center text-center rounded-3  selected-type">
+                                                            <a href="#" class="interactable links" data-action="actDispPlayerCareer" data-type="career" data-player="${data.playerId}">
                                                                 <p class="text-grey">CAREER</p>
                                                             </a>
                                                         </div>
@@ -532,7 +532,171 @@ const content = {
                                                     </div>
                                                 </div>
                                                 
-                                              </div>`
+                                              </div>`,
+    createPlayerCareerContent: data => `<div class="item my-2">
+                                                    <div class="row border-bottom-grey">
+                                                        <div class="col-2">
+                                                            <p class="text-white bold mb-0">${data.season}</p>
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <p class="text-white bold mb-0">${formatNames(data.club_name)}</p>
+                                                        </div>
+                                                        <div class="col-3">
+                                                            <p class="text-white bold mb-0">${formatNames(data.competition_name)}</p>
+                                                        </div>
+                                                        <div class="col-1">
+                                                            <p class="text-white bold mb-0">${data.minutes_played}</p>
+                                                        </div>
+                                                        <div class="col-1">
+                                                            <p class="text-white bold mb-0">${data.goals}</p>
+                                                        </div>
+                                                        <div class="col-1">
+                                                            <p class="text-white bold mb-0">${data.assists}</p>
+                                                        </div>
+                                                        <div class="col-1">
+                                                            <p class="text-white bold mb-0">${data.red_cards}</p>
+                                                        </div>
+                                                        <div class="col-1">
+                                                            <p class="text-white bold mb-0">${data.yellow_cards}</p>
+                                                        </div>
+                                                    </div>
+                                             </div>`,
+    createPlayerCareerContent2: data     =>`<div class="item my-2">
+                                                <div class="container-fluid bg-black rounded-3 my-4">
+                                                    <div class="row rounded-3 bg-black">
+                                                        <div class="col-2"><p class="tooltip-container text-white bold mb-0">SEASON<span class="tooltip-text">Player name and surname</span></p></div>
+                                                        <div class="col-2"><p class="tooltip-container text-white bold mb-0">CLUB<span class="tooltip-text">Player age</span></p></div>
+                                                        <div class="col-3"><p class="tooltip-container text-white bold mb-0">COMPETITION<span class="tooltip-text">Competition name</span></p></div>
+                                                        <div class="col-1"><p class="tooltip-container text-white bold mb-0">MIN<span class="tooltip-text">Total minutes played</span></p></div>
+                                                        <div class="col-1"><p class="tooltip-container text-white bold mb-0">G<span class="tooltip-text">Total goals</span></p></div>
+                                                        <div class="col-1"><p class="tooltip-container text-white bold mb-0">A<span class="tooltip-text">Total assists</span></p></div>
+                                                        <div class="col-1"><div class="red_card tooltip-container"><span class="tooltip-text">Total red cards</span></div></div>
+                                                        <div class="col-1"><div class="yellow_card tooltip-container"><span class="tooltip-text">Total yellow cards</span></div></div>
+                                                    </div>
+                                                    <div class="scroll-container2">
+                                                        ${data}
+                                                    </div>
+                                                </div>
+                                            </div>`,
+    createRankingTotalContent:         data =>`<div class="item my-2">
+                                                 <a href="#" class="interactable bg-links" data-action="" >
+                                                    <div class="row border-bottom-grey">
+                                                        <div class="col-4 d-flex align-items-start">
+                                                            <p class="text-white bold mb-0">${data.club_name}</p>
+                                                        </div>
+                                                        <div class="col-1 d-flex justify-content-center align-items-center">
+                                                            <p class="text-white bold mb-0">${data.total_games}</p>
+                                                        </div>
+                                                        <div class="col-1 d-flex justify-content-center align-items-center">
+                                                            <p class="text-white bold mb-0">${data.total_win}</p>
+                                                        </div>
+                                                        <div class="col-2 d-flex justify-content-center align-items-center">
+                                                            <p class="text-white bold mb-0">${data.tie}</p>
+                                                        </div>
+                                                        <div class="col-1 d-flex justify-content-center align-items-center">
+                                                            <p class="text-white bold mb-0">${data.total_loss}</p>
+                                                        </div>
+                                                        <div class="col-1 d-flex justify-content-center align-items-center">
+                                                            <p class="text-white bold mb-0">${data.total_goals}</p>
+                                                        </div>
+                                                        <div class="col-1 d-flex justify-content-center align-items-center">
+                                                            <p class="text-white bold mb-0">${data.total_points}</p>
+                                                        </div>
+                                                    </div>
+                                                 </a>
+                                             </div>`,
+    createRankingHomeContent:         data =>`<div class="item my-2">
+                                                 <a href="#" class="interactable bg-links" data-action="" >
+                                                    <div class="row border-bottom-grey">
+                                                        <div class="col-4 d-flex align-items-start">
+                                                            <p class="text-white bold mb-0">${data.club_name}</p>
+                                                        </div>
+                                                        <div class="col-1 d-flex justify-content-center align-items-center">
+                                                            <p class="text-white bold mb-0">${data.home_games}</p>
+                                                        </div>
+                                                        <div class="col-1 d-flex justify-content-center align-items-center">
+                                                            <p class="text-white bold mb-0">${data.win_home}</p>
+                                                        </div>
+                                                        <div class="col-2 d-flex justify-content-center align-items-center">
+                                                            <p class="text-white bold mb-0">${data.tie}</p>
+                                                        </div>
+                                                        <div class="col-1 d-flex justify-content-center align-items-center">
+                                                            <p class="text-white bold mb-0">${data.loss_home}</p>
+                                                        </div>
+                                                        <div class="col-1 d-flex justify-content-center align-items-center">
+                                                            <p class="text-white bold mb-0">${data.club_goals_home}</p>
+                                                        </div>
+                                                        <div class="col-1 d-flex justify-content-center align-items-center">
+                                                            <p class="text-white bold mb-0">${data.points_home}</p>
+                                                        </div>
+                                                    </div>
+                                                 </a>
+                                             </div>`,
+    createRankingAwayContent:         data =>`<div class="item my-2">
+                                                 <a href="#" class="interactable bg-links" data-action="" >
+                                                    <div class="row border-bottom-grey">
+                                                        <div class="col-4 d-flex align-items-start">
+                                                            <p class="text-white bold mb-0">${data.club_name}</p>
+                                                        </div>
+                                                        <div class="col-1 d-flex justify-content-center align-items-center">
+                                                            <p class="text-white bold mb-0">${data.away_games}</p>
+                                                        </div>
+                                                        <div class="col-1 d-flex justify-content-center align-items-center">
+                                                            <p class="text-white bold mb-0">${data.win_away}</p>
+                                                        </div>
+                                                        <div class="col-2 d-flex justify-content-center align-items-center">
+                                                            <p class="text-white bold mb-0">${data.tie}</p>
+                                                        </div>
+                                                        <div class="col-1 d-flex justify-content-center align-items-center">
+                                                            <p class="text-white bold mb-0">${data.loss_away}</p>
+                                                        </div>
+                                                        <div class="col-1 d-flex justify-content-center align-items-center">
+                                                            <p class="text-white bold mb-0">${data.club_goals_away}</p>
+                                                        </div>
+                                                        <div class="col-1 d-flex justify-content-center align-items-center">
+                                                            <p class="text-white bold mb-0">${data.points_away}</p>
+                                                        </div>
+                                                    </div>
+                                                 </a>
+                                             </div>`,
+    createRankingContentWrap: data =>`<div class="container-fluid border-top-green py-2">
+                                        <div class="row bg-black">
+                                            <div class="col-4 d-flex justify-content-center align-items-center"><p class="tooltip-container text-white bold mb-0">CLUB<span class="tooltip-text">Club name</span></p></div>
+                                            <div class="col-1 d-flex justify-content-center align-items-center"><p class="tooltip-container text-white bold mb-0">PG<span class="tooltip-text">Total Played Games</span></p></div>
+                                            <div class="col-1 d-flex justify-content-center align-items-center"><p class="tooltip-container text-white bold mb-0">W<span class="tooltip-text">Matches Won </span></p></div>
+                                            <div class="col-2 d-flex justify-content-center align-items-center"><p class="tooltip-container text-white bold mb-0">T<span class="tooltip-text">Matches drawn</span></p></div>
+                                            <div class="col-1 d-flex justify-content-center align-items-center"><p class="tooltip-container text-white bold mb-0">L<span class="tooltip-text">Lost matches</span></p></div>
+                                            <div class="col-1 d-flex justify-content-center align-items-center"><p class="tooltip-container text-white bold mb-0">G<span class="tooltip-text">Total goals</span></p></div>
+                                            <div class="col-1 d-flex justify-content-center align-items-center"><p class="tooltip-container text-white bold mb-0">P<span class="tooltip-text">Total points</span></p></div>
+                                        </div>
+                                    </div>
+                                    <div class="scroll-container2">
+                                        <div class="container-fluid">
+                                          ${data}
+                                        </div>
+                                    </div>`,
+    createChartContent:     data =>`<div class="item my-2">
+                                            <div class="container-fluid bg-black rounded-3 my-4 py-2">
+                                                <div class="row">
+                                                    <div class="col-3 rounded-3 selected-subsubtype">
+                                                        <a href="#" class="interactable bg-links" data-action="actRankings" data-subsubtype="total" data-competition="${data.competition}">
+                                                            <p class="text-grey text-center mb-0 border-grey rounded-3">TOTAL</p>
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-3 rounded-3 selected-subsubtype">
+                                                        <a href="#" class="interactable bg-links" data-action="actRankings" data-subsubtype="home" data-competition="${data.competition}">
+                                                            <p class="text-grey text-center mb-0 border-grey rounded-3">HOME</p>
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-3 rounded-3 selected-subsubtype">
+                                                        <a href="#" class="interactable bg-links" data-action="actRankings" data-subsubtype="away" data-competition="${data.competition}">
+                                                            <p class="text-grey text-center mb-0 border-grey rounded-3">AWAY</p>
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-3  rounded-3 "></div>
+                                                </div>
+                                            </div> 
+                                            <div id="dataDisplay3"></div> 
+                                       </div>`
 };
 
-//                                              <p class="text-white">${data.url}</p>

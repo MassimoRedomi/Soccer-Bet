@@ -2,7 +2,6 @@ const GameEvent = require('../models/game_events');
 
 exports.getGameEventsByGameId = async (req, res) => {
     const { game_id } = req.body;
-    console.log('Received game_id:', game_id);
 
     try {
         const gameEvents = await GameEvent.find({ game_id: Number(game_id) }).sort({ minute: 1 });

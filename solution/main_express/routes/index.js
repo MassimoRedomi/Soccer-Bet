@@ -9,17 +9,33 @@ const saltRounds = 10;
  * /:
  *   get:
  *     summary: Get the home page
+ *     description: Retrieves the HTML content for the home page of the website.
+ *     tags:
+ *       - Home
  *     responses:
  *       200:
- *         description: Home page
+ *         description: Successfully retrieved the home page.
  *         content:
  *           text/html:
  *             schema:
  *               type: string
+ *             example: "<html><head><title>Home Page</title></head><body>Welcome to the Home Page!</body></html>"
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "An unexpected error occurred."
  */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Home Page' });
 });
+
+
 
 /**
  * @swagger
@@ -46,20 +62,47 @@ router.get('/api/soccer-nations', async (req, res, next) => {
   }
 });
 
+
+
 /**
  * @swagger
  * /api/clubs-names:
  *   get:
- *     summary: Get club names
+ *     summary: Retrieve the list of club names
+ *     description: Fetches a list of club names and their IDs from an external service.
+ *     tags:
+ *       - Data Club
  *     responses:
  *       200:
- *         description: List of club names
+ *         description: A list of club names with their IDs.
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
  *                 type: object
+ *                 properties:
+ *                   name:
+ *                     type: string
+ *                     example: "Sportverein Darmstadt 1898 e. V."
+ *                   clubId:
+ *                     type: integer
+ *                     example: 105
+ *             example: [
+ *               {"name":"Sportverein Darmstadt 1898 e. V.","clubId":105},
+ *               {"name":"FK Ural Yekaterinburg","clubId":11127},
+ *               {"name":"Beşiktaş Jimnastik Kulübü","clubId":114}
+ *             ]
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "An unexpected error occurred."
  */
 router.get('/api/clubs-names', async (req, res, next) => {
   try {
@@ -70,6 +113,7 @@ router.get('/api/clubs-names', async (req, res, next) => {
     next(error);
   }
 });
+
 
 /**
  * @swagger
@@ -443,7 +487,7 @@ router.post('/api/games_by_champion', async (req, res) => {
   const { competition_id } = req.body;
 
   try {
-    const response = await fetch('http://localhost:3002/games/games_by_competition', {
+    const response = await fetch('http://localhost:3002/api/games_by_competition', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ competition_id: competition_id })
@@ -563,7 +607,7 @@ router.post('/api/games_by_champion', async (req, res) => {
 router.post('/api/games_by_championNseason', async (req, res) => {
   const { competition_id, season } = req.body;
   try {
-    const response = await fetch('http://localhost:3002/games/games_by_competitionNseason', {
+    const response = await fetch('http://localhost:3002/api/games_by_competitionNseason', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ competition_id: competition_id, season: season })
@@ -615,7 +659,7 @@ router.post('/api/games_by_championNseason', async (req, res) => {
 router.post('/api/seasons_by_champion', async (req, res) => {
   const { competitionId } = req.body;
   try {
-    const response = await fetch('http://localhost:3002/games/seasons_by_competition', {
+    const response = await fetch('http://localhost:3002/api/seasons_by_competition', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ competition_id: competitionId })
@@ -718,7 +762,7 @@ router.post('/api/competitionbyid', async (req, res) => {
 router.post('/api/gamebyid', async (req, res) => {
   const { game_id } = req.body;
   try {
-    const response = await fetch('http://localhost:3002/games/getgame-by-id', {
+    const response = await fetch('http://localhost:3002/api/getgame-by-id', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ game_id: game_id })
@@ -740,7 +784,7 @@ router.post('/api/gamebyid', async (req, res) => {
 router.post('/api/lineupsbyid', async (req, res) => {
   const { game_id } = req.body;
   try {
-    const response = await fetch('http://localhost:3002/lineups/lineupbygameid', {
+    const response = await fetch('http://localhost:3002/api/lineupbygameid', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ game_id: game_id })
@@ -761,7 +805,7 @@ router.post('/api/lineupsbyid', async (req, res) => {
 router.post('/api/eventsbygameid', async (req, res) => {
   const { game_id } = req.body;
   try {
-    const response = await fetch('http://localhost:3002/events/getgamevents-by-id', {
+    const response = await fetch('http://localhost:3002/api/getgamevents-by-id', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ game_id: game_id })
@@ -804,7 +848,7 @@ router.post('/api/clubbyid', async (req, res) => {
 router.post('/api/getgamesbyclubnseason', async (req, res) => {
   const { club_id, season } = req.body;
   try {
-    const response = await fetch('http://localhost:3002/games/getbyclubnseason', {
+    const response = await fetch('http://localhost:3002/api/getbyclubnseason', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ club_id: club_id, season: season })
@@ -847,7 +891,7 @@ router.post('/api/playerbyid', async (req, res) => {
 
 router.get('/api/getgames', async (req, res, next) => {
   try {
-    const response = await fetch('http://localhost:3002/games/getgames');
+    const response = await fetch('http://localhost:3002/api/getgames');
     const data = await response.json();
     res.json(data);
   } catch (error) {
@@ -855,5 +899,47 @@ router.get('/api/getgames', async (req, res, next) => {
   }
 });
 
+router.post('/api/careerbyplayerid', async (req, res) => {
+  const { player } = req.body;
+  try {
+    const response = await fetch('http://localhost:3002/api/careerbyplayerid', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ player_id: player })
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch seasons from the competition service');
+    }
+
+    const data = await response.json();
+    res.status(200).json(data);
+  } catch (error) {
+    console.error('Error forwarding request:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+
+router.post('/api/getranking', async (req, res) => {
+  const { competition_id, season } = req.body;
+  try {
+    const response = await fetch('http://localhost:3002/api/getrankings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ competition_id: competition_id, season: season })
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch seasons from the competition service');
+    }
+
+    const data = await response.json();
+    res.status(200).json(data);
+  } catch (error) {
+    console.error('Error forwarding request:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
 
 module.exports = router;

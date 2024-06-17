@@ -5,7 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="16bd983e-abfc-45a5-a300-d522b0fd36ea" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../secondary_express/controllers/careerController.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../secondary_express/controllers/rankingsController.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../secondary_express/models/career.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../secondary_express/models/rankings.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../secondary_express/routes/career.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../secondary_express/routes/rankings.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/actions.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/actions.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/content.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/content.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../secondary_express/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../secondary_express/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../secondary_express/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/../secondary_express/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../secondary_express/controllers/gameEventsController.js" beforeDir="false" afterPath="$PROJECT_DIR$/../secondary_express/controllers/gameEventsController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../spring_server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../spring_server/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,6 +65,8 @@
       <workItem from="1718210225854" duration="35000" />
       <workItem from="1718210285540" duration="99000" />
       <workItem from="1718365755649" duration="599000" />
+      <workItem from="1718376414492" duration="51774000" />
+      <workItem from="1718568474744" duration="11816000" />
     </task>
     <servers />
   </component>

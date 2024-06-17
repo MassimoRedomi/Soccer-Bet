@@ -12,6 +12,8 @@ const app = express();
 const gamesRouter = require('./routes/games');
 const gameLineupsRouter = require('./routes/gameLineups');
 const gameEventsRouter = require('./routes/gameEvents');
+const careerRoutes = require('./routes/career');
+const rankingsRoutes = require('./routes/rankings');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -24,10 +26,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/games', gamesRouter);
-app.use('/lineups', gameLineupsRouter);
-app.use('/events', gameEventsRouter);
+app.use('/api', usersRouter);
+app.use('/api', gamesRouter);
+app.use('/api', gameLineupsRouter);
+app.use('/api', gameEventsRouter);
+app.use('/api', careerRoutes);
+app.use('/api', rankingsRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

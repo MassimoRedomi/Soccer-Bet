@@ -31,7 +31,7 @@ async function fetchAndUpdate(url, elementId, contentFn, data = null) {
 
 
 function autoSelectionClass(data) {
-    const keys = ['season', 'type', 'nationlist', 'game', 'nation'];
+    const keys = ['season', 'type', 'nationlist', 'game', 'nation', 'subtype', 'subsubtype'];
 
     keys.forEach(key => {
         if (data[key]) {
