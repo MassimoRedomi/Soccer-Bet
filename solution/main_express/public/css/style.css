@@ -764,12 +764,13 @@ footer ul.list-unstyled li:hover p {
   position: absolute;
   background-color: #fff;
   border: 1px solid #ccc;
-  width: calc(100% - 2px); /* Ensures the container is the same width as the input field */
+  width: calc(100% - 2px);
   max-height: 200px;
   overflow-y: auto;
   z-index: 9999;
-  top: 100%; /* Position below the input */
+  top: 100%;
   left: 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .suggestion-item {
@@ -782,12 +783,21 @@ footer ul.list-unstyled li:hover p {
 }
 
 .search-container {
-  position: relative; /* Ensures the suggestions container is positioned correctly */
+  position: relative;
 }
 
 .form-control {
-  width: auto; /* Ensures the input fields do not shrink */
-  flex: 1; /* Makes sure input fields take available space */
+  width: auto;
+  flex: 1;
+  border: 1px solid #ccc; /* Set a border for the input fields */
+  box-shadow: none; /* Remove any box-shadow */
+  outline: none; /* Remove default outline */
 }
+
+.form-control:focus {
+  border-color: #ccc; /* Maintain the same border color on focus */
+  box-shadow: none; /* Ensure no shadow on focus */
+}
+
 
 /* END SUGGESTIONS SEARCH BAR*/

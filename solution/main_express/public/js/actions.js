@@ -152,11 +152,9 @@ const actions = {
         try{
             chargeBreadCrumbs(data);
             autoSelectionClass({season: data.season});
-            const gamesData = await fetchAndUpdate(
-                '/api/games_by_championNseason',
-                'gamesxchampion',content.createGamesContent,
-                {competition_id: data.competition, season: data.season}
-            );
+            const gamesData = await postAxiosQuery('/api/games_by_championNseason', {competition_id: data.competition, season: data.season});
+            const htmlContent= formatGames(gamesData);
+            updateElementHtml('gamesxchampion', htmlContent, 'replace');
             updateElementHtml('championName', `<h4 class="text-white bold">${toUpperCase(data.name)}</h4>`, 'replace');
             await actions.actGamesChamp({game: gamesData[0].game_id, clubname:`${gamesData[0].home_club_name} vs ${gamesData[0].away_club_name}` });
         }catch (error){

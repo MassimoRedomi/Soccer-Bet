@@ -564,3 +564,84 @@ function selectSuggestion(name, id, inputId, clubName = '', nation = '') {
     const suggestionsContainer = inputElement.nextElementSibling;
     suggestionsContainer.style.display = 'none';
 }
+
+const formatGames = (dataGames) => {
+    if (!Array.isArray(dataGames)) {
+        console.error('Error: dataGames is not an array');
+        return '';
+    }
+
+    const gamesByRound = dataGames.reduce((acc, game) => {
+        const round = game.round;
+        if (!acc[round]) {
+            acc[round] = [];
+        }
+        acc[round].push(game);
+        return acc;
+    }, {});
+
+    const sortedRounds = Object.keys(gamesByRound).sort((a, b) => extractOrderValue(a) - extractOrderValue(b));
+
+    let htmlContent = '';
+    for (const round of sortedRounds) {
+        htmlContent += `<div class="container-fluid p-0 mt-4">
+                            <h5 class="mb-0 text-white">${toUpperCase(round)}</h5>
+                        </div>`;
+        gamesByRound[round].forEach(game => {
+            htmlContent += `
+                <div class="item my-2">
+                    <div class="container-fluid p-0 m-0 selected-game">
+                        <a href="#" class="interactable bg-links" data-action="actGamesChamp" data-game="${game.game_id}" data-clubname="${game.home_club_name} vs ${game.away_club_name}">
+                            <div class="row border-bottom-grey">
+                                <div class="col-4 d-flex flex-column align-items-start">
+                                    <p class="tooltip-container mb-0">${setDimNames(game.home_club_name)} <span class="tooltip-text">${game.home_club_id}</span></p>
+                                </div>
+                                <div class="col-4 d-flex flex-column align-items-center">
+                                    ${setColorNumbers(game.home_club_goals, game.away_club_goals)}
+                                </div>
+                                <div class="col-4 d-flex flex-column align-items-end">
+                                    <p class="mb-0">${setDimNames(game.away_club_name)}</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    return htmlContent;
+};
+
+
+
+const extractOrderValue = (round) => {
+    const matchDayMatch = round.match(/^(\d+)\. Matchday$/);
+    if (matchDayMatch) return parseInt(matchDayMatch[1]);
+
+    const qualifyingRoundMatch = round.match(/Qualifying Round (\d+)(st|nd|rd|th) leg/);
+    if (qualifyingRoundMatch) return parseInt(qualifyingRoundMatch[1]);
+
+    const groupMatch = round.match(/^Group ([A-Z])$/);
+    if (groupMatch) return groupMatch[1].charCodeAt(0);
+
+    const ordinalNumberMatch = round.match(/^(First|Second|Third|Fourth|Fifth|Sixth|Seventh|Eighth|Ninth|Tenth) Round$/);
+    if (ordinalNumberMatch) {
+        const ordinalToNumber = {
+            First: 1, Second: 2, Third: 3, Fourth: 4, Fifth: 5,
+            Sixth: 6, Seventh: 7, Eighth: 8, Ninth: 9, Tenth: 10
+        };
+        return ordinalToNumber[ordinalNumberMatch[1]];
+    }
+
+    const finalRoundsMatch = round.match(/^(Quarter Finals|Semi Finals|Final)$/);
+    if (finalRoundsMatch) {
+        const finalRoundsToNumber = {
+            "Quarter Finals": 1, "Semi Finals": 2, "Final": 3
+        };
+        return 1000 + finalRoundsToNumber[finalRoundsMatch[1]];
+    }
+
+    return Infinity;
+};
+
