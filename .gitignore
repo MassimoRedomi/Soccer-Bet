@@ -178,4 +178,4 @@ generated/
 # Specific files for HTML report
 **/html-report/
 
-.data
+data/
