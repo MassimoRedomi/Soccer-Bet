@@ -588,6 +588,7 @@ footer ul.list-unstyled li:hover p {
   padding: 20px;
   border: 1px solid #888;
   max-width: 60%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .close {
@@ -610,11 +611,20 @@ footer ul.list-unstyled li:hover p {
 
 .form-group label {
   display: block;
+  font-size: 1.1em;
 }
 
 .form-group input {
   width: 100%;
   padding: 0.5em;
+  border: 1px solid #ccc;
+  font-size: 1em;
+}
+
+.form-group input:focus {
+  border-color: #05A840;
+  outline: none;
+  box-shadow: 0 0 5px rgba(5, 168, 64, 0.5);
 }
 
 #loginButton {
@@ -629,8 +639,17 @@ footer ul.list-unstyled li:hover p {
   font-size: 16px;
   margin: 4px 2px;
   cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#loginButton:hover,
+#loginButton:focus {
+  background-color: #028a32;
+  outline: none;
+  box-shadow: 0 0 5px rgba(5, 168, 64, 0.5);
 }
 /* END MODAL */
+
 
 /* SCROLL BAR */
 .scrollbar-style {
