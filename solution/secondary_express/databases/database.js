@@ -2,12 +2,7 @@ const mongoose = require('mongoose');
 
 const mongoDB = 'mongodb://localhost:27017/SoccerDB';
 mongoose.Promise = global.Promise;
-connection = mongoose.connect(mongoDB, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    checkServerIdentity: false,
-    family: 4
-})
+connection = mongoose.connect(mongoDB)
     .then(() => {
         console.log('connection to mongodb worked!');
     })
