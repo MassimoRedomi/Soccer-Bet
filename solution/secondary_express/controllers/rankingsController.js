@@ -1,4 +1,4 @@
-const Ranking = require('../models/Rankings');
+const Ranking = require('../models/rankings');
 
 exports.getRankings = async (req, res) => {
     const { competition_id, season } = req.body;

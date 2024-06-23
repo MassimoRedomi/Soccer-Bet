@@ -23,4 +23,4 @@ const RankingSchema = new mongoose.Schema({
     total_games: Number
 }, { collection: 'rankings' });
 
-module.exports = mongoose.model('Rankings', RankingSchema);
+module.exports = mongoose.model('Ranking', RankingSchema);
