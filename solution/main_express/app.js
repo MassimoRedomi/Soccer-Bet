@@ -8,13 +8,16 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const session = require('express-session');
-const server = http.createServer(app);
 const socketIo = require('socket.io');
-const port = 3000;
-const io = socketIo(server);
+
 // Initialize the Express application
 const app = express();
+
+// Create the HTTP server and initialize Socket.IO
+const server = http.createServer(app);
+const io = socketIo(server);
 require('./socket.io/socket.io').init(io);
+
 // Import route handlers
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -65,7 +68,9 @@ app.use((err, req, res, next) => {
   res.render('error');
 });
 
-app.listen(port, () => {
+// Start the server
+const port = 3000;
+server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
