@@ -5,7 +5,7 @@ let chat= io.connect('/chat');
 
 /**
  * called by <body onload>
- * it initialises the interface and the expected socket messages
+ * it initialises the interface and the expected socket.io messages
  * plus the associated actions
  */
 function initChat() {
@@ -18,7 +18,7 @@ function initChat() {
 
 
 /**
- * it initialises the socket for /chat
+ * it initialises the socket.io for /chat
  */
 
 function initChatSocket() {
@@ -44,7 +44,7 @@ function initChatSocket() {
 
 /**
  * called when the Send button is pressed. It gets the text to send from the interface
- * and sends the message via  socket
+ * and sends the message via  socket.io
  */
 function sendChatText() {
     let chatText = document.getElementById('chat_input').value;
@@ -85,11 +85,10 @@ function hideLoginInterface(room, userId) {
     document.getElementById('initial_form').style.display = 'none';
     document.getElementById('chat_interface').style.display = 'block';
     document.getElementById('who_you_are').innerHTML= userId;
-    document.getElementById('in_room').innerHTML= ' '+actions.formatNames(room);
+    document.getElementById('in_room').innerHTML= ' '+formatNames(room);
 }
 
 function scrollToBottom() {
     const chatHistory = document.getElementById('chat_history');
     chatHistory.scrollTop = chatHistory.scrollHeight;
 }
-
