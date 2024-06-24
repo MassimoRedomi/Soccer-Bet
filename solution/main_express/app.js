@@ -1,6 +1,5 @@
 // Import required modules
 const createError = require('http-errors');
-const http = require('http');
 const express = require('express');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpecs = require('./swaggerConfig');
@@ -8,15 +7,9 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const session = require('express-session');
-const socketIo = require('socket.io');
 
 // Initialize the Express application
 const app = express();
-
-// Create the HTTP server and initialize Socket.IO
-const server = http.createServer(app);
-const io = socketIo(server);
-require('./socket.io/socket.io').init(io);
 
 // Import route handlers
 const indexRouter = require('./routes/index');
@@ -68,11 +61,6 @@ app.use((err, req, res, next) => {
   res.render('error');
 });
 
-// Start the server
-const port = 3000;
-server.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
 
 // Export the Express application instance
 module.exports = app;

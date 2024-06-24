@@ -9,3 +9,4 @@ connection = mongoose.connect(mongoDB)
     .catch((error) => {
         console.log('connection to mongodb did not work! ' + JSON.stringify(error));
     });
+
