@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const mongoDB = 'mongodb://localhost:27017/SoccerDB';
+const mongoDB = 'mongodb://127.0.0.1:27017/SoccerDB';
 mongoose.Promise = global.Promise;
 connection = mongoose.connect(mongoDB)
     .then(() => {
